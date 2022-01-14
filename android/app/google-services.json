@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "836178805906",
+    "project_id": "campi-f8278",
+    "storage_bucket": "campi-f8278.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836178805906:android:d19eb0598d5eb20ee3124b",
+        "android_client_info": {
+          "package_name": "com.campi.sns"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836178805906-mk4bbsdvckdsl5u6c9s555jugd1vl32q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.campi.sns",
+            "certificate_hash": "4e4cf1358e3f440d3e4eac2b40534acd8c59b86f"
+          }
+        },
+        {
+          "client_id": "836178805906-2l7e44146vnmj1j5q72f1cup1dsh3ht9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4HPksH5yhx92LfB9JLZtzNitJwAf6Xgk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "836178805906-2l7e44146vnmj1j5q72f1cup1dsh3ht9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
