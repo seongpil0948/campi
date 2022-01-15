@@ -36,6 +36,13 @@ dependencies:
   firebase_auth: ^3.3.5
   google_sign_in: ^5.2.3
   carousel_slider: ^4.0.0
+  uuid: ^3.0.5
+  rich_text_controller:
+    git:
+      url: https://github.com/micazi/rich_text_controller  
+  video_player: ^2.2.11
+  cached_network_image: ^3.2.0
+  image_picker: ^0.8.4+4
 
 dev_dependencies:
   flutter_test:
@@ -44,5 +51,8 @@ dev_dependencies:
   flutter_lints: ^1.0.0
 
 flutter:
-
+  # TODO: Test required https://flutter.dev/assets-and-images/#resolution-aware.
+  # see https://flutter.dev/custom-fonts/#from-packages
   uses-material-design: true
+  assets:
+    - assets/images/
