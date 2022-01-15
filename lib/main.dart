@@ -1,3 +1,4 @@
+import 'package:campi/firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -10,7 +11,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await MyApp.analytics.logAppOpen();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseStorage storage = FirebaseStorage.instance;
@@ -20,6 +21,7 @@ void main() async {
     'feat1_enabled': false,
   });
 
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
   runApp(const MyApp());
 }
 
@@ -72,9 +74,9 @@ class _MyHomePageState extends State<MyHomePage> {
     FirebaseCrashlytics.instance.log("SPSPSPSPSPSP APP Open");
     auth.authStateChanges().listen((User? user) {
       if (user == null) {
-        print('User is currently signed out!');
+        FirebaseCrashlytics.instance.log('User is currently signed out!');
       } else {
-        print('User is signed in!');
+        FirebaseCrashlytics.instance.log('User is signed in!');
       }
     });
     super.initState();
@@ -119,29 +121,32 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             ElevatedButton(
               onPressed: () async {
-                // Trigger the authentication flow
-                final GoogleSignInAccount? googleUser =
-                    await GoogleSignIn().signIn();
+                try {
+                  // Trigger the authentication flow
+                  final GoogleSignInAccount? googleUser =
+                      await GoogleSignIn().signIn();
 
-                // Obtain the auth details from the request
-                final GoogleSignInAuthentication? googleAuth =
-                    await googleUser?.authentication;
+                  // Obtain the auth details from the request
+                  final GoogleSignInAuthentication? googleAuth =
+                      await googleUser?.authentication;
 
-                // Create a new credential
-                final credential = GoogleAuthProvider.credential(
-                  accessToken: googleAuth?.accessToken,
-                  idToken: googleAuth?.idToken,
-                );
-                final authResult = await auth.signInWithCredential(credential);
-                final user = authResult.user;
-                setState(() {
-                  email = user!.email ?? "";
-                  url = user.email ?? "";
-                  name = user.displayName ?? "";
-                });
-
-                // Once signed in, return the UserCredential
-                // await FirebaseAuth.instance.signInWithCredential(credential);
+                  // Create a new credential
+                  final credential = GoogleAuthProvider.credential(
+                    accessToken: googleAuth?.accessToken,
+                    idToken: googleAuth?.idToken,
+                  );
+                  final authResult =
+                      await auth.signInWithCredential(credential);
+                  final user = authResult.user;
+                  setState(() {
+                    email = user!.email ?? "";
+                    url = user.email ?? "";
+                    name = user.displayName ?? "";
+                  });
+                } catch (e, s) {
+                  FirebaseCrashlytics.instance
+                      .log("=== LOGIN FAIL === $e \n Stack Trace :$s");
+                }
               },
               child: const Text("!!구글 로그인!!"),
             )
