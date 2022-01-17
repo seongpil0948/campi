@@ -5,43 +5,43 @@
 // import 'package:flutter/material.dart';
 // import 'package:image_picker/image_picker.dart';
 
-// enum PyFileType { Video, Image }
+// enum PiFileType { Video, Image }
 
-// extension ParseToString on PyFileType {
+// extension ParseToString on PiFileType {
 //   String toCustomString() {
 //     return this.toString().split('.').last;
 //   }
 // }
 
-// PyFileType fileTypeFromString(String ftype) {
+// PiFileType fileTypeFromString(String ftype) {
 //   switch (ftype) {
 //     case "Video":
-//       return PyFileType.Video;
+//       return PiFileType.Video;
 //     case "Image":
-//       return PyFileType.Image;
+//       return PiFileType.Image;
 //     default:
-//       return PyFileType.Image;
+//       return PiFileType.Image;
 //   }
 // }
 
-// class PyFile {
+// class PiFile {
 //   File? file;
 //   String? url;
-//   late PyFileType ftype;
+//   late PiFileType ftype;
 
-//   PyFile.fromXfile({required XFile f, required this.ftype})
+//   PiFile.fromXfile({required XFile f, required this.ftype})
 //       : this.file = File(f.path);
-//   PyFile.fileName({required String fileName, required this.ftype})
+//   PiFile.fileName({required String fileName, required this.ftype})
 //       : this.file = File(fileName);
-//   PyFile.file({required this.file, required this.ftype});
+//   PiFile.file({required this.file, required this.ftype});
 
-//   PyFile.fromCdn({required String this.url, required String fileType}) {
+//   PiFile.fromCdn({required String this.url, required String fileType}) {
 //     switch (fileType) {
 //       case "Image":
-//         ftype = PyFileType.Image;
+//         ftype = PiFileType.Image;
 //         break;
 //       case "Video":
-//         ftype = PyFileType.Video;
+//         ftype = PiFileType.Video;
 //         break;
 //     }
 //   }
@@ -54,15 +54,15 @@
 //         'ftype': ftype.toCustomString(),
 //       };
 
-//   PyFile.fromJson(j)
+//   PiFile.fromJson(j)
 //       : url = j['url'],
 //         ftype = fileTypeFromString(j['ftype']);
 // }
 
-// Widget loadFile({required PyFile f, required BuildContext ctx}) {
-//   final mq = MediaQuery.of(ctx);
+// Widget loadFile({required PiFile f, required BuildContext context}) {
+//   final mq = MediaQuery.of(context);
 //   switch (f.ftype) {
-//     case PyFileType.Image:
+//     case PiFileType.Image:
 //       return f.file != null
 //           ? Image.file(
 //               f.file!,
@@ -75,7 +75,7 @@
 //               width: mq.size.width,
 //             );
 
-//     case PyFileType.Video:
+//     case PiFileType.Video:
 //       final c = f.file != null
 //           ? VideoPlayerController.file(f.file!)
 //           : VideoPlayerController.network(f.url!);

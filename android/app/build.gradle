@@ -84,3 +84,9 @@ dependencies {
 }
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
+
+rootProject.ext {
+  set('FlutterFire', [
+    FirebaseSDKVersion: '29.0.0'
+  ])
+}

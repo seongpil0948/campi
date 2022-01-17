@@ -43,6 +43,10 @@ dependencies:
   video_player: ^2.2.11
   cached_network_image: ^3.2.0
   image_picker: ^0.8.4+4
+  equatable: ^2.0.3
+  flutter_bloc: ^8.0.1
+  cache:
+    path: package/cache  
 
 dev_dependencies:
   flutter_test:
