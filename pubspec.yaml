@@ -47,6 +47,7 @@ dependencies:
   flutter_bloc: ^8.0.1
   cache:
     path: package/cache  
+  stream_transform: ^2.0.0
 
 dev_dependencies:
   flutter_test:
