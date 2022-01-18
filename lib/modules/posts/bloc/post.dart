@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:campi/modules/posts/events.dart';
 import 'package:campi/modules/posts/models/mgz.dart';
 import 'package:campi/modules/posts/state/post.dart';
