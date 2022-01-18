@@ -1,4 +1,3 @@
-import 'package:campi/modules/app/bloc/app_bloc.dart';
 import 'package:campi/modules/posts/bloc/post.dart';
 import 'package:campi/modules/posts/events.dart';
 import 'package:campi/modules/posts/models/mgz.dart';
@@ -6,7 +5,6 @@ import 'package:campi/modules/posts/state/post.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/src/provider.dart';
 
 class PostListPage extends StatelessWidget {
   const PostListPage({Key? key}) : super(key: key);
@@ -15,11 +13,13 @@ class PostListPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
         create: (_) => PostBloc(httpClient: http.Client())..add(PostFetched()),
-        child: PostsList());
+        child: const PostsList());
   }
 }
 
 class PostsList extends StatefulWidget {
+  const PostsList({Key? key}) : super(key: key);
+
   @override
   _PostsListState createState() => _PostsListState();
 }
@@ -39,7 +39,7 @@ class _PostsListState extends State<PostsList> {
       builder: (context, state) {
         switch (state.status) {
           case PostStatus.failure:
-            return const Center(child: Text('failed to fetch posts'));
+            return const Center(child: Text('게시글들을 받아오는데에 실패 하였습니다.'));
           case PostStatus.success:
             if (state.posts.isEmpty) {
               return const Center(child: Text('no posts'));
@@ -47,7 +47,7 @@ class _PostsListState extends State<PostsList> {
             return ListView.builder(
               itemBuilder: (BuildContext context, int index) {
                 return index >= state.posts.length
-                    ? BottomLoader()
+                    ? const BottomLoader()
                     : PostListItem(post: state.posts[index]);
               },
               itemCount: state.hasReachedMax
@@ -83,6 +83,8 @@ class _PostsListState extends State<PostsList> {
 }
 
 class BottomLoader extends StatelessWidget {
+  const BottomLoader({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return const Center(

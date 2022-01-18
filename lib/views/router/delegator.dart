@@ -4,7 +4,9 @@ import 'package:campi/views/pages/common/splash.dart';
 import 'package:campi/views/pages/posts/posts.dart';
 import 'package:campi/views/router/path.dart';
 import 'package:campi/views/router/state.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+// ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 
 // e.key = pageConfig Key
@@ -33,7 +35,9 @@ class PiRouterDelegate extends RouterDelegate<PiPathConfig>
         break;
     }
 
-    print("Build Pages");
+    if (kDebugMode) {
+      print("Build Pages");
+    }
     return pages;
   }
 
@@ -44,7 +48,9 @@ class PiRouterDelegate extends RouterDelegate<PiPathConfig>
       pages: buildPages(context),
       onPopPage: _onPopPage,
       onGenerateRoute: (settings) {
-        print("===> onGenerateRoute : $settings");
+        if (kDebugMode) {
+          print("===> onGenerateRoute : $settings");
+        }
         // return MaterialPageRoute(
         //     builder: (_) => const SplashPage(), settings: settings);
       },
@@ -52,9 +58,6 @@ class PiRouterDelegate extends RouterDelegate<PiPathConfig>
   }
 
   Widget _getPageW(PiPathConfig pageConfig) {
-    // final shouldAddPage = _pages.isEmpty ||
-    //     (_pages.last.arguments as PyPathConfig).uiCtgr != pageConfig.uiCtgr;
-
     switch (pageConfig.uiCtgr) {
       case Views.splashPage:
         return const SplashPage(key: ValueKey("Splash"));
@@ -70,7 +73,9 @@ class PiRouterDelegate extends RouterDelegate<PiPathConfig>
 
   @override
   Future<void> setNewRoutePath(configuration) async {
-    print("In setNewRoutePath, Configure: $configuration");
+    if (kDebugMode) {
+      print("In setNewRoutePath, Configure: $configuration");
+    }
   }
 
   bool _onPopPage(Route<dynamic> route, result) {

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class SplashPage extends StatelessWidget {
   const SplashPage({Key? key}) : super(key: key);
   @override
-  Widget build(BuildContext ctx) {
-    final mq = MediaQuery.of(ctx);
+  Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
