@@ -6,9 +6,8 @@ class PiRouteDelegator extends RouterDelegate<PiPageConfig>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   final List<Page> _pages = [
     const MaterialPage(
-        child: PostsListView(key: ValueKey("Post Lists Keys")),
+        child: PostsListView(key: ValueKey("Post Lists View")),
         key: ValueKey("Post Lists Page"),
-        name: "postlist",
         arguments: {})
   ];
   List<Page> get pages => List.unmodifiable(_pages);

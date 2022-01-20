@@ -5,7 +5,7 @@ class PiRouteParser extends RouteInformationParser<PiPageConfig> {
   @override
   Future<PiPageConfig> parseRouteInformation(
       RouteInformation routeInformation) async {
-    return PiPageConfig(
-        path: routeInformation.location ?? "", state: routeInformation.state);
+    final String path = routeInformation.location ?? '';
+    return PiPageConfig(location: path);
   }
 }
