@@ -20,8 +20,8 @@ class PiTheme extends PyThemeInterface {
   @override
   ThemeData get lightTheme {
     final primaryColor = Colors.blue.shade900; //1
-    final primaryVarColor = Colors.deepPurple;
-    final secondColor = Colors.grey; //1
+    const primaryVarColor = Colors.deepPurple;
+    const secondColor = Colors.grey; //1
     final origin = ThemeData.light();
     return ThemeData(
       brightness: Brightness.light,
@@ -44,7 +44,7 @@ class PiTheme extends PyThemeInterface {
           bodyText1: TextStyle(
             color: primaryColor,
           ),
-          bodyText2: TextStyle(color: primaryVarColor)),
+          bodyText2: const TextStyle(color: primaryVarColor)),
       appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(color: Colors.black),
           toolbarTextStyle: TextStyle(color: Colors.black),
