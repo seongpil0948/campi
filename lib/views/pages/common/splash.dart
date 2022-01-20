@@ -1,8 +1,22 @@
 import 'package:campi/utils/responsive_ratio.dart';
 import 'package:flutter/material.dart';
 
-class SplashPage extends StatelessWidget {
-  const SplashPage({Key? key}) : super(key: key);
+class SplashPage extends StatefulWidget {
+  const SplashPage() : super(key: const ValueKey("Splash"));
+  @override
+  _SplashPageState createState() => _SplashPageState();
+}
+
+class _SplashPageState extends State<SplashPage> {
+  void _dispatchEvent(BuildContext context) {}
+
+  @override
+  void initState() {
+    super.initState();
+    _dispatchEvent(
+        context); // This will dispatch the navigateToHomeScreen event.
+  }
+
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);

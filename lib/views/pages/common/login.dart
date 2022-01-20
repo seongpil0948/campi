@@ -1,10 +1,8 @@
-import 'package:campi/modules/auth/repos/auth.dart';
 import 'package:campi/utils/responsive_ratio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginView extends StatelessWidget {
+  const LoginView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +58,8 @@ class LoginButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-        onTap: () => context.read<AuthRepo>().logInWithGoogle(),
+        // onTap: () {context.read<AuthRepo>().logInWithGoogle()},
+        onTap: () {},
         splashColor: Theme.of(context).primaryColor,
         child: Padding(
           padding: EdgeInsets.symmetric(horizontal: mq.size.width / 7),
