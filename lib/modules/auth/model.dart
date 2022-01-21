@@ -1,0 +1,110 @@
+import 'package:campi/utils/moment.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class PiUser {
+  String userId;
+  String? displayName;
+  String? email;
+  bool emailVerified;
+  String? phoneNumber;
+  UserMetadata? metadata;
+  String photoURL;
+  List<UserInfo>? providerData;
+  String? refreshToken;
+  String? messageToken;
+  String? tenantId;
+  int hash;
+  String get profileImage => photoURL;
+  List<String> favoriteFeeds = [];
+  List<String> followers = [];
+  List<String> follows = [];
+  DateTime createdAt = DateTime.now();
+  DateTime updatedAt = DateTime.now();
+
+  PiUser({required User user, this.messageToken})
+      : displayName = user.displayName,
+        email = user.email,
+        userId = user.uid,
+        emailVerified = user.emailVerified,
+        phoneNumber = user.phoneNumber,
+        metadata = user.metadata,
+        photoURL = user.photoURL!,
+        providerData = user.providerData,
+        refreshToken = user.refreshToken,
+        tenantId = user.tenantId,
+        hash = user.hashCode;
+
+  @override
+  String toString() {
+    return """
+    PiUser: name: $displayName \n 
+    providerData: $providerData \n 
+    tenantId: $tenantId \n
+    followers: $followers \n 
+    follows: $follows \n
+    createdAt: $createdAt 
+    updatedAt: $updatedAt 
+    """;
+  }
+
+  PiUser.fromJson(Map<String, dynamic> j)
+      : userId = j['userId'],
+        displayName = j['displayName'],
+        email = j['email'],
+        emailVerified = j['emailVerified'],
+        phoneNumber = j['phoneNumber'],
+        photoURL = j['photoURL'],
+        refreshToken = j['refreshToken'],
+        messageToken = j['messageToken'],
+        tenantId = j['tenantId'],
+        hash = j['hash'],
+        favoriteFeeds = List<String>.from(j['favoriteFeeds']),
+        followers = List<String>.from(j['followers']),
+        follows = List<String>.from(j['follows']),
+        createdAt = j['createdAt'] is DateTime
+            ? j['createdAt']
+            : timeStamp2DateTime(j['createdAt']),
+        updatedAt = j['updatedAt'] is DateTime
+            ? j['updatedAt']
+            : timeStamp2DateTime(j['updatedAt']);
+
+  Map<String, dynamic> toJson() => {
+        'userId': userId,
+        'displayName': displayName,
+        'email': email,
+        'emailVerified': emailVerified,
+        'phoneNumber': phoneNumber,
+        'photoURL': photoURL,
+        'refreshToken': refreshToken,
+        'messageToken': messageToken,
+        'tenantId': tenantId,
+        'hash': hash,
+        'favoriteFeeds': favoriteFeeds,
+        'followers': followers,
+        'follows': follows,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+      };
+  static Iterable<PiUser> mocks(int n) {
+    return Iterable.generate(
+        n,
+        (i) => PiUser.fromJson({
+              'userId': "spsp$i",
+              'displayName': "spspspsp",
+              'email': "seongpil0948@gmail.com",
+              'emailVerified': i % 2 == 0 ? true : false,
+              'phoneNumber': i % 2 == 0 ? "010-7184-0948" : null,
+              'photoURL': "https://picsum.photos/250?image=$i",
+              'refreshToken': "asdasfasfasfasfgadg",
+              'messageToken': "asdasfasfasfasfgadg",
+              'tenantId': "asdasfasfasfasfgadg",
+              'hash': 1010012312412,
+              'favoriteFeeds': [],
+              'followers': [],
+              'follows': [],
+              'createdAt': Timestamp.now(),
+              'updatedAt': Timestamp.now(),
+            }));
+  }
+}

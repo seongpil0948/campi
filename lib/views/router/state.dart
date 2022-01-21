@@ -7,7 +7,6 @@ class NavigationCubit extends Cubit<NavigationStack> {
       : super(NavigationStack(initialPages));
 
   void push(String path, [Map<String, dynamic>? args]) {
-    print('push called with $path and $args');
     PiPageConfig config = PiPageConfig(location: path, args: args);
     emit(state.push(config));
   }

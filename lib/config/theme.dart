@@ -4,7 +4,7 @@ const buttonRadius = 18.0;
 const ovalRadius = 40.0;
 const ovalBorderWidth = 3.0;
 
-abstract class PyThemeInterface with ChangeNotifier {
+abstract class PiThemeInterface with ChangeNotifier {
   ThemeData get lightTheme;
   ThemeData get darkTheme;
 
@@ -16,7 +16,7 @@ abstract class PyThemeInterface with ChangeNotifier {
   }
 }
 
-class PiTheme extends PyThemeInterface {
+class PiTheme extends PiThemeInterface {
   @override
   ThemeData get lightTheme {
     final primaryColor = Colors.blue.shade900; //1

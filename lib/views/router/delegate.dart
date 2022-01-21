@@ -13,14 +13,11 @@ class PiRouteDelegator extends RouterDelegate<PiPageConfig>
   Widget build(BuildContext context) {
     return BlocConsumer<NavigationCubit, NavigationStack>(
         buildWhen: (previous, current) {
-          print("In Navi Bloc Build When");
           return true;
         },
         builder: (context, stack) => Navigator(
             key: navigatorKey, pages: stack.pages, onPopPage: _onPopPage),
-        listener: (context, stack) {
-          print("In Navi Bloc Listen");
-        });
+        listener: (context, stack) {});
   }
 
   @override
