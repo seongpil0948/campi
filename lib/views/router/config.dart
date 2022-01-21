@@ -33,7 +33,7 @@ class PiPageConfig extends Equatable {
 
   @override
   String toString() {
-    return 'PageConfig: path = $path, args = $args';
+    return 'PiPageConfig: path = $path, args = $args';
   }
 
   @override

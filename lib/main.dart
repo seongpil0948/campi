@@ -1,13 +1,18 @@
 import 'package:campi/config/theme.dart';
 import 'package:campi/firebase_options.dart';
+import 'package:campi/views/router/config.dart';
 import 'package:campi/views/router/delegate.dart';
+import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/parser.dart';
+import 'package:campi/views/router/state.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 final appTheme = PiTheme();
+final navi = NavigationCubit([PiPageConfig(location: postListPath)]);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,12 +34,15 @@ class CampingApp extends StatelessWidget {
   const CampingApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-        title: 'Camping & Picknic',
-        // theme: appTheme.lightTheme,
-        // darkTheme: appTheme.darkTheme,
-        // themeMode: appTheme.currentTheme,
-        routeInformationParser: PiRouteParser(),
-        routerDelegate: PiRouteDelegator());
+    return BlocProvider.value(
+        value: navi,
+        child: MaterialApp.router(
+          title: 'Camping & Picknic',
+          theme: appTheme.lightTheme,
+          darkTheme: appTheme.darkTheme,
+          themeMode: appTheme.currentTheme,
+          routeInformationParser: PiRouteParser(),
+          routerDelegate: PiRouteDelegator(navi: navi),
+        ));
   }
 }

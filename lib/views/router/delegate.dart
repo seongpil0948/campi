@@ -1,24 +1,26 @@
-import 'package:campi/views/pages/posts/posts.dart';
 import 'package:campi/views/router/config.dart';
+import 'package:campi/views/router/stack.dart';
+import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PiRouteDelegator extends RouterDelegate<PiPageConfig>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
-  final List<Page> _pages = [
-    const MaterialPage(
-        child: PostsListView(key: ValueKey("Post Lists View")),
-        key: ValueKey("Post Lists Page"),
-        arguments: {})
-  ];
-  List<Page> get pages => List.unmodifiable(_pages);
+  final NavigationCubit navi;
+  PiRouteDelegator({required this.navi});
 
   @override
   Widget build(BuildContext context) {
-    return Navigator(
-      key: navigatorKey,
-      pages: pages,
-      onPopPage: _onPopPage,
-    );
+    return BlocConsumer<NavigationCubit, NavigationStack>(
+        buildWhen: (previous, current) {
+          print("In Navi Bloc Build When");
+          return true;
+        },
+        builder: (context, stack) => Navigator(
+            key: navigatorKey, pages: stack.pages, onPopPage: _onPopPage),
+        listener: (context, stack) {
+          print("In Navi Bloc Listen");
+        });
   }
 
   @override
@@ -34,18 +36,11 @@ class PiRouteDelegator extends RouterDelegate<PiPageConfig>
     }
     // Otherwise, check to see if we can remove the top page
     // and remove the page from the list of pages.
-    if (canPop()) {
-      pop();
+    if (navi.canPop()) {
+      navi.pop();
       return true;
     }
     return false;
-  }
-
-  bool canPop() => pages.length > 1;
-  void pop() {
-    if (canPop()) {
-      pages.remove(_pages.last);
-    }
   }
 
   @override
