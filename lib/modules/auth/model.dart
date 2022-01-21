@@ -35,6 +35,12 @@ class PiUser {
         tenantId = user.tenantId,
         hash = user.hashCode;
 
+  PiUser.empty()
+      : userId = '',
+        emailVerified = false,
+        photoURL = '',
+        hash = 0;
+
   @override
   String toString() {
     return """

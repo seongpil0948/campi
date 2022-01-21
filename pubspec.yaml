@@ -50,6 +50,7 @@ dependencies:
   bloc_concurrency:
     path: package/bloc_concurrency
   stream_transform: ^2.0.0
+  formz: ^0.4.1
 
 dev_dependencies:
   flutter_test:

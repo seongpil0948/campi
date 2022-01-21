@@ -1,5 +1,6 @@
 import 'package:campi/config/theme.dart';
 import 'package:campi/firebase_options.dart';
+import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:campi/views/router/delegate.dart';
 import 'package:campi/views/router/page.dart';
@@ -12,7 +13,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 final appTheme = PiTheme();
-final navi = NavigationCubit([PiPageConfig(location: postListPath)]);
+final navi = NavigationCubit([PiPageConfig(location: splashPath)]);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,15 +35,18 @@ class CampingApp extends StatelessWidget {
   const CampingApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return BlocProvider.value(
-        value: navi,
-        child: MaterialApp.router(
-          title: 'Camping & Picknic',
-          theme: appTheme.lightTheme,
-          darkTheme: appTheme.darkTheme,
-          themeMode: appTheme.currentTheme,
-          routeInformationParser: PiRouteParser(),
-          routerDelegate: PiRouteDelegator(navi: navi),
-        ));
+    return RepositoryProvider(
+      create: (_) => AuthRepo(),
+      child: BlocProvider.value(
+          value: navi,
+          child: MaterialApp.router(
+            title: 'Camping & Picknic',
+            theme: appTheme.lightTheme,
+            darkTheme: appTheme.darkTheme,
+            themeMode: appTheme.currentTheme,
+            routeInformationParser: PiRouteParser(),
+            routerDelegate: PiRouteDelegator(navi: navi),
+          )),
+    );
   }
 }

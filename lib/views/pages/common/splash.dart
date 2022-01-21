@@ -1,25 +1,44 @@
+import 'dart:async';
+
 import 'package:campi/utils/responsive_ratio.dart';
+import 'package:campi/views/router/page.dart';
+import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage() : super(key: const ValueKey("Splash"));
+  const SplashPage({Key? key}) : super(key: const ValueKey("Splash Page"));
+
   @override
   _SplashPageState createState() => _SplashPageState();
 }
 
 class _SplashPageState extends State<SplashPage> {
-  void _dispatchEvent(BuildContext context) {}
-
   @override
   void initState() {
+    Timer(const Duration(milliseconds: 1500), () {
+      BlocProvider.of<NavigationCubit>(context).clearAndPush(loginPath);
+    });
     super.initState();
-    _dispatchEvent(
-        context); // This will dispatch the navigateToHomeScreen event.
   }
 
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
+    return SplashW(mq: mq);
+  }
+}
+
+class SplashW extends StatelessWidget {
+  const SplashW({
+    Key? key,
+    required this.mq,
+  }) : super(key: key);
+
+  final MediaQueryData mq;
+
+  @override
+  Widget build(BuildContext context) {
     return Stack(
       alignment: AlignmentDirectional.center,
       children: [
