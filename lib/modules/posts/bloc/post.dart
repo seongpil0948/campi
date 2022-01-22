@@ -3,10 +3,10 @@ import 'dart:convert';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/events.dart';
-import 'package:campi/modules/posts/models/mgz.dart';
-import 'package:campi/modules/posts/state/post.dart';
-import 'package:http/http.dart' as http;
+import 'package:campi/modules/posts/repo.dart';
+import 'package:campi/modules/posts/state.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 const _postLimit = 20;
@@ -19,14 +19,15 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 }
 
 class PostBloc extends Bloc<PostEvent, PostState> {
-  PostBloc({required this.httpClient}) : super(const PostState()) {
+  PostRepo postRepo = PostRepo();
+  UserRepo userRepo = UserRepo();
+  PostBloc() : super(const PostState()) {
     on<PostFetched>(
       _onPostFetched,
       transformer: throttleDroppable(throttleDuration),
     );
+    add(PostFetched());
   }
-
-  final http.Client httpClient;
 
   Future<void> _onPostFetched(
     PostFetched event,
@@ -57,24 +58,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
-  Future<List<Post>> _fetchPosts([int startIndex = 0]) async {
-    final response = await httpClient.get(
-      Uri.https(
-        'jsonplaceholder.typicode.com',
-        '/posts',
-        <String, String>{'_start': '$startIndex', '_limit': '$_postLimit'},
-      ),
-    );
-    if (response.statusCode == 200) {
-      final body = json.decode(response.body) as List;
-      return body.map((dynamic json) {
-        return Post(
-          id: json['id'] as int,
-          title: json['title'] as String,
-          body: json['body'] as String,
-        );
-      }).toList();
-    }
-    throw Exception('error fetching posts');
-  }
+  Future<List<dynamic>> _fetchPosts([int startIndex = 0]) async =>
+      postRepo.getAllPosts(await userRepo.allUserIds);
 }

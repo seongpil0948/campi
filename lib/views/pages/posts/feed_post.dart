@@ -47,7 +47,7 @@ class FeedPostW extends StatelessWidget {
           ),
         ),
         // SelectMapW(onPick: (PickResult r) { TODO
-        //   var feed = context.read<FeedInfo>();
+        //   var feed = context.read<FeedState>();
         //   feed.addr = r.formattedAddress;
         //   final l = r.geometry?.location;
         //   if (l != null) {
@@ -94,7 +94,7 @@ Future _postFeed({required BuildContext context}) async {
   //   }
 
   //   final doc = getCollection(c: Collections.Users).doc(writer?.userId);
-  //   var finfo = FeedInfo(
+  //   var finfo = FeedState(
   //     writerId: writer!.userId,
   //     feedId: feed.feedId,
   //     files: paths,

@@ -1,3 +1,5 @@
+import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/common/collections.dart';
 import 'package:campi/utils/io.dart';
 import 'package:campi/utils/moment.dart';
 import 'package:equatable/equatable.dart';
@@ -38,6 +40,13 @@ class FeedState extends Equatable {
     this.sharedUserIds = const [],
     this.bookmarkedUserIds = const [],
   }) : feedId = const Uuid().v4();
+
+  Future<PiUser?> get writer async {
+    final doc = await getCollection(c: Collections.users).doc(writerId).get();
+    return doc.exists
+        ? PiUser.fromJson(doc.data() as Map<String, dynamic>)
+        : null;
+  }
 
   FeedState copyWith({
     List<PiFile>? fs,

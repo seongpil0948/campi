@@ -22,8 +22,8 @@ class MgzPostPage extends StatelessWidget {
 }
 
 class MgzPostW extends StatelessWidget {
-  PiUser user;
-  MgzPostW({Key? key, required this.user}) : super(key: key);
+  final PiUser user;
+  const MgzPostW({Key? key, required this.user}) : super(key: key);
 
   Future<String> _assetPickCallback(File file, bool isVideo, PiUser u) async {
     final f = PiFile.file(

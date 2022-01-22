@@ -1,4 +1,3 @@
-import 'package:campi/modules/posts/models/mgz.dart';
 import 'package:equatable/equatable.dart';
 
 enum PostStatus { initial, success, failure }
@@ -6,17 +5,17 @@ enum PostStatus { initial, success, failure }
 class PostState extends Equatable {
   const PostState({
     this.status = PostStatus.initial,
-    this.posts = const <Post>[],
+    this.posts = const [],
     this.hasReachedMax = false,
   });
 
   final PostStatus status;
-  final List<Post> posts;
+  final List<dynamic> posts;
   final bool hasReachedMax;
 
   PostState copyWith({
     PostStatus? status,
-    List<Post>? posts,
+    List<dynamic>? posts,
     bool? hasReachedMax,
   }) {
     return PostState(
