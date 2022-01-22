@@ -13,6 +13,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'modules/bloc_observer.dart';
+
 final appTheme = PiTheme();
 final navi = NavigationCubit([PiPageConfig(location: splashPath)]);
 final auth = AuthRepo();
@@ -29,7 +31,11 @@ void main() async {
   //   'welcome_message': 'this is the default welcome message',
   //   'feat1_enabled': false,
   // });
-  runApp(const CampingApp());
+  await auth.user.first;
+  BlocOverrides.runZoned(
+    () => runApp(const CampingApp()),
+    blocObserver: AppBlocObserver(),
+  );
 }
 
 class CampingApp extends StatelessWidget {
