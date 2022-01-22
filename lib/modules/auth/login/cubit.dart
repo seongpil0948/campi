@@ -5,14 +5,14 @@ import 'package:formz/formz.dart';
 import '../repo.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit(this._authenticationRepository) : super(const LoginState());
+  LoginCubit(this._authRepo) : super(const LoginState());
 
-  final AuthRepo _authenticationRepository;
+  final AuthRepo _authRepo;
 
   Future<void> logInWithGoogle() async {
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
-      await _authenticationRepository.logInWithGoogle();
+      await _authRepo.logInWithGoogle();
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on LogInWithGoogleFailure catch (e) {
       emit(state.copyWith(

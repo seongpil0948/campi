@@ -22,6 +22,11 @@ class PiUser {
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
 
+  bool get isEmpty => this == PiUser.empty();
+
+  /// Convenience getter to determine whether the current user is not empty.
+  bool get isNotEmpty => this != PiUser.empty();
+
   PiUser({required User user, this.messageToken})
       : displayName = user.displayName,
         email = user.email,

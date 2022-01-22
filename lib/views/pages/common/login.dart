@@ -22,6 +22,7 @@ class LoginPage extends StatelessWidget {
           "assets/images/splash_back_${fileNumberByRatio(mq.devicePixelRatio)}.png",
           fit: BoxFit.cover,
           height: mq.size.height,
+          width: mq.size.width,
         ),
         BlocProvider(
             create: (_) => LoginCubit(context.read<AuthRepo>()),

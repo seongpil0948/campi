@@ -1,5 +1,6 @@
 import 'package:campi/config/theme.dart';
 import 'package:campi/firebase_options.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:campi/views/router/delegate.dart';
@@ -14,7 +15,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 final appTheme = PiTheme();
 final navi = NavigationCubit([PiPageConfig(location: splashPath)]);
-
+final auth = AuthRepo();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -35,10 +36,13 @@ class CampingApp extends StatelessWidget {
   const CampingApp({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return RepositoryProvider(
-      create: (_) => AuthRepo(),
-      child: BlocProvider.value(
-          value: navi,
+    return RepositoryProvider.value(
+      value: auth,
+      child: MultiBlocProvider(
+          providers: [
+            BlocProvider.value(value: navi),
+            BlocProvider(create: (_) => AppBloc(authRepo: auth)),
+          ],
           child: MaterialApp.router(
             title: 'Camping & Picknic',
             theme: appTheme.lightTheme,
