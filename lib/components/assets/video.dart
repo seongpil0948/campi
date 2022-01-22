@@ -6,7 +6,7 @@ class VideoW extends StatefulWidget {
   @override
   _VideoWState createState() => _VideoWState();
 
-  VideoW({required this.controller});
+  const VideoW({required this.controller, Key? key}) : super(key: key);
 }
 
 class _VideoWState extends State<VideoW> {

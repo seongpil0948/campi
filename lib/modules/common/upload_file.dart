@@ -22,13 +22,9 @@ Future<PiFile?> uploadFilePathsToFirebase(
           'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
     }
   }, onError: (e) {
-    // The final snapshot is also available on the task via `.snapshot`,
-    // this can include 2 additional states, `TaskState.error` & `TaskState.canceled`
-    // FIXME: ERRRRRORR Report
     print(task.snapshot);
   });
 
-  // We can still optionally use the Future alongside the stream.
   try {
     await task;
     var meta = await storeRef.getMetadata();

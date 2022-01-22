@@ -15,12 +15,15 @@ class MgzPostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (_) => MgzCubit(), child: MgzPostW());
+    final _user = context.select((AppBloc bloc) => bloc.state.user);
+    return BlocProvider(
+        create: (_) => MgzCubit(_user.userId), child: MgzPostW(user: _user));
   }
 }
 
 class MgzPostW extends StatelessWidget {
-  MgzPostW({Key? key}) : super(key: key);
+  PiUser user;
+  MgzPostW({Key? key, required this.user}) : super(key: key);
 
   Future<String> _assetPickCallback(File file, bool isVideo, PiUser u) async {
     final f = PiFile.file(
@@ -32,14 +35,12 @@ class MgzPostW extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _user = context.select((AppBloc bloc) => bloc.state.user);
-    context.read<MgzCubit>().fillId(_user.userId);
     Future<String> _onImagePickCallback(File file) async {
-      return await _assetPickCallback(file, false, _user);
+      return await _assetPickCallback(file, false, user);
     }
 
     Future<String> _onVideoPickCallback(File file) async {
-      return await _assetPickCallback(file, true, _user);
+      return await _assetPickCallback(file, true, user);
     }
 
     final _controller = q.QuillController.basic();

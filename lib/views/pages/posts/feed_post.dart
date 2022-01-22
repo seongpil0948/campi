@@ -15,7 +15,6 @@ class FeedPostPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Piffold(
         body: SingleChildScrollView(
-            // FIXME: writer
             child: BlocProvider(
       create: (_) => FeedCubit(),
       child: const FeedPostW(),

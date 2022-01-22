@@ -4,10 +4,10 @@ import 'package:campi/modules/posts/models/common.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class MgzState extends Time {
-  late String writerId;
+  final String writerId;
   final Document content;
 
-  MgzState({required this.content});
+  MgzState({required this.writerId, required this.content});
 
   MgzState.fromJson(Map<String, dynamic> j)
       : writerId = j['writerId'],
@@ -21,8 +21,10 @@ class MgzState extends Time {
         ...super.toJson()
       };
   MgzState copyWith({
+    String? writerId,
     Document? content,
-  }) {
-    return MgzState(content: content ?? this.content);
-  }
+  }) =>
+      MgzState(
+          writerId: writerId ?? this.writerId,
+          content: content ?? this.content);
 }

@@ -56,7 +56,9 @@ dependencies:
   flutter_slidable: ^1.2.0
   path_provider: ^2.0.8
   google_maps_flutter: ^2.1.1
-  google_maps_place_picker: ^2.1.0-nullsafety.3
+  google_maps_place_picker: 
+    git:
+      url: https://github.com/GauravCalidig/google_maps_place_picker.git
 
 dev_dependencies:
   flutter_test:

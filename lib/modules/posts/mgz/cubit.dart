@@ -6,12 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/models/documents/document.dart';
 
 class MgzCubit extends Cubit<MgzState> {
-  MgzCubit() : super(MgzState(content: Document()));
+  MgzCubit(String writerId)
+      : super(MgzState(writerId: writerId, content: Document()));
   void changeDoc(Document doc) => emit(state.copyWith(content: doc));
-  void fillId(String writeId) {
-    state.writerId = writeId;
-    emit(state);
-  }
 
   void posting(BuildContext context) =>
       getCollection(c: Collections.magazines, userId: state.writerId)
