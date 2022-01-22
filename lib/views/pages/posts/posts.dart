@@ -191,7 +191,9 @@ class MgzW extends StatelessWidget {
     return mediaUrl != null
         ? InkWell(
             onTap: () {
-              context.read<NavigationCubit>().push(mgzPostPath);
+              context
+                  .read<NavigationCubit>()
+                  .push(mgzDetailPath, {'magazine': mgz});
             },
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),

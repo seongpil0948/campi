@@ -20,7 +20,7 @@ class MgzCubit extends Cubit<MgzState> {
 String? docCheckMedia(Document dc, {checkImg = false, checkVideo = false}) {
   final j = dc.toDelta().toJson();
   for (var i = 0; i < j.length; i++) {
-    if (!j[i].containsKey("insert") || j[i].values.single is String) {
+    if (!j[i].containsKey("insert") || j[i].values.first is String) {
       continue;
     } else if (checkImg == true && j[i].values.single.containsKey('image')) {
       return j[i].values.single['image'];

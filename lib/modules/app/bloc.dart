@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
+import 'package:campi/modules/common/collections.dart';
 import 'package:equatable/equatable.dart';
 
 part 'event.dart';
@@ -19,7 +20,14 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
     _userSubscription = _authRepo.user.listen(
-      (user) => add(AppUserChanged(user)),
+      (user) async {
+        add(AppUserChanged(user));
+        final c =
+            await getCollection(c: Collections.users).doc(user.userId).get();
+        if (!c.exists) {
+          user.update();
+        }
+      },
     );
   }
 

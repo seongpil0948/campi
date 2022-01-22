@@ -1,3 +1,4 @@
+import 'package:campi/modules/common/collections.dart';
 import 'package:campi/utils/moment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +27,15 @@ class PiUser {
 
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != PiUser.empty();
+  // ignore: hash_and_equals, test_types_in_equals
+  bool operator ==(other) => userId == (other as PiUser).userId;
+
+  Future<bool> update() async {
+    updatedAt = DateTime.now();
+    final doc = getCollection(c: Collections.users).doc(userId);
+    await doc.set(toJson(), SetOptions(merge: true));
+    return true;
+  }
 
   PiUser({required User user, this.messageToken})
       : displayName = user.displayName,

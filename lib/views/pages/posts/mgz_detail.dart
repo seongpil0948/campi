@@ -11,7 +11,7 @@ class MgzDetailPage extends StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
     print("Magazine Detail View Arguments : $args");
     MgzState mgz = args.args['magazine'];
-    print("Magazine : $mgz");
+    // print("Magazine : $mgz");
     final FocusNode _focusNode = FocusNode();
 
     final _controller = QuillController(

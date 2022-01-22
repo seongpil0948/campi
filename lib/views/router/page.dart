@@ -19,7 +19,7 @@ const mgzDetailPath = '/post/detail/mgz';
 const feedDetailPath = '/post/detail/feed';
 
 MaterialPage wgetToPage(PiPageConfig config, Widget w) =>
-    MaterialPage(arguments: config.args, child: w, name: config.name);
+    MaterialPage(arguments: config, child: w, name: config.name);
 
 MaterialPage getPage(PiPageConfig config) =>
     wgetToPage(config, _routes[config.route]?.call() ?? const UnknownPage());
