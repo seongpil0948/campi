@@ -32,7 +32,7 @@ class GridFeeds extends StatelessWidget {
           final f = feeds[idx];
           return Card(
               elevation: 4.0,
-              child: Container(
+              child: SizedBox(
                 width: mq.size.width / 2.5,
                 height: mq.size.height / 3,
                 child: Column(

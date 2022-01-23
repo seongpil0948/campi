@@ -2,6 +2,7 @@ import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/utils/io.dart';
 import 'package:campi/utils/moment.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:uuid/uuid.dart';
 
@@ -46,6 +47,16 @@ class FeedState extends Equatable {
     return doc.exists
         ? PiUser.fromJson(doc.data() as Map<String, dynamic>)
         : null;
+  }
+
+  Future<bool> update() {
+    updatedAt = DateTime.now();
+    final fc = getCollection(c: Collections.feeds, userId: writerId);
+    return fc
+        .doc(feedId)
+        .set(toJson(), SetOptions(merge: true))
+        .then((value) => true)
+        .catchError((e) => false);
   }
 
   FeedState copyWith({

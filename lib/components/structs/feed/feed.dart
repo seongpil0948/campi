@@ -2,8 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/utils/io.dart';
+import 'package:campi/views/pages/common/user.dart';
+import 'package:campi/views/router/page.dart';
+import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';
-// ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 
 enum ThumnailSize { medium, small }
@@ -26,9 +28,9 @@ class FeedThumnail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final thumnail = GestureDetector(
-      onTap: () {
-        //FIXME
-      },
+      onTap: () => context
+          .read<NavigationCubit>()
+          .push(feedDetailPath, {"selectedFeed": feedInfo}),
       child: ClipRRect(
           borderRadius: BorderRadius.circular(30),
           child: Stack(children: [
@@ -47,8 +49,8 @@ class FeedThumnail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (tSize == ThumnailSize.medium)
-                      // FIXME: UserRow(feedInfo: feedInfo),
-                      const SizedBox(height: 10),
+                      UserRow(feedInfo: feedInfo),
+                    const SizedBox(height: 10),
                     Text(
                       feedInfo.content,
                       overflow: TextOverflow.ellipsis,
@@ -96,9 +98,8 @@ class FeedStatusRow extends StatefulWidget {
 class _FeedStatusRowState extends State<FeedStatusRow> {
   void _updates(PiUser u) {
     setState(() {
-      // FIXME:
-      // u.update();
-      // widget.feed.update();
+      u.update();
+      widget.feed.update();
     });
   }
 
@@ -118,7 +119,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                       F.likeUserIds.remove(U.userId);
                       _updates(U);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.favorite,
                       color: Colors.red,
                     ))
@@ -128,7 +129,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                       F.likeUserIds.add(U.userId);
                       _updates(U);
                     },
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.favorite_border_outlined,
                       color: Colors.black,
                     ),
@@ -183,7 +184,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                         );
                       });
                 },
-                icon: Icon(Icons.share_rounded)),
+                icon: const Icon(Icons.share_rounded)),
             Text("  ${F.sharedUserIds.length}  "),
           ],
         ),
@@ -198,12 +199,11 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
               future: F.writer,
               builder: (context, snapshot) {
                 return snapshot.hasData
-                    ? Container()
-                    // FIXME: ? FollowBtn(
-                    //     currUser: U,
-                    //     targetUser: snapshot.data!,
-                    //   )
-                    : Center(child: CircularProgressIndicator());
+                    ? FollowBtn(
+                        currUser: U,
+                        targetUser: snapshot.data!,
+                      )
+                    : const Center(child: CircularProgressIndicator());
               })
       ],
     );

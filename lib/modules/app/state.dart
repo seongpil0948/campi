@@ -7,7 +7,7 @@ enum AppStatus {
 
 class AppState extends Equatable {
   final AppStatus status;
-  late PiUser user;
+  late final PiUser user;
 
   AppState._({required this.status, PiUser? piUser})
       : user = piUser ?? PiUser.empty();

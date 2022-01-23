@@ -13,7 +13,7 @@ class PostingFab extends StatelessWidget {
         onPressed: () {
           showDialog(
               context: context,
-              builder: (innerCtx) => AlertDialog(
+              builder: (innercontext) => AlertDialog(
                   title: const Center(child: Text("포스팅 종류 선택")),
                   content: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,

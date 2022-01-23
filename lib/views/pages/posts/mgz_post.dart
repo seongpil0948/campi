@@ -107,7 +107,7 @@ class MgzPostW extends StatelessWidget {
           if (mediaUrl == null) {
             showDialog(
                 context: context,
-                builder: (BuildContext nestedCtx) {
+                builder: (BuildContext nestedcontext) {
                   return const AlertDialog(content: Text("이미지를 하나이상 첨부 해주세요."));
                 });
             return;
