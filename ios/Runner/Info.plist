@@ -94,5 +94,9 @@
 	<string>음성인식 기능을 사용해도 될까요?</string>
 	<key>kTCCServiceMediaLibrary</key>
 	<string>애플 뮤직을 사용하시겠어요?</string>	
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	</array>	
 </dict>
 </plist>
