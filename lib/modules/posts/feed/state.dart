@@ -143,19 +143,3 @@ class FeedState extends Equatable {
     return str;
   }
 }
-  // Future<PiUser?> get writer async {
-  //   final doc = await getCollection(c: Collections.Users).doc(writerId).get();
-  //   return doc.exists
-  //       ? PiUser.fromJson(doc.data() as Map<String, dynamic>)
-  //       : null;
-  // }
-
-  // Future<bool> update() {
-  //   updatedAt = DateTime.now();
-  //   final fc = getCollection(c: Collections.Feeds, userId: writerId);
-  //   return fc
-  //       .doc(feedId)
-  //       .set(toJson(), SetOptions(merge: true))
-  //       .then((value) => true)
-  //       .catchError((e) => false);
-  // }

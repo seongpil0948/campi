@@ -71,8 +71,36 @@ class FeedPostW extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(60, 0, 60, 30),
                 child: ElevatedButton(
-                  onPressed: () {
-                    _postFeed(context: context);
+                  onPressed: () async {
+                    List<PiFile> paths = [];
+                    try {
+                      final feed = context.read<FeedCubit>().state;
+                      final userId = feed.writerId;
+                      if (feed.files.isEmpty) {
+                        oneMoreImg(context);
+                        return;
+                      }
+                      for (var f in feed.files) {
+                        var file = await uploadFilePathsToFirebase(
+                            f: f, path: 'clientUploads/$userId/${f.fName}');
+                        if (file != null) paths.add(file);
+                      }
+
+                      final doc =
+                          getCollection(c: Collections.users).doc(userId);
+                      doc
+                          .collection(feedCollection)
+                          .doc(feed.feedId)
+                          .set(feed.toJson())
+                          .then((value) {
+                        context.read<NavigationCubit>().pop();
+                      });
+                    } catch (e, s) {
+                      debugPrint(
+                          '!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
+                      FirebaseCrashlytics.instance.recordError(e, s,
+                          reason: 'Post Feed Error', fatal: true);
+                    }
                   },
                   child: const Center(
                     child: Text("올리기"),
@@ -84,37 +112,6 @@ class FeedPostW extends StatelessWidget {
         )
       ],
     );
-  }
-}
-
-Future _postFeed({required BuildContext context}) async {
-  List<PiFile> paths = [];
-  try {
-    final feed = context.read<FeedCubit>().state;
-    final userId = feed.writerId;
-    if (feed.files.isEmpty) {
-      oneMoreImg(context);
-      return;
-    }
-    for (var f in feed.files) {
-      var file = await uploadFilePathsToFirebase(
-          f: f, path: 'clientUploads/$userId/${f.fName}');
-      if (file != null) paths.add(file);
-    }
-
-    final doc = getCollection(c: Collections.users).doc(userId);
-    doc
-        .collection(feedCollection)
-        .doc(feed.feedId)
-        .set(feed.toJson())
-        .then((value) {
-      context.read<NavigationCubit>().pop();
-    });
-  } catch (e, s) {
-    debugPrint(
-        '!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
-    FirebaseCrashlytics.instance
-        .recordError(e, s, reason: 'Post Feed Error', fatal: true);
   }
 }
 

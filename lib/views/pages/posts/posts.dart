@@ -47,11 +47,6 @@ class _PostsListState extends State<PostsListView> {
             'Message also contained a notification: ${message.notification}');
       }
     });
-    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-      await Firebase.initializeApp();
-
-      debugPrint("Handling a background message: ${message.messageId}");
-    });
     super.initState();
     _scrollController.addListener(_onScroll);
   }
