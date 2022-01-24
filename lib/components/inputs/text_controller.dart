@@ -37,10 +37,12 @@ class _PiEditorsState extends State<PiFeedEditors> {
             setHashTags(context, matches);
             return matches.join(" ");
           });
-      _contentController.addListener(() =>
-          context.read<FeedCubit>().changeContent(_contentController.text));
-      _titleController.addListener(
-          () => context.read<FeedCubit>().changeTitle(_titleController.text));
+      _contentController.addListener(() {
+        context.read<FeedCubit>().changeContent(_contentController.text);
+      });
+      _titleController.addListener(() {
+        context.read<FeedCubit>().changeTitle(_titleController.text);
+      });
       once = true;
     }
 

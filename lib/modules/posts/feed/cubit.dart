@@ -1,13 +1,14 @@
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:campi/utils/io.dart';
+import 'package:flutter/foundation.dart';
 
 class FeedCubit extends Cubit<FeedState> {
-  FeedCubit() : super(FeedState());
+  FeedCubit(String userId) : super(FeedState(writerId: userId));
 
   @override
   void onChange(Change<FeedState> change) {
-    print("Feed Change: $change");
+    debugPrint("Feed Change: $change");
     super.onChange(change);
   }
 
@@ -18,6 +19,6 @@ class FeedCubit extends Cubit<FeedState> {
   void changeAround(String a) => emit(state.copyWith(around: a));
   void changeContent(String t) => emit(state.copyWith(content: t));
   void changeHashTags(List<String> hs) => emit(state.copyWith(hashTags: hs));
-
-  void postFeed(List<String> hs) => emit(state.copyWith(hashTags: hs));
+  void changeAddr(double lat, double lng, String? addr) =>
+      emit(state.copyWith(lat: lat, lng: lng, addr: addr));
 }

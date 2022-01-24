@@ -50,7 +50,7 @@ class _MyPageW extends StatelessWidget {
     final mq = MediaQuery.of(context);
 
     return Column(children: [
-      Container(
+      SizedBox(
         height: mq.size.height / 2.3,
         width: mq.size.width,
         child: Stack(children: [

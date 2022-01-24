@@ -30,25 +30,27 @@ class PostsListView extends StatefulWidget {
 class _PostsListState extends State<PostsListView> {
   final _scrollController = ScrollController();
   final _msgInst = FirebaseMessaging.instance;
+  final bloc = PostBloc();
 
   @override
   void initState() {
     if (defaultTargetPlatform == TargetPlatform.android) {
       AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
     }
-    _msgInst.getToken().then((value) => print("Msg Token : $value"));
+    _msgInst.getToken().then((value) => debugPrint("Msg Token : $value"));
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
+      debugPrint('Got a message whilst in the foreground!');
+      debugPrint('Message data: ${message.data}');
 
       if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+        debugPrint(
+            'Message also contained a notification: ${message.notification}');
       }
     });
     FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
       await Firebase.initializeApp();
 
-      print("Handling a background message: ${message.messageId}");
+      debugPrint("Handling a background message: ${message.messageId}");
     });
     super.initState();
     _scrollController.addListener(_onScroll);
@@ -56,9 +58,8 @@ class _PostsListState extends State<PostsListView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-        create: (_) => PostBloc(),
-        child: PostListW(scrollController: _scrollController));
+    return BlocProvider.value(
+        value: bloc, child: PostListW(scrollController: _scrollController));
   }
 
   @override
@@ -70,7 +71,7 @@ class _PostsListState extends State<PostsListView> {
   }
 
   void _onScroll() {
-    if (_isBottom) context.read<PostBloc>().add(PostFetched());
+    if (_isBottom) bloc.add(PostFetched());
   }
 
   bool get _isBottom {

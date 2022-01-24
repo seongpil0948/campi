@@ -6,6 +6,7 @@ import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';
+// ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 
 enum ThumnailSize { medium, small }

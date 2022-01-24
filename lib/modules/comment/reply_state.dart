@@ -4,6 +4,7 @@ import 'package:campi/modules/posts/models/common.dart';
 
 class Reply extends Comment {
   @override
+  // ignore: overridden_fields
   ContentType ctype = ContentType.reply;
   final String targetCmtId;
   Reply(

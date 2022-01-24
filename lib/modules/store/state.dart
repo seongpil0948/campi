@@ -77,7 +77,7 @@ const _storeProductFour = ProductInfo(
     salesPrice: '89,000',
     reviewCount: 322,
     imgPath: 'assets/images/store_rank_4.png');
-const _StoreProducts = [
+const _storeProducts = [
   _storeProductOne,
   _storeProductTwo,
   _storeProductThree,
@@ -86,7 +86,7 @@ const _StoreProducts = [
 
 Iterable<ProductInfo> getProds(int count) {
   return Iterable.generate(count).map((i) {
-    var idx = i % _StoreProducts.length;
-    return _StoreProducts[idx];
+    var idx = i % _storeProducts.length;
+    return _storeProducts[idx];
   });
 }

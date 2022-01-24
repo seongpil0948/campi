@@ -49,6 +49,7 @@ class _CampyMapState extends State<CampyMap> {
       GoogleMap(
           mapType: widget.mapType,
           markers: Set.from(_markers),
+          // ignore: prefer_collection_literals
           gestureRecognizers: Set()
             ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
             ..add(
@@ -96,7 +97,7 @@ class SelectMapW extends StatefulWidget {
 }
 
 class _SelectMapWState extends State<SelectMapW> {
-  static const kInitialPosition = LatLng(-33.8567844, 151.213108);
+  static const kInitialPosition = LatLng(37.48030185005912, 126.85525781355892);
   PickResult? selectedPlace;
   @override
   Widget build(BuildContext context) {
@@ -136,10 +137,7 @@ class _SelectMapWState extends State<SelectMapW> {
                               inputDecorationTheme:
                                   const InputDecorationTheme()),
                           child: PlacePicker(
-                            apiKey:
-                                Theme.of(context).platform == TargetPlatform.iOS
-                                    ? 'AIzaSyDtVadFa64BpO8BxD55xfP3gwQFpXJ9Zeo'
-                                    : 'AIzaSyDtVadFa64BpO8BxD55xfP3gwQFpXJ9Zeo',
+                            apiKey: 'AIzaSyAjz67bd4ak6nVUZH_lYSg665KnmVAbajU',
                             initialPosition: kInitialPosition,
                             useCurrentLocation: true,
                             selectInitialPosition: true,

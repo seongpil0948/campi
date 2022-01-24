@@ -9,9 +9,9 @@ class MgzDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
-    print("Magazine Detail View Arguments : $args");
+    debugPrint("Magazine Detail View Arguments : $args");
     MgzState mgz = args.args['magazine'];
-    // print("Magazine : $mgz");
+    // debugPrint("Magazine : $mgz");
     final FocusNode _focusNode = FocusNode();
 
     final _controller = QuillController(
@@ -39,7 +39,7 @@ class MgzDetailPage extends StatelessWidget {
           //   onKey: (evt) {
           //     if (evt.isControlPressed && evt.character == 'b') {
           //       final atts = _controller.getSelectionStyle().attributes;
-          //       print("Selected Attributes: $atts");
+          //       debugPrint("Selected Attributes: $atts");
           //       atts.keys.contains("bold")
           //           ? _controller
           //               .formatSelection(Attribute.clone(Attribute.bold, null))

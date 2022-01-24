@@ -39,7 +39,7 @@ class PiAssetCarousel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var fs = context.select((FeedCubit c) => c.state.files);
+    final fs = context.select((FeedCubit c) => c.state.files);
     return CarouselSlider.builder(
         itemCount: fs.length + 1,
         itemBuilder: (BuildContext context, int idx, int pageViewIndex) {
@@ -55,20 +55,21 @@ class PiAssetCarousel extends StatelessWidget {
   }
 
   _pressAssetButton(bool isVideo, List<PiFile> fs, BuildContext context) async {
+    List<PiFile> files = [...fs];
     if (isVideo) {
       final asset = await _picker.pickVideo(source: ImageSource.gallery);
       if (asset != null) {
-        fs.add(PiFile.fromXfile(f: asset, ftype: PiFileType.video));
-        context.read<FeedCubit>().changeFs(fs);
+        files.add(PiFile.fromXfile(f: asset, ftype: PiFileType.video));
+        context.read<FeedCubit>().changeFs(files);
       }
       return null;
     }
     final imgs = await _picker.pickMultiImage();
     if (imgs != null) {
       for (var i in imgs) {
-        fs.add(PiFile.fromXfile(f: i, ftype: PiFileType.image));
+        files.add(PiFile.fromXfile(f: i, ftype: PiFileType.image));
       }
-      context.read<FeedCubit>().changeFs(fs);
+      context.read<FeedCubit>().changeFs(files);
     }
   }
 }

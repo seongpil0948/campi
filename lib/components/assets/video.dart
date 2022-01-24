@@ -18,7 +18,7 @@ class _VideoWState extends State<VideoW> {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
       });
-    print("");
+    debugPrint("");
   }
 
   @override

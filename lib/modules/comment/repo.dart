@@ -17,7 +17,7 @@ Future<List<Comment>> loadComment(String userId, String feedId) async {
 }
 
 void postComment(String txt, PiUser writer, FeedState feed) {
-  final commentId = Uuid().v4();
+  final commentId = const Uuid().v4();
   final comment = Comment(id: commentId, writer: writer, content: txt);
   final cj = comment.toJson();
   getCollection(

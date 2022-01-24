@@ -27,7 +27,8 @@ class PiUser {
 
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != PiUser.empty();
-  // ignore: hash_and_equals, test_types_in_equals
+  @override
+  // ignore: hash_and_equals
   bool operator ==(other) => userId == (other as PiUser).userId;
 
   Future<bool> update() async {

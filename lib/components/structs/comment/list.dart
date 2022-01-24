@@ -16,7 +16,8 @@ class CommentList extends StatefulWidget {
   CommentList({Key? key, required this.userId, required this.feedId})
       : commentStream = getCollection(
                 c: Collections.comments, userId: userId, feedId: feedId)
-            .snapshots();
+            .snapshots(),
+        super(key: key);
 
   @override
   _CommentListState createState() => _CommentListState();

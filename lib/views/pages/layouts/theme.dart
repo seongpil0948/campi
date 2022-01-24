@@ -46,8 +46,8 @@ class PiTheme extends PiThemeInterface {
           ),
           bodyText2: TextStyle(color: primaryVarColor)),
       appBarTheme: const AppBarTheme(
-          iconTheme: const IconThemeData(color: Colors.black),
-          toolbarTextStyle: const TextStyle(color: Colors.black),
+          iconTheme: IconThemeData(color: Colors.black),
+          toolbarTextStyle: TextStyle(color: Colors.black),
           backgroundColor: Colors.white,
           elevation: 0),
       // visualDensity: VisualDensity(vertical: 0.5, horizontal: 0.5),

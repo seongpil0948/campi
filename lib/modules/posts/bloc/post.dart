@@ -19,7 +19,7 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostRepo postRepo = PostRepo();
-  UserRepo userRepo = UserRepo();
+  UserRepo userRepo = const UserRepo();
   PostBloc() : super(const PostState()) {
     on<PostFetched>(
       _onPostFetched,

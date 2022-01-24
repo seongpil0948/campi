@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:campi/components/signs/files.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/common/upload_file.dart';
@@ -105,11 +106,7 @@ class MgzPostW extends StatelessWidget {
         onPressed: () {
           final mediaUrl = docCheckMedia(_controller.document, checkImg: true);
           if (mediaUrl == null) {
-            showDialog(
-                context: context,
-                builder: (BuildContext nestedcontext) {
-                  return const AlertDialog(content: Text("이미지를 하나이상 첨부 해주세요."));
-                });
+            oneMoreImg(context);
             return;
           }
           final c = context.read<MgzCubit>();

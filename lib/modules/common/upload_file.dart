@@ -18,11 +18,11 @@ Future<PiFile?> uploadFilePathsToFirebase(
 
   task.snapshotEvents.listen((TaskSnapshot snapshot) {
     if (kDebugMode) {
-      print(
+      debugPrint(
           'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
     }
   }, onError: (e) {
-    print(task.snapshot);
+    debugPrint(task.snapshot.toString());
   });
 
   try {
@@ -37,7 +37,7 @@ Future<PiFile?> uploadFilePathsToFirebase(
     }
   } on FirebaseException catch (e) {
     if (e.code == 'permission-denied') {
-      print('User does not have permission to upload to this reference.');
+      debugPrint('User does not have permission to upload to this reference.');
     }
     // ...
   }

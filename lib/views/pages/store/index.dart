@@ -1,4 +1,3 @@
-import 'package:campi/components/assets/carousel.dart';
 import 'package:campi/components/layout/piffold.dart';
 import 'package:campi/components/structs/store/product.dart';
 import 'package:campi/modules/store/state.dart';
@@ -7,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class StoreCategoryView extends StatelessWidget {
-  StoreCategoryView({Key? key}) : super(key: key);
+  const StoreCategoryView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
@@ -67,7 +66,7 @@ class StoreCategoryView extends StatelessWidget {
           headLineStyle: headLineStyle,
           title: "BEST",
         ),
-        Container(
+        SizedBox(
           width: mq.size.width - 10,
           height: mq.size.height / 4,
           child: ListView.builder(

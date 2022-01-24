@@ -8,7 +8,7 @@ Future<void> main() async {
   /// Create a `CounterBloc` instance.
   final bloc = CounterBloc();
 
-  /// Subscribe to state changes and print each state.
+  /// Subscribe to state changes and debugPrint each state.
   final subscription = bloc.stream.listen(print);
 
   /// Interact with the `bloc` to trigger `state` changes.

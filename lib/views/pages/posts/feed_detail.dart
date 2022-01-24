@@ -58,6 +58,7 @@ class FeedDetailW extends StatelessWidget {
     final U = context.watch<PiUser?>();
     if (U == null) return const Center(child: CircularProgressIndicator());
     Map<String, Text> tagMap = {};
+    // ignore: avoid_function_literals_in_foreach_calls
     feed.hashTags.forEach(
         (tag) => tagMap[tag] = Text(tag, style: tagTextSty(tag, context)));
     return Stack(children: [

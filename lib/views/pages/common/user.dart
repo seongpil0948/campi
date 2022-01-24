@@ -99,7 +99,7 @@ void showFollow(
 class UserList extends StatelessWidget {
   final PiUser targetUser;
   final PiUser? currUser;
-  UserList({
+  const UserList({
     required this.targetUser,
     this.currUser,
     Key? key,

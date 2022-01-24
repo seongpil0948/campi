@@ -10,7 +10,7 @@ import 'package:uuid/uuid.dart';
 class FeedState extends Equatable {
   final String feedId;
   final List<PiFile> files;
-  late String writerId;
+  final String writerId;
   late String title;
   late String content;
   String? placeAround;
@@ -26,21 +26,22 @@ class FeedState extends Equatable {
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
 
-  FeedState({
-    this.files = const [],
-    this.title = '',
-    this.content = '',
-    this.placeAround,
-    this.placePrice,
-    this.campKind,
-    this.addr,
-    this.lat,
-    this.lng,
-    this.hashTags = const [],
-    this.likeUserIds = const [],
-    this.sharedUserIds = const [],
-    this.bookmarkedUserIds = const [],
-  }) : feedId = const Uuid().v4();
+  FeedState(
+      {this.files = const [],
+      this.title = '',
+      this.content = '',
+      this.placeAround,
+      this.placePrice,
+      this.campKind,
+      this.addr,
+      this.lat,
+      this.lng,
+      this.hashTags = const [],
+      this.likeUserIds = const [],
+      this.sharedUserIds = const [],
+      this.bookmarkedUserIds = const [],
+      required this.writerId})
+      : feedId = const Uuid().v4();
 
   Future<PiUser?> get writer async {
     final doc = await getCollection(c: Collections.users).doc(writerId).get();
@@ -75,7 +76,8 @@ class FeedState extends Equatable {
     List<String>? sharedUserIds,
     List<String>? bookmarkedUserIds,
   }) {
-    return FeedState(
+    var feed = FeedState(
+        writerId: writerId,
         files: fs ?? files,
         title: title ?? this.title,
         content: content ?? this.content,
@@ -89,6 +91,7 @@ class FeedState extends Equatable {
         likeUserIds: likeUserIds ?? this.likeUserIds,
         sharedUserIds: sharedUserIds ?? this.sharedUserIds,
         bookmarkedUserIds: bookmarkedUserIds ?? this.bookmarkedUserIds);
+    return feed;
   }
 
   FeedState.fromJson(Map<String, dynamic> j)

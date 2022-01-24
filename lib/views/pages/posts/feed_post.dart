@@ -1,22 +1,31 @@
 import 'package:campi/components/assets/carousel.dart';
+import 'package:campi/components/geo/pymap.dart';
 import 'package:campi/components/inputs/text_controller.dart';
 import 'package:campi/components/layout/piffold.dart';
 import 'package:campi/components/select/single.dart';
+import 'package:campi/components/signs/files.dart';
+import 'package:campi/modules/app/bloc.dart';
+import 'package:campi/modules/common/collections.dart';
+import 'package:campi/modules/common/upload_file.dart';
 import 'package:campi/modules/posts/feed/cubit.dart';
 import 'package:campi/utils/io.dart';
 import 'package:campi/utils/parsers.dart';
+import 'package:campi/views/router/state.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 
 class FeedPostPage extends StatelessWidget {
   const FeedPostPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _user = context.select((AppBloc bloc) => bloc.state.user);
     return Piffold(
         body: SingleChildScrollView(
             child: BlocProvider(
-      create: (_) => FeedCubit(),
+      create: (_) => FeedCubit(_user.userId),
       child: const FeedPostW(),
     )));
   }
@@ -46,15 +55,14 @@ class FeedPostW extends StatelessWidget {
             ],
           ),
         ),
-        // SelectMapW(onPick: (PickResult r) { TODO
-        //   var feed = context.read<FeedState>();
-        //   feed.addr = r.formattedAddress;
-        //   final l = r.geometry?.location;
-        //   if (l != null) {
-        //     feed.lat = l.lat;
-        //     feed.lng = l.lng;
-        //   }
-        // }),
+        SelectMapW(onPick: (PickResult r) {
+          final l = r.geometry?.location;
+          if (l != null) {
+            context
+                .read<FeedCubit>()
+                .changeAddr(l.lat, l.lng, r.formattedAddress);
+          }
+        }),
         const PiFeedEditors(),
         const _HashList(),
         Row(
@@ -81,51 +89,33 @@ class FeedPostW extends StatelessWidget {
 
 Future _postFeed({required BuildContext context}) async {
   List<PiFile> paths = [];
-  // try {
-  final feed = context.read<FeedCubit>().state;
-  await Future.delayed(Duration.zero);
-  return true;
-  //   final writer = await feed.writer;
+  try {
+    final feed = context.read<FeedCubit>().state;
+    final userId = feed.writerId;
+    if (feed.files.isEmpty) {
+      oneMoreImg(context);
+      return;
+    }
+    for (var f in feed.files) {
+      var file = await uploadFilePathsToFirebase(
+          f: f, path: 'clientUploads/$userId/${f.fName}');
+      if (file != null) paths.add(file);
+    }
 
-  //   for (var f in feed.files) {
-  //     var file = await uploadFilePathsToFirebase(
-  //         f: f, path: 'clientUploads/${writer?.userId}/${f.fName}');
-  //     if (file != null) paths.add(file);
-  //   }
-
-  //   final doc = getCollection(c: Collections.Users).doc(writer?.userId);
-  //   var finfo = FeedState(
-  //     writerId: writer!.userId,
-  //     feedId: feed.feedId,
-  //     files: paths,
-  //     title: feed.title,
-  //     content: feed.content,
-  //     placeAround: feed.placeAround,
-  //     placePrice: feed.placePrice,
-  //     campKind: feed.campKind,
-  //     hashTags: feed.hashTags,
-  //     addr: feed.addr,
-  //     lat: feed.lat,
-  //     lng: feed.lng,
-  //   );
-  //   // If you don't add a field to the document it will be orphaned.
-  //   doc.set(writer.toJson(), SetOptions(merge: true));
-  //   doc
-  //       .collection(FeedCollection)
-  //       .doc(feed.feedId)
-  //       .set(finfo.toJson())
-  //       .then((value) {
-  //     print(">>> Feed Added <<<");
-  //     state.currPageAction = PageAction.feed();
-  //   });
-  // } catch (e, s) {
-  //   print(
-  //       '!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
-  //   FirebaseCrashlytics.instance
-  //       .recordError(e, s, reason: 'Post Feed Error', fatal: true);
-  // } finally {
-  //   state.isLoading = false;
-  // }
+    final doc = getCollection(c: Collections.users).doc(userId);
+    doc
+        .collection(feedCollection)
+        .doc(feed.feedId)
+        .set(feed.toJson())
+        .then((value) {
+      context.read<NavigationCubit>().pop();
+    });
+  } catch (e, s) {
+    debugPrint(
+        '!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
+    FirebaseCrashlytics.instance
+        .recordError(e, s, reason: 'Post Feed Error', fatal: true);
+  }
 }
 
 class _EditAround extends StatelessWidget {
