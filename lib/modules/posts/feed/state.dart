@@ -134,7 +134,18 @@ class FeedState extends Equatable {
       };
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [
+        files,
+        title,
+        content,
+        placeAround,
+        placePrice,
+        campKind,
+        addr,
+        lat,
+        lng,
+        hashTags
+      ];
   @override
   String toString() {
     var str =
