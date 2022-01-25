@@ -1,5 +1,5 @@
 import 'package:campi/components/structs/comment/list.dart';
-import 'package:campi/modules/comment/state.dart';
+import 'package:campi/modules/comment/comment.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

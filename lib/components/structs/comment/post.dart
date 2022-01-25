@@ -1,7 +1,7 @@
 import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/comment/repo.dart';
-import 'package:campi/modules/comment/state.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +36,9 @@ class CommentPost extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Row(
         children: [
-          const SizedBox(width: 5),
+          const SizedBox(
+            width: 5,
+          ),
           Expanded(
             flex: 1,
             child: Padding(

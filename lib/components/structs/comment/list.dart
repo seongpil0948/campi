@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/components/structs/comment/core.dart';
-import 'package:campi/modules/comment/reply_state.dart';
-import 'package:campi/modules/comment/state.dart';
+import 'package:campi/modules/comment/comment.dart';
+import 'package:campi/modules/comment/reply.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/utils/moment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -131,7 +131,7 @@ class AvartarIdRow extends StatelessWidget {
 class ReplyList extends StatelessWidget {
   final Comment c;
   final String feedId;
-  const ReplyList({Key? key, required this.c, required this.feedId})
+  ReplyList({Key? key, required this.c, required this.feedId})
       : super(key: key);
 
   @override

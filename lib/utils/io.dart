@@ -46,7 +46,7 @@ class PiFile {
     }
   }
 
-  String get fName => file!.path.split("/").last;
+  String? get fName => file != null ? file!.path.split("/").last : url;
 
   Map<String, dynamic> toJson() => {
         'url': url,

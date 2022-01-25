@@ -85,13 +85,13 @@ class FeedPostW extends StatelessWidget {
                             f: f, path: 'clientUploads/$userId/${f.fName}');
                         if (file != null) paths.add(file);
                       }
-
+                      final newFeed = feed.copyWith(fs: paths);
                       final doc =
                           getCollection(c: Collections.users).doc(userId);
                       doc
                           .collection(feedCollection)
-                          .doc(feed.feedId)
-                          .set(feed.toJson())
+                          .doc(newFeed.feedId)
+                          .set(newFeed.toJson())
                           .then((value) {
                         context.read<NavigationCubit>().pop();
                       });

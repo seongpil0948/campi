@@ -1,3 +1,4 @@
+import 'package:campi/components/inputs/text_controller.dart';
 import 'package:campi/config/theme.dart';
 import 'package:campi/firebase_options.dart';
 import 'package:campi/modules/app/bloc.dart';
@@ -48,6 +49,7 @@ class CampingApp extends StatelessWidget {
           providers: [
             BlocProvider.value(value: navi),
             BlocProvider(create: (_) => AppBloc(authRepo: auth)),
+            BlocProvider(create: (ctx) => SearchValBloc())
           ],
           child: MaterialApp.router(
             title: 'Camping & Picknic',

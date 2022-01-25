@@ -6,7 +6,7 @@ import 'package:campi/components/structs/feed/feed.dart';
 import 'package:campi/components/structs/feed/place.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
-import 'package:campi/modules/comment/state.dart';
+import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/utils/parsers.dart';
 import 'package:campi/views/pages/layouts/drawer.dart';
