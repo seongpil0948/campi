@@ -77,7 +77,6 @@ class MgzPostW extends StatelessWidget {
       showAlignmentButtons: false,
       showCodeBlock: false,
       showDividers: false,
-      showHorizontalRule: false,
       showInlineCode: false,
       showItalicButton: false,
       showQuote: false,

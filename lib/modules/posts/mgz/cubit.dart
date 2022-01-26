@@ -3,7 +3,7 @@ import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quill/models/documents/document.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 class MgzCubit extends Cubit<MgzState> {
   MgzCubit(String writerId)
