@@ -16,10 +16,10 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    Timer(const Duration(milliseconds: 1500), () {
+    super.initState();
+    Timer(const Duration(milliseconds: 3000), () {
       BlocProvider.of<NavigationCubit>(context).clearAndPush(loginPath);
     });
-    super.initState();
   }
 
   @override
