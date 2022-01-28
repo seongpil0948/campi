@@ -17,10 +17,8 @@ Future<PiFile?> uploadFilePathsToFirebase(
   var task = storeRef.putFile(File(f.file!.path), metadata);
 
   task.snapshotEvents.listen((TaskSnapshot snapshot) {
-    if (kDebugMode) {
-      debugPrint(
-          'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
-    }
+    debugPrint(
+        'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
   }, onError: (e) {
     debugPrint(task.snapshot.toString());
   });

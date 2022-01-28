@@ -37,10 +37,10 @@ class PiFile {
 
   PiFile.fromCdn({required String this.url, required String fileType}) {
     switch (fileType) {
-      case "Image":
+      case "image":
         ftype = PiFileType.image;
         break;
-      case "Video":
+      case "video":
         ftype = PiFileType.video;
         break;
     }

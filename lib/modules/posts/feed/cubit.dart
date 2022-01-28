@@ -8,7 +8,7 @@ class FeedCubit extends Cubit<FeedState> {
 
   @override
   void onChange(Change<FeedState> change) {
-    debugPrint("Feed Change: $change");
+    // debugPrint("Feed Change: $change");
     super.onChange(change);
   }
 
