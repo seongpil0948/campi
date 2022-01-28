@@ -59,7 +59,7 @@ class _CommentListState extends State<CommentList> {
 }
 
 // ignore: must_be_immutable
-class _CommentExpandList extends StatefulWidget {
+class _CommentExpandList extends StatelessWidget {
   List<bool> cmtExpands;
   List<CommentModel> comments;
   String feedId;
@@ -71,37 +71,21 @@ class _CommentExpandList extends StatefulWidget {
       : super(key: key);
 
   @override
-  __CommentExpandListState createState() => __CommentExpandListState();
-}
-
-class __CommentExpandListState extends State<_CommentExpandList> {
-  @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    return ExpansionPanelList(
-      animationDuration: const Duration(milliseconds: 1000),
-      expandedHeaderPadding: EdgeInsets.zero,
-      elevation: 0,
-      dividerColor: Theme.of(context).cardColor,
-      expansionCallback: (int index, bool isExpanded) {
-        setState(() {
-          widget.cmtExpands[index] = !isExpanded;
-        });
-      },
-      children: [
-        for (var cIdx = 0; cIdx < widget.comments.length; cIdx++)
-          ExpansionPanel(
-              canTapOnHeader: true,
-              isExpanded: widget.cmtExpands[cIdx],
-              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-              headerBuilder: (context, isExpanded) {
-                final diffDays = daysBetween(
-                    DateTime.now(), widget.comments[cIdx].updatedAt);
-                return CommentW(
-                    mq: mq, c: widget.comments[cIdx], diffDays: diffDays);
-              },
-              body: ReplyList(c: widget.comments[cIdx], feedId: widget.feedId))
-      ],
+    return SizedBox(
+      height: mq.size.height / 3,
+      child: ListView.separated(
+          itemCount: comments.length,
+          separatorBuilder: (context, index) => const Divider(),
+          itemBuilder: (context, idx) {
+            final diffDays =
+                daysBetween(DateTime.now(), comments[idx].updatedAt);
+            return Column(children: [
+              CommentW(mq: mq, c: comments[idx], diffDays: diffDays),
+              ReplyList(c: comments[idx], feedId: feedId)
+            ]);
+          }),
     );
   }
 }
@@ -137,6 +121,7 @@ class ReplyList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const _margin = EdgeInsets.fromLTRB(40, 5, 10, 5);
     return StreamBuilder<QuerySnapshot>(
         stream: getCollection(
                 c: Collections.comments,
@@ -152,15 +137,16 @@ class ReplyList extends StatelessWidget {
                 .map((r) => Reply.fromJson(r.data() as Map<String, dynamic>))
                 .toList();
             if (replies.isEmpty) return Container();
-            return ListView.builder(
+            return ListView.separated(
                 itemCount: replies.length,
+                separatorBuilder: (context, index) =>
+                    Container(margin: _margin, child: const Divider()),
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, idx) {
                   final r = replies[idx];
                   return Container(
-                    margin: const EdgeInsets.fromLTRB(40, 10, 0, 10),
-                    color: Colors.cyan,
+                    margin: _margin,
                     child: Row(
                       children: [
                         AvartarIdRow(c: c),
