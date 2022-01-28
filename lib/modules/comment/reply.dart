@@ -2,7 +2,7 @@ import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/posts/models/common.dart';
 
-class Reply extends Comment {
+class Reply extends CommentModel {
   // ignore: overridden_fields, annotate_overrides
   ContentType ctype = ContentType.reply;
   final String targetCmtId;

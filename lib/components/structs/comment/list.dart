@@ -33,7 +33,8 @@ class _CommentListState extends State<CommentList> {
         if (!snapshot.hasError &&
             snapshot.connectionState != ConnectionState.waiting) {
           var comments = snapshot.data!.docs
-              .map((c) => Comment.fromJson(c.data() as Map<String, dynamic>))
+              .map((c) =>
+                  CommentModel.fromJson(c.data() as Map<String, dynamic>))
               .toList();
           var cmtExpands = [for (var _ = 1; _ <= comments.length; _++) false];
           return Column(
@@ -60,7 +61,7 @@ class _CommentListState extends State<CommentList> {
 // ignore: must_be_immutable
 class _CommentExpandList extends StatefulWidget {
   List<bool> cmtExpands;
-  List<Comment> comments;
+  List<CommentModel> comments;
   String feedId;
   _CommentExpandList(
       {Key? key,
@@ -111,7 +112,7 @@ class AvartarIdRow extends StatelessWidget {
     required this.c,
   }) : super(key: key);
 
-  final Comment c;
+  final CommentModel c;
 
   @override
   Widget build(BuildContext context) {
@@ -122,16 +123,16 @@ class AvartarIdRow extends StatelessWidget {
           backgroundImage: CachedNetworkImageProvider(c.writer.photoURL)),
       Container(
           margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-          child: Text(c.writer.email!.split("@")[0],
+          child: Text(c.writer.name,
               style: T.bodyText2!.copyWith(fontWeight: FontWeight.bold))),
     ]);
   }
 }
 
 class ReplyList extends StatelessWidget {
-  final Comment c;
+  final CommentModel c;
   final String feedId;
-  ReplyList({Key? key, required this.c, required this.feedId})
+  const ReplyList({Key? key, required this.c, required this.feedId})
       : super(key: key);
 
   @override
@@ -159,6 +160,7 @@ class ReplyList extends StatelessWidget {
                   final r = replies[idx];
                   return Container(
                     margin: const EdgeInsets.fromLTRB(40, 10, 0, 10),
+                    color: Colors.cyan,
                     child: Row(
                       children: [
                         AvartarIdRow(c: c),

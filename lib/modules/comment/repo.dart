@@ -7,30 +7,30 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-Future<List<Comment>> loadComment(String userId, String feedId) async {
+Future<List<CommentModel>> loadComment(String userId, String feedId) async {
   final comments = await getCollection(
           c: Collections.comments, userId: userId, feedId: feedId)
       .orderBy('createdAt', descending: true)
       .get();
   return comments.docs
-      .map((c) => Comment.fromJson(c.data() as Map<String, dynamic>))
+      .map((c) => CommentModel.fromJson(c.data() as Map<String, dynamic>))
       .toList();
 }
 
 void postComment(String txt, PiUser writer, FeedState feed) {
   final commentId = const Uuid().v4();
-  final comment = Comment(id: commentId, writer: writer, content: txt);
+  final comment = CommentModel(id: commentId, writer: writer, content: txt);
   final cj = comment.toJson();
   getCollection(
           c: Collections.comments, userId: writer.userId, feedId: feed.feedId)
       .doc(commentId)
       .set(cj)
       .then((value) {
-    debugPrint("Post Comment is Successed ");
+    debugPrint("Post CommentModel is Successed ");
   }).catchError((e) {
-    debugPrint("Post Comment is Restricted: $e");
+    debugPrint("Post CommentModel is Restricted: $e");
     FirebaseCrashlytics.instance
-        .recordError(e, null, reason: 'Post Comment Error', fatal: true);
+        .recordError(e, null, reason: 'Post CommentModel Error', fatal: true);
   });
 }
 
@@ -45,9 +45,9 @@ void postReply(String txt, PiUser writer, String feedId, String commentId) {
       .doc(replyId)
       .set(rj)
       .then((value) {
-    print("Post Reply is Successed ");
+    debugPrint("Post Reply is Successed ");
   }).catchError((e) {
-    print("Post Reply is Restricted: $e");
+    debugPrint("Post Reply is Restricted: $e");
     FirebaseCrashlytics.instance
         .recordError(e, null, reason: 'Post Reply Error', fatal: true);
   });

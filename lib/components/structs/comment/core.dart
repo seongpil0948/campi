@@ -12,7 +12,7 @@ class CommentW extends StatelessWidget {
   }) : super(key: key);
 
   final MediaQueryData mq;
-  final Comment c;
+  final CommentModel c;
   final int diffDays;
 
   @override
@@ -29,18 +29,17 @@ class CommentW extends StatelessWidget {
               padding: const EdgeInsets.only(left: 40),
               child: Row(children: [
                 Text("${diffDays.abs()}일전"),
-                Consumer<CommentState>(
-                    builder: (context, cmtState, child) => TextButton(
-                        onPressed: () {
-                          cmtState.setTargetCmt = c;
-                          cmtState.showPostCmtWidget = true;
-                        },
-                        child: Text("답글달기",
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText2!
-                                .copyWith(fontWeight: FontWeight.bold),
-                            overflow: TextOverflow.ellipsis)))
+                TextButton(
+                    onPressed: () {
+                      context.read<CommentBloc>().add(ShowPostCmtW(
+                          targetComment: c, showPostCmtWiget: true));
+                    },
+                    child: Text("답글달기",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2!
+                            .copyWith(fontWeight: FontWeight.bold),
+                        overflow: TextOverflow.ellipsis))
               ]),
             ),
             // ReplyList(c: c, feedId: widget.feedId)

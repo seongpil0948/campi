@@ -12,6 +12,7 @@ import 'package:campi/utils/parsers.dart';
 import 'package:campi/views/pages/layouts/drawer.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 
@@ -20,34 +21,26 @@ class FeedDetailPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
     final args = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
     final feed = args.args['selectedFeed'] as FeedState;
     var _commentController = TextEditingController();
     return Scaffold(
         drawer: const PiDrawer(),
-        body: MultiProvider(
-          providers: [
-            Provider<PiUser?>(
-                create: (_) => context.watch<AuthRepo>().currentUser),
-            Provider<CommentState>(create: (_) => CommentState())
-          ],
-          child: FeedDetailW(
-              mq: mq, feed: feed, commentController: _commentController),
-        ));
+        body: BlocProvider(
+            create: (_) => CommentBloc(),
+            child: FeedDetailW(
+                feed: feed, commentController: _commentController)));
   }
 }
 
 class FeedDetailW extends StatelessWidget {
   const FeedDetailW({
     Key? key,
-    required this.mq,
     required this.feed,
     required TextEditingController commentController,
   })  : _commentController = commentController,
         super(key: key);
 
-  final MediaQueryData mq;
   final FeedState feed;
   final TextEditingController _commentController;
 
@@ -55,8 +48,9 @@ class FeedDetailW extends StatelessWidget {
   Widget build(BuildContext context) {
     const leftPadding = 20.0;
     const iconImgH = 24.0;
-    final U = context.watch<PiUser?>();
-    if (U == null) return const Center(child: CircularProgressIndicator());
+    final U = context.watch<AuthRepo>().currentUser;
+    final mq = MediaQuery.of(context);
+
     Map<String, Text> tagMap = {};
     // ignore: avoid_function_literals_in_foreach_calls
     feed.hashTags.forEach(
@@ -65,8 +59,8 @@ class FeedDetailW extends StatelessWidget {
       SingleChildScrollView(
         child: GestureDetector(
           onTap: () {
-            Provider.of<CommentState>(context, listen: false)
-                .showPostCmtWidget = false;
+            context.read<CommentBloc>().add(
+                ShowPostCmtW(targetComment: null, showPostCmtWiget: false));
           },
           child: Column(
             children: [
@@ -93,17 +87,20 @@ class FeedDetailW extends StatelessWidget {
               ],
               const _Divider(),
               PlaceInfo(mq: mq, iconImgH: iconImgH, feed: feed),
-              RichText(
-                  text: TextSpan(
-                      children: feed.content
-                          .split(
-                              ' ') /*find words that start with '@' and include a username that can also be found in the list of mentions*/
-                          .map((word) => TextSpan(
-                              text: word + ' ',
-                              style: tagMap.containsKey(word)
-                                  ? tagMap[word]!.style
-                                  : Theme.of(context).textTheme.bodyText2))
-                          .toList())),
+              Container(
+                margin: const EdgeInsets.symmetric(vertical: 20),
+                child: RichText(
+                    text: TextSpan(
+                        children: feed.content
+                            .split(
+                                ' ') /*find words that start with '@' and include a username that can also be found in the list of mentions*/
+                            .map((word) => TextSpan(
+                                text: word + ' ',
+                                style: tagMap.containsKey(word)
+                                    ? tagMap[word]!.style
+                                    : Theme.of(context).textTheme.bodyText2))
+                            .toList())),
+              ),
               if (feed.lat != null && feed.lng != null)
                 SizedBox(
                     height: mq.size.height / 3,
@@ -111,28 +108,27 @@ class FeedDetailW extends StatelessWidget {
               const _Divider(),
               TextButton(
                   onPressed: () {
-                    final cmtState = context.read<CommentState>();
-                    cmtState.setTargetCmt = null;
-                    cmtState.showPostCmtWidget = true;
+                    context.read<CommentBloc>().add(ShowPostCmtW(
+                        targetComment: null, showPostCmtWiget: true));
                   },
                   child: const Text("댓글 달기")),
-              Padding(
+              Container(
                 padding: const EdgeInsets.only(left: leftPadding),
+                margin: const EdgeInsets.only(bottom: 40),
                 child: CommentList(feedId: feed.feedId, userId: U.userId),
               )
             ],
           ),
         ),
       ),
-      if (Provider.of<CommentState>(context).showPostCmtWidget)
-        Positioned(
-          bottom: 30,
-          child: CommentPost(
-              mq: mq,
-              currUser: U,
-              commentController: _commentController,
-              feed: feed),
-        )
+      BlocBuilder<CommentBloc, CommentState>(
+          builder: (context, state) => state.showPostCmtW
+              ? Positioned(
+                  bottom: 30,
+                  child: CommentPostW(
+                      commentController: _commentController, feed: feed),
+                )
+              : Container())
     ]);
   }
 }

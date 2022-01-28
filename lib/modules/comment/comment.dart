@@ -1,23 +1,25 @@
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/posts/models/common.dart';
 import 'package:campi/utils/moment.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Comment {
+class CommentModel {
   ContentType ctype = ContentType.comment;
   final String id;
   final PiUser writer;
   String content;
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
-  Comment({required this.id, required this.writer, required this.content});
+  CommentModel({required this.id, required this.writer, required this.content});
 
   void update({required String content}) {
     updatedAt = DateTime.now();
     this.content = content;
   }
 
-  Comment.fromJson(Map<String, dynamic> j)
+  CommentModel.fromJson(Map<String, dynamic> j)
       : id = j['id'],
         writer = PiUser.fromJson(j['writer']),
         ctype = contentTypeFromString(j['ctype']),
@@ -34,25 +36,35 @@ class Comment {
       };
 }
 
-class CommentState extends ChangeNotifier {
-  Comment? _targetCmt;
-  bool _show = false;
+// ignore: must_be_immutable
+class CommentState extends Equatable {
+  final CommentModel? targetCmt;
+  final bool showPostCmtW;
 
-  Comment? get getTargetCmt => _targetCmt;
+  const CommentState(CommentModel? targetComment, bool showPostCmtWiget)
+      : targetCmt = targetComment,
+        showPostCmtW = showPostCmtWiget;
 
-  set setTargetCmt(Comment? cmt) {
-    _targetCmt = cmt;
-    notifyListeners();
+  CommentState copyWith(CommentModel? targetComment, bool showPostCmtWiget) {
+    return CommentState(targetComment, showPostCmtWiget);
   }
 
-  bool get showPostCmtWidget => _show;
+  @override
+  List<Object?> get props => [targetCmt, showPostCmtW];
+}
 
-  set showPostCmtWidget(bool to) {
-    if (to == false) {
-      _targetCmt = null;
-      notifyListeners();
-    }
-    _show = to;
-    notifyListeners();
+abstract class CommentEvent {}
+
+class ShowPostCmtW extends CommentEvent {
+  CommentModel? targetComment;
+  bool showPostCmtWiget;
+  ShowPostCmtW({required this.targetComment, required this.showPostCmtWiget});
+}
+
+class CommentBloc extends Bloc<CommentEvent, CommentState> {
+  CommentBloc() : super(const CommentState(null, false)) {
+    on<ShowPostCmtW>((ShowPostCmtW event, Emitter<CommentState> emit) async {
+      return emit(state.copyWith(event.targetComment, event.showPostCmtWiget));
+    });
   }
 }

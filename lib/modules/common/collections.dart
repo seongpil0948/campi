@@ -19,7 +19,7 @@ CollectionReference getCollection(
       if (userId == null || feedId == null)
         // ignore: curly_braces_in_flow_control_structures
         throw ArgumentError(
-            "If you want a Comment collection, please enter your user & feed ID.");
+            "If you want a CommentModel collection, please enter your user & feed ID.");
       return store
           .collection(userCollection)
           .doc(userId)
