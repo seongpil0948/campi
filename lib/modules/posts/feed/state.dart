@@ -1,4 +1,5 @@
 import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/utils/io.dart';
 import 'package:campi/utils/moment.dart';
@@ -25,6 +26,7 @@ class FeedState extends Equatable {
   List<String> bookmarkedUserIds = [];
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
+  PiUser? _writer;
 
   FeedState(
       {this.files = const [],
@@ -43,11 +45,10 @@ class FeedState extends Equatable {
       required this.writerId})
       : feedId = const Uuid().v4();
 
-  Future<PiUser?> get writer async {
-    final doc = await getCollection(c: Collections.users).doc(writerId).get();
-    return doc.exists
-        ? PiUser.fromJson(doc.data() as Map<String, dynamic>)
-        : null;
+  Future<PiUser> get writer async {
+    if (_writer != null) return _writer!;
+    _writer = await UserRepo.getUserById(writerId);
+    return _writer!;
   }
 
   Future<bool> update() {

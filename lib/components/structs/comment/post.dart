@@ -6,7 +6,6 @@ import 'package:campi/modules/comment/repo.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/provider.dart';
 
 class CommentPostW extends StatelessWidget {
   const CommentPostW(
@@ -41,11 +40,7 @@ class CommentPostW extends StatelessWidget {
                 padding: const EdgeInsets.all(1.0),
                 child: BlocBuilder<CommentBloc, CommentState>(
                     builder: (context, state) => PiUserAvatar(
-                        radius: 17,
-                        imgUrl: state.targetCmt != null
-                            ? state.targetCmt!.writer.photoURL
-                            : U.profileImage,
-                        userId: U.userId)),
+                        radius: 17, imgUrl: U.profileImage, userId: U.userId)),
               )),
           Expanded(
               flex: 6,
@@ -72,11 +67,12 @@ class CmtPostTxtField extends StatelessWidget {
   Widget build(BuildContext context) {
     final U = context.watch<AuthRepo>().currentUser;
     final target = context.select((CommentBloc bloc) => bloc.state.targetCmt);
-    return TextField(
+    TextField txtFieldW(String? labelTxt) => TextField(
         controller: _commentController,
         minLines: 1,
         maxLines: 12,
         decoration: InputDecoration(
+          labelText: labelTxt,
           filled: true,
           fillColor: Colors.white,
           suffixIcon: IconButton(
@@ -91,6 +87,16 @@ class CmtPostTxtField extends StatelessWidget {
         onSubmitted: (String txt) {
           _submit(target, txt, U, feed, context, _commentController);
         });
+    return target == null
+        ? txtFieldW(null)
+        : FutureBuilder<PiUser>(
+            future: target.writer,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return txtFieldW(snapshot.data!.name);
+              }
+              return const Center(child: CircularProgressIndicator());
+            });
   }
 }
 

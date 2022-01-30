@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/components/structs/comment/core.dart';
+import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/comment/reply.dart';
 import 'package:campi/modules/common/collections.dart';
@@ -101,15 +102,25 @@ class AvartarIdRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final T = Theme.of(context).textTheme;
-    return Row(children: [
-      CircleAvatar(
-          radius: 15,
-          backgroundImage: CachedNetworkImageProvider(c.writer.photoURL)),
-      Container(
-          margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-          child: Text(c.writer.name,
-              style: T.bodyText2!.copyWith(fontWeight: FontWeight.bold))),
-    ]);
+    return FutureBuilder<PiUser>(
+        future: c.writer,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Row(children: [
+              CircleAvatar(
+                  radius: 15,
+                  backgroundImage:
+                      CachedNetworkImageProvider(snapshot.data!.photoURL)),
+              Container(
+                  margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  child: Text(snapshot.data!.name,
+                      style:
+                          T.bodyText2!.copyWith(fontWeight: FontWeight.bold))),
+            ]);
+            ;
+          }
+          return const Center(child: CircularProgressIndicator());
+        });
   }
 }
 
@@ -124,9 +135,7 @@ class ReplyList extends StatelessWidget {
     const _margin = EdgeInsets.fromLTRB(40, 5, 10, 5);
     return StreamBuilder<QuerySnapshot>(
         stream: getCollection(
-                c: Collections.comments,
-                userId: c.writer.userId,
-                feedId: feedId)
+                c: Collections.comments, userId: c.writerId, feedId: feedId)
             .doc(c.id)
             .collection(replyCollection)
             .snapshots(),

@@ -1,18 +1,27 @@
 import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/models/common.dart';
 import 'package:campi/utils/moment.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CommentModel {
   ContentType ctype = ContentType.comment;
   final String id;
-  final PiUser writer;
+  String writerId;
   String content;
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
-  CommentModel({required this.id, required this.writer, required this.content});
+  PiUser? _writer;
+
+  CommentModel(
+      {required this.id, required this.writerId, required this.content});
+
+  Future<PiUser> get writer async {
+    if (_writer != null) return _writer!;
+    _writer = await UserRepo.getUserById(writerId);
+    return _writer!;
+  }
 
   void update({required String content}) {
     updatedAt = DateTime.now();
@@ -21,14 +30,15 @@ class CommentModel {
 
   CommentModel.fromJson(Map<String, dynamic> j)
       : id = j['id'],
-        writer = PiUser.fromJson(j['writer']),
+        writerId = j['writerId'],
         ctype = contentTypeFromString(j['ctype']),
         content = j['content'],
         createdAt = timeStamp2DateTime(j['createdAt']),
         updatedAt = timeStamp2DateTime(j['updatedAt']);
+
   Map<String, dynamic> toJson() => {
         'id': id,
-        'writer': writer.toJson(),
+        'writerId': writerId,
         'ctype': ctype.toCustomString(),
         'content': content,
         'updatedAt': updatedAt,

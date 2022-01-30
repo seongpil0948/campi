@@ -19,7 +19,8 @@ Future<List<CommentModel>> loadComment(String userId, String feedId) async {
 
 void postComment(String txt, PiUser writer, FeedState feed) {
   final commentId = const Uuid().v4();
-  final comment = CommentModel(id: commentId, writer: writer, content: txt);
+  final comment =
+      CommentModel(id: commentId, writerId: writer.userId, content: txt);
   final cj = comment.toJson();
   getCollection(
           c: Collections.comments, userId: writer.userId, feedId: feed.feedId)
@@ -37,7 +38,10 @@ void postComment(String txt, PiUser writer, FeedState feed) {
 void postReply(String txt, PiUser writer, String feedId, String commentId) {
   final replyId = const Uuid().v4();
   final reply = Reply(
-      id: commentId, writer: writer, content: txt, targetCmtId: commentId);
+      id: commentId,
+      writerId: writer.userId,
+      content: txt,
+      targetCmtId: commentId);
   final rj = reply.toJson();
   getCollection(c: Collections.comments, userId: writer.userId, feedId: feedId)
       .doc(commentId)

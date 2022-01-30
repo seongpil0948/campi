@@ -21,6 +21,12 @@ class UserRepo {
         .toList();
   }
 
+  static Future<PiUser> getUserById(String userId) async {
+    final doc = await getCollection(c: Collections.users).doc(userId).get();
+    assert(doc.exists);
+    return PiUser.fromJson(doc.data() as Map<String, dynamic>);
+  }
+
   Future<List<PiUser>> usersByIds(List<String> userIds) async {
     final uCol = getCollection(c: Collections.users);
     const chunkSize = 9;
