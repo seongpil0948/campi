@@ -72,19 +72,16 @@ class LoginW extends StatelessWidget {
               w: Text("캠피 서비스 이용을 위해 SNS 로그인을 해주세요", style: body2),
             ),
             InkWell(
-              onTap: () => context.read<LoginCubit>().logInWithGoogle(),
-              child: LoginButton(
-                mq: mq,
-                aImg: "assets/images/google_login.png",
-              ),
-            ),
-            const SizedBox(height: 10),
-            InkWell(
-                onTap: () {},
+                onTap: () => context.read<LoginCubit>().logInWithGoogle(),
                 child: LoginButton(
                   mq: mq,
-                  aImg: "assets/images/facebook_login.png",
+                  aImg: "assets/images/google_login.png",
                 ))
+            // const SizedBox(height: 10),
+            // InkWell(
+            //     onTap: () {},
+            //     child: LoginButton(
+            //         mq: mq, aImg: "assets/images/facebook_login.png"))
           ],
         ));
   }

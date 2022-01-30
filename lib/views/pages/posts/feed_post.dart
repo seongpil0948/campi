@@ -74,9 +74,14 @@ class FeedPostW extends StatelessWidget {
                   onPressed: () async {
                     List<PiFile> paths = [];
                     try {
+                      context.read<AppBloc>().add(AppLoadingChange());
                       final feed = context.read<FeedCubit>().state;
                       final userId = feed.writerId;
-                      if (feed.files.isEmpty) {
+                      if (feed.files.isEmpty ||
+                          feed.files
+                              .where((element) =>
+                                  element.ftype == PiFileType.image)
+                              .isEmpty) {
                         oneMoreImg(context);
                         return;
                       }
@@ -93,6 +98,7 @@ class FeedPostW extends StatelessWidget {
                           .doc(newFeed.feedId)
                           .set(newFeed.toJson())
                           .then((value) {
+                        context.read<AppBloc>().add(AppLoadingChange());
                         context.read<NavigationCubit>().pop();
                       });
                     } catch (e, s) {

@@ -106,17 +106,19 @@ class PostListW extends StatelessWidget {
 
                 return ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
-                    return index >= state.posts.length
-                        ? const BottomLoader()
-                        : PostListItem(post: state.posts[index]);
+                    // return index >= state.posts.length
+                    // ? const BottomLoader()
+                    // : PostListItem(post: state.posts[index]);
+                    return PostListItem(post: state.posts[index]);
                   },
-                  itemCount: state.hasReachedMax
-                      ? state.posts.length
-                      : state.posts.length + 1,
+                  itemCount: state.posts.length,
+                  // itemCount: state.hasReachedMax
+                  // ? state.posts.length
+                  // : state.posts.length + 1,
                   controller: _scrollController,
                 );
               default:
-                return const Center(child: CircularProgressIndicator());
+                return Container();
             }
           },
         ),

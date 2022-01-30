@@ -19,6 +19,9 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
+    on<AppLoadingChange>((evt, emit) {
+      emit(state.copyWith(state.status, state.user, !state.isLoading));
+    });
     _userSubscription = _authRepo.user.listen(
       (user) async {
         add(AppUserChanged(user));

@@ -15,9 +15,9 @@ extension ParseToString on PiFileType {
 
 PiFileType fileTypeFromString(String ftype) {
   switch (ftype) {
-    case "Video":
+    case "video":
       return PiFileType.video;
-    case "Image":
+    case "image":
       return PiFileType.image;
     default:
       return PiFileType.image;
