@@ -44,9 +44,7 @@ class PiAppBar extends StatelessWidget {
                   onTap: () => context
                       .read<NavigationCubit>()
                       .push(myPath, {"selectedUser": auth.currentUser}),
-                  child: PiUserAvatar(
-                      imgUrl: auth.currentUser.profileImage,
-                      userId: auth.currentUser.userId))
+                  child: GoMyAvatar(user: auth.currentUser))
             ],
           ),
         ),
