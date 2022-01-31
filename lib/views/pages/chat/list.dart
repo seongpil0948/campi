@@ -1,4 +1,4 @@
-import 'package:campi/components/layout/piffold.dart';
+import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/auth/user_repo.dart';

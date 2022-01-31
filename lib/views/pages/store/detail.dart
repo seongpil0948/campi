@@ -1,5 +1,5 @@
 import 'package:campi/components/assets/carousel.dart';
-import 'package:campi/components/layout/piffold.dart';
+import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/components/structs/store/product.dart';
 import 'package:campi/modules/store/state.dart';
 import 'package:campi/views/router/config.dart';

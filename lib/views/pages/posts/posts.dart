@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/components/btn/fabs.dart';
-import 'package:campi/components/layout/piffold.dart';
+import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/components/structs/feed/feed.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/posts/bloc/post.dart';

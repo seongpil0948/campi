@@ -1,7 +1,7 @@
 import 'package:campi/components/assets/carousel.dart';
 import 'package:campi/components/geo/pymap.dart';
 import 'package:campi/components/inputs/text_controller.dart';
-import 'package:campi/components/layout/piffold.dart';
+import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/components/select/single.dart';
 import 'package:campi/components/signs/files.dart';
 import 'package:campi/modules/app/bloc.dart';
