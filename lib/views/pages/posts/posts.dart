@@ -47,7 +47,8 @@ class _PostsListState extends State<PostsListView> {
       }
     });
     super.initState();
-    _scrollController.addListener(_onScroll);
+    bloc.add(PostFetched());
+    // _scrollController.addListener(_onScroll);
   }
 
   @override
@@ -58,15 +59,15 @@ class _PostsListState extends State<PostsListView> {
 
   @override
   void dispose() {
-    _scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
+    // _scrollController
+    //   ..removeListener(_onScroll)
+    //   ..dispose();
     super.dispose();
   }
 
-  void _onScroll() {
-    if (_isBottom) bloc.add(PostFetched());
-  }
+  // void _onScroll() {
+  //   if (_isBottom) bloc.add(PostFetched());
+  // }
 
   bool get _isBottom {
     if (!_scrollController.hasClients) return false;
