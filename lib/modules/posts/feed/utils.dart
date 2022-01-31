@@ -1,7 +1,5 @@
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/utils/io.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 
 Future<List<PiFile>> imgsOfFeed({required FeedState f, int limit = 1}) async {
   List<PiFile> imgs = [];

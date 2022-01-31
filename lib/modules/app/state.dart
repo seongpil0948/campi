@@ -5,6 +5,7 @@ enum AppStatus {
   unauthenticated,
 }
 
+// ignore: must_be_immutable
 class AppState extends Equatable {
   final AppStatus status;
   late final PiUser user;

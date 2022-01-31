@@ -1,7 +1,6 @@
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:bloc/bloc.dart';
 import 'package:campi/utils/io.dart';
-import 'package:flutter/foundation.dart';
 
 class FeedCubit extends Cubit<FeedState> {
   FeedCubit(String userId) : super(FeedState(writerId: userId));

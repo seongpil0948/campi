@@ -4,7 +4,6 @@ import 'package:campi/components/structs/comment/list.dart';
 import 'package:campi/components/structs/comment/post.dart';
 import 'package:campi/components/structs/feed/feed.dart';
 import 'package:campi/components/structs/feed/place.dart';
-import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/posts/feed/state.dart';
@@ -13,8 +12,6 @@ import 'package:campi/views/pages/layouts/drawer.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// ignore: implementation_imports
-import 'package:provider/src/provider.dart';
 
 class FeedDetailPage extends StatelessWidget {
   const FeedDetailPage({Key? key}) : super(key: key);

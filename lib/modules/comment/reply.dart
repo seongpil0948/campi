@@ -1,4 +1,3 @@
-import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/posts/models/common.dart';
 

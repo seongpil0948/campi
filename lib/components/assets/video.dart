@@ -13,7 +13,8 @@ class _VideoWState extends State<VideoW> {
   @override
   void initState() {
     super.initState();
-    var videoPlayerController = widget.controller
+    // ignore: avoid_single_cascade_in_expression_statements
+    widget.controller
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
         setState(() {});
