@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/components/btn/fabs.dart';
+import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/components/structs/feed/feed.dart';
 import 'package:campi/modules/auth/model.dart';
@@ -153,7 +154,7 @@ class PostListItem extends StatelessWidget {
     if (post is FeedState) {
       return FeedW(mq: mq, f: post as FeedState);
     } else if (post is MgzState) {
-      return MgzW(mgz: post as MgzState);
+      return MgzW(mgz: post as MgzState, tSize: ThumnailSize.medium);
     } else {
       throw ("Un expected Post Item");
     }
@@ -200,9 +201,11 @@ class MgzW extends StatelessWidget {
   const MgzW({
     Key? key,
     required this.mgz,
+    required this.tSize,
   }) : super(key: key);
 
   final MgzState mgz;
+  final ThumnailSize tSize;
 
   @override
   Widget build(BuildContext context) {
@@ -219,11 +222,32 @@ class MgzW extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(50),
-                child: CachedNetworkImage(
-                    imageUrl: mediaUrl,
-                    fit: BoxFit.cover,
-                    width: size.width,
-                    height: size.height / 3),
+                child: Stack(
+                  children: [
+                    CachedNetworkImage(
+                        imageUrl: mediaUrl,
+                        fit: BoxFit.cover,
+                        width: size.width,
+                        height: size.height / 3),
+                    Positioned(
+                        bottom: size.height / 30,
+                        left: size.width / 15,
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (tSize == ThumnailSize.medium)
+                                UserRow(userId: mgz.writerId),
+                              const SizedBox(height: 10),
+                              Text(
+                                mgz.title,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    ?.copyWith(color: Colors.white),
+                              )
+                            ]))
+                  ],
+                ),
               ),
             ))
         : Container();

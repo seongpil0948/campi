@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:campi/components/inputs/text_controller.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/events.dart';
 import 'package:campi/modules/posts/repo.dart';
@@ -20,12 +21,20 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostRepo postRepo = PostRepo();
   UserRepo userRepo = const UserRepo();
+  final postContoller = SearchValBloc().state.postController;
   PostBloc() : super(const PostState()) {
     on<PostFetched>(
       _onPostFetched,
       transformer: throttleDroppable(throttleDuration),
     );
     add(PostFetched());
+    postContoller.addListener(() {
+      state.copyWith(
+          posts: state.posts
+              .where((element) =>
+                  (element.title as String).contains(postContoller.text))
+              .toList());
+    });
   }
 
   Future<void> _onPostFetched(

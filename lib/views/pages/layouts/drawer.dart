@@ -99,8 +99,9 @@ class PiDrawer extends StatelessWidget {
                       Container(
                           margin: const EdgeInsets.only(top: 15),
                           height: 35,
-                          child:
-                              UserSnsInfo(numUserFeeds: _currUser.feeds.length))
+                          child: UserSnsInfo(
+                              numUserPosts: _currUser.feeds.length +
+                                  _currUser.mgzs.length))
                     ],
                   ),
                 ),

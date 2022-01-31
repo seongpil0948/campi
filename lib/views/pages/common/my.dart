@@ -16,7 +16,7 @@ class MyPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final arg = ModalRoute.of(context)!.settings as PiPageConfig;
+    final arg = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
     final selectedUser = arg.args['selectedUser'] as PiUser;
     final body = FutureBuilder<CompleteUser>(
       future: getCompleteUser(context: context, selectedUser: selectedUser),
@@ -30,7 +30,7 @@ class MyPage extends StatelessWidget {
     );
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: const FeedFab(),
+        floatingActionButton: const PostingFab(),
         drawer: const PiDrawer(),
         body: body);
   }
@@ -75,7 +75,7 @@ class _MyPageW extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "@${targetUser.user.email!.split('@')[0]}",
+                        "@${targetUser.user.name}",
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       const SizedBox(width: 5),
@@ -88,7 +88,9 @@ class _MyPageW extends StatelessWidget {
                 Container(
                   margin: const EdgeInsets.symmetric(vertical: 15),
                   width: mq.size.width / 1.5,
-                  child: UserSnsInfo(numUserFeeds: targetUser.feeds.length),
+                  child: UserSnsInfo(
+                      numUserPosts:
+                          targetUser.feeds.length + targetUser.mgzs.length),
                 ),
                 Text("이 시대 진정한 인싸 캠핑러 \n 정보 공유 DM 환영 ",
                     style: Theme.of(context).textTheme.bodyText1),
@@ -102,7 +104,10 @@ class _MyPageW extends StatelessWidget {
           child: Stack(
             children: [
               GridFeeds(
-                  feeds: targetUser.feeds, mq: mq, currUser: targetUser.user),
+                  feeds: targetUser.feeds,
+                  mgzs: targetUser.mgzs,
+                  mq: mq,
+                  currUser: targetUser.user),
             ],
           ))
     ]);

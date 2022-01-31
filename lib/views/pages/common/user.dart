@@ -15,10 +15,10 @@ const userRepo = UserRepo();
 class UserSnsInfo extends StatelessWidget {
   const UserSnsInfo({
     Key? key,
-    required this.numUserFeeds,
+    required this.numUserPosts,
   }) : super(key: key);
 
-  final int numUserFeeds;
+  final int numUserPosts;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +33,7 @@ class UserSnsInfo extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          "포스팅 ${numUserFeeds.toString()}",
+          "포스팅 ${numUserPosts.toString()}",
           style: sty,
         ),
         TextButton(
@@ -164,15 +164,15 @@ class _FollowBtnState extends State<FollowBtn> {
 class UserRow extends StatelessWidget {
   const UserRow({
     Key? key,
-    required this.feedInfo,
+    required this.userId,
   }) : super(key: key);
 
-  final FeedState feedInfo;
+  final String userId;
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<PiUser?>(
-        future: feedInfo.writer,
+        future: UserRepo.getUserById(userId),
         builder: (context, snapshot) {
           return snapshot.hasData
               ? GestureDetector(

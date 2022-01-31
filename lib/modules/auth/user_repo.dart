@@ -2,6 +2,7 @@ import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/posts/feed/state.dart';
+import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:campi/modules/posts/repo.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,8 @@ class UserRepo {
 class CompleteUser {
   PiUser user;
   List<FeedState> feeds;
-  CompleteUser({required this.user, required this.feeds});
+  List<MgzState> mgzs;
+  CompleteUser({required this.user, required this.feeds, required this.mgzs});
 }
 
 Future<CompleteUser> getCompleteUser(
@@ -63,8 +65,10 @@ Future<CompleteUser> getCompleteUser(
   } else {
     user = context!.watch<AuthRepo>().currentUser;
   }
-  final feeds = await PostRepo().getFeeds([user.userId]);
-  return CompleteUser(feeds: feeds, user: user);
+  final pRepo = PostRepo();
+  final feeds = await pRepo.getFeeds([user.userId]);
+  final mgzs = await pRepo.getMgzs([user.userId]);
+  return CompleteUser(feeds: feeds, user: user, mgzs: mgzs);
 }
 
 Future<PiUser?> getUser(String? userId) async {

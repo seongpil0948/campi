@@ -23,11 +23,8 @@ class PiUser {
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
 
-  String get name => displayName == null
-      ? email == null
-          ? userId
-          : email!.split("@")[0]
-      : '';
+  String get name => displayName ?? email!.split("@")[0];
+
   bool get isEmpty => this == PiUser.empty();
 
   /// Convenience getter to determine whether the current user is not empty.

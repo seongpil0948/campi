@@ -50,7 +50,7 @@ class FeedThumnail extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     if (tSize == ThumnailSize.medium)
-                      UserRow(feedInfo: feedInfo),
+                      UserRow(userId: feedInfo.writerId),
                     const SizedBox(height: 10),
                     Text(
                       feedInfo.content,
