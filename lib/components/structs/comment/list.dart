@@ -117,7 +117,6 @@ class AvartarIdRow extends StatelessWidget {
                       style:
                           T.bodyText2!.copyWith(fontWeight: FontWeight.bold))),
             ]);
-            ;
           }
           return const Center(child: CircularProgressIndicator());
         });

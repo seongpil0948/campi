@@ -7,6 +7,8 @@ import 'package:campi/views/pages/posts/feed_post.dart';
 import 'package:campi/views/pages/posts/mgz_detail.dart';
 import 'package:campi/views/pages/posts/mgz_post.dart';
 import 'package:campi/views/pages/posts/posts.dart';
+import 'package:campi/views/pages/store/detail.dart';
+import 'package:campi/views/pages/store/index.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:flutter/material.dart';
 
@@ -40,9 +42,9 @@ Map<String, Widget Function()> _routes = {
   mgzDetailPath: () => const MgzDetailPage(),
   feedDetailPath: () => const FeedDetailPage(),
   // Un Implements ....
-  storePath: () => const FeedDetailPage(),
+  storePath: () => const StorePage(),
   myPath: () => const MyPage(),
-  storeDetailPath: () => const FeedDetailPage(),
+  storeDetailPath: () => const ProductDetailPage(),
   chatPath: () => const FeedDetailPage(),
   chatRoomPath: () => const FeedDetailPage(),
 };

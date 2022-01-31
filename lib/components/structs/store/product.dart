@@ -37,7 +37,7 @@ class _ProdBottom extends StatelessWidget {
     return InkWell(
         onTap: () => context
             .read<NavigationCubit>()
-            .push(storeDetailPath, {"selectedProd": I.prodInfo}),
+            .push(storeDetailPath, {"selectedProd": I}),
         child: Column(children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(20),
