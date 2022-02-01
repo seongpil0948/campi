@@ -11,8 +11,8 @@ import 'package:image_picker/image_picker.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 
-Widget getAvatar(double? radius, String imgUrl) => CircleAvatar(
-    radius: radius, backgroundImage: CachedNetworkImageProvider(imgUrl));
+Widget getAvatar(double? radius, String imgUrl) =>
+    CircleAvatar(radius: radius, backgroundImage: NetworkImage(imgUrl));
 
 class GoMyAvatar extends StatelessWidget {
   final double? radius;
@@ -65,7 +65,7 @@ class PiUserAvatar extends StatelessWidget {
   }
 }
 
-class PiEditAvatar extends StatelessWidget {
+class PiEditAvatar extends StatefulWidget {
   final double? radius;
   final String? userId;
   const PiEditAvatar({
@@ -73,7 +73,11 @@ class PiEditAvatar extends StatelessWidget {
     this.radius,
     this.userId,
   }) : super(key: key);
+  @override
+  _PiEditAvatarState createState() => _PiEditAvatarState();
+}
 
+class _PiEditAvatarState extends State<PiEditAvatar> {
   @override
   Widget build(BuildContext context) {
     final U = context.watch<AuthRepo>().currentUser;
@@ -84,12 +88,14 @@ class PiEditAvatar extends StatelessWidget {
           if (f == null) return;
           final pyfile = PiFile.fromXfile(f: f, ftype: PiFileType.image);
           final uploaded = await uploadFilePathsToFirebase(
-              f: pyfile, path: 'userProfile/$userId');
+              f: pyfile, path: 'userProfile/${widget.userId}');
           if (uploaded != null) {
-            U.photoURL = uploaded.url!;
+            setState(() {
+              U.photoURL = uploaded.url!;
+            });
             await U.update();
           }
         },
-        child: getAvatar(radius, U.profileImage));
+        child: getAvatar(widget.radius, U.profileImage));
   }
 }
