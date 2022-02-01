@@ -4,12 +4,18 @@ import 'package:bloc/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
+import 'package:campi/modules/common/fcm/repo.dart';
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 part 'event.dart';
 part 'state.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
+  final AuthRepo _authRepo;
+  late final StreamSubscription<Future<PiUser>> _userSubscription;
+  late FcmRepo _fcm;
+
   AppBloc({required AuthRepo authRepo})
       : _authRepo = authRepo,
         super(
@@ -24,23 +30,29 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     });
     _userSubscription = _authRepo.user.listen(
       (user) async {
-        add(AppUserChanged(user));
-        final c =
-            await getCollection(c: Collections.users).doc(user.userId).get();
+        final u = await user;
+        add(AppUserChanged(u));
+        final c = await getCollection(c: Collections.users).doc(u.userId).get();
         if (!c.exists) {
-          user.update();
+          u.update();
         }
       },
     );
   }
 
-  final AuthRepo _authRepo;
-  late final StreamSubscription<PiUser> _userSubscription;
-
   void _onUserChanged(AppUserChanged event, Emitter<AppState> emit) {
-    emit(event.user.isNotEmpty
-        ? AppState.authenticated(event.user)
-        : AppState.unauthenticated());
+    final u = event.user;
+    if (u.isNotEmpty) {
+      FirebaseMessaging.instance.getToken().then((token) {
+        _fcm = FcmRepo(token: token!);
+        if (!u.messageToken.contains(token)) {
+          u.messageToken.add(token);
+        }
+        u.update();
+      });
+      return emit(AppState.authenticated(u));
+    }
+    return emit(AppState.unauthenticated());
   }
 
   void _onLogoutRequested(AppLogoutRequested event, Emitter<AppState> emit) {

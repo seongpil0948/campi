@@ -72,27 +72,23 @@ class PiDrawer extends StatelessWidget {
                               radius: 30,
                               userId: _currUser.user.userId),
                           const SizedBox(width: 20),
-                          Expanded(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                    "@${_currUser.user.displayName ?? _currUser.user.email!.split('@')[0]}",
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1),
-                                Container(
-                                    margin: const EdgeInsets.only(top: 7),
-                                    height: 23,
-                                    child: PiWhiteButton(
-                                        widget: Text(
-                                      "My Places",
-                                      style: TextStyle(
-                                          color:
-                                              Theme.of(context).primaryColor),
-                                    ))),
-                              ],
-                            ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  "@${_currUser.user.displayName ?? _currUser.user.email!.split('@')[0]}",
+                                  style: Theme.of(context).textTheme.bodyText1),
+                              Container(
+                                  margin: const EdgeInsets.only(top: 7),
+                                  height: 23,
+                                  child: PiWhiteButton(
+                                      widget: Text(
+                                    "My Places",
+                                    style: TextStyle(
+                                        color: Theme.of(context).primaryColor),
+                                  ))),
+                            ],
                           )
                         ],
                       ),

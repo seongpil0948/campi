@@ -18,7 +18,9 @@ class _SplashPageState extends State<SplashPage> {
   void initState() {
     super.initState();
     Timer(const Duration(milliseconds: 3000), () {
-      BlocProvider.of<NavigationCubit>(context).clearAndPush(loginPath);
+      if (mounted) {
+        BlocProvider.of<NavigationCubit>(context).clearAndPush(loginPath);
+      }
     });
   }
 

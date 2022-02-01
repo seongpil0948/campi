@@ -4,6 +4,8 @@ import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:campi/modules/posts/repo.dart';
+import 'package:campi/views/router/page.dart';
+import 'package:campi/views/router/state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
@@ -58,12 +60,15 @@ class CompleteUser {
 }
 
 Future<CompleteUser> getCompleteUser(
-    {required BuildContext? context, PiUser? selectedUser}) async {
+    {required BuildContext context, PiUser? selectedUser}) async {
   late PiUser user;
   if (selectedUser != null) {
     user = selectedUser;
   } else {
-    user = context!.watch<AuthRepo>().currentUser;
+    user = context.watch<AuthRepo>().currentUser;
+  }
+  if (user.isEmpty) {
+    context.read<NavigationCubit>().clearAndPush(loginPath);
   }
   final pRepo = PostRepo();
   final feeds = await pRepo.getFeeds([user.userId]);

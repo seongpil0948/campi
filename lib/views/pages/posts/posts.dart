@@ -14,7 +14,6 @@ import 'package:campi/modules/posts/state.dart';
 import 'package:campi/utils/io.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -29,7 +28,6 @@ class PostsListView extends StatefulWidget {
 
 class _PostsListState extends State<PostsListView> {
   final _scrollController = ScrollController();
-  final _msgInst = FirebaseMessaging.instance;
   final bloc = PostBloc();
 
   @override
@@ -37,16 +35,6 @@ class _PostsListState extends State<PostsListView> {
     if (defaultTargetPlatform == TargetPlatform.android) {
       AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
     }
-    _msgInst.getToken().then((value) => debugPrint("Msg Token : $value"));
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      debugPrint('Got a message whilst in the foreground!');
-      debugPrint('Message data: ${message.data}');
-
-      if (message.notification != null) {
-        debugPrint(
-            'Message also contained a notification: ${message.notification}');
-      }
-    });
     super.initState();
     bloc.add(PostFetched());
     // _scrollController.addListener(_onScroll);

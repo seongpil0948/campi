@@ -15,6 +15,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'modules/bloc_observer.dart';
+import 'modules/common/fcm/repo.dart';
 
 final appTheme = PiTheme();
 final navi = NavigationCubit([PiPageConfig(location: splashPath)]);
@@ -33,6 +34,7 @@ void main() async {
   //   'feat1_enabled': false,
   // });
   await auth.user.first;
+  await FcmRepo().initFcm();
   BlocOverrides.runZoned(
     () => runApp(const CampingApp()),
     blocObserver: AppBlocObserver(),

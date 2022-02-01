@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cache/cache.dart';
 import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/common/collections.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -37,10 +38,20 @@ class AuthRepo {
   /// the authentication state changes.
   ///
   /// Emits [User.empty] if the user is not authenticated.
-  Stream<PiUser> get user {
-    return _firebaseAuth.authStateChanges().map((firebaseUser) {
-      final user =
-          firebaseUser == null ? PiUser.empty() : PiUser(user: firebaseUser);
+  Stream<Future<PiUser>> get user {
+    return _firebaseAuth.authStateChanges().map((fireUser) async {
+      late PiUser user;
+      if (fireUser == null) {
+        user = PiUser.empty();
+      }
+      final c =
+          await getCollection(c: Collections.users).doc(fireUser!.uid).get();
+      if (c.exists) {
+        user = PiUser.fromJson(c.data() as Map<String, dynamic>);
+      } else {
+        user = PiUser(user: fireUser);
+      }
+
       _cache.write(key: userCacheKey, value: user);
       return user;
     });

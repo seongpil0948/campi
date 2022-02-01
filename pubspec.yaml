@@ -60,6 +60,8 @@ dependencies:
     git:
       url: https://github.com/GauravCalidig/google_maps_place_picker.git
   video_thumbnail: ^0.4.3
+  flutter_local_notifications: ^9.2.0
+  http: ^0.13.4
 
 dev_dependencies:
   flutter_test:

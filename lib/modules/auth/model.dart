@@ -13,10 +13,10 @@ class PiUser {
   String photoURL;
   List<UserInfo>? providerData;
   String? refreshToken;
-  String? messageToken;
   String? tenantId;
   int hash;
   String get profileImage => photoURL;
+  List<String> messageToken = [];
   List<String> favoriteFeeds = [];
   List<String> followers = [];
   List<String> follows = [];
@@ -40,7 +40,7 @@ class PiUser {
     return true;
   }
 
-  PiUser({required User user, this.messageToken})
+  PiUser({required User user})
       : displayName = user.displayName,
         email = user.email,
         userId = user.uid,
@@ -80,7 +80,7 @@ class PiUser {
         phoneNumber = j['phoneNumber'],
         photoURL = j['photoURL'],
         refreshToken = j['refreshToken'],
-        messageToken = j['messageToken'],
+        messageToken = List<String>.from(j['messageToken']),
         tenantId = j['tenantId'],
         hash = j['hash'],
         favoriteFeeds = List<String>.from(j['favoriteFeeds']),
