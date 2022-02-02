@@ -58,6 +58,7 @@ class _PostsListState extends State<PostsListView> {
   //   if (_isBottom) bloc.add(PostFetched());
   // }
 
+  // ignore: unused_element
   bool get _isBottom {
     if (!_scrollController.hasClients) return false;
     final maxScroll = _scrollController.position.maxScrollExtent;

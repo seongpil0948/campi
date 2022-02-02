@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 void main() async {
@@ -13,7 +14,7 @@ void main() async {
     body: constructFCMPayload(
         "fuTCZ2jpRPOV_pemnFmVGH:APA91bHIz19gW8p31I6xfb9Ia1mIjlvhDX9gSH85pjJ1GekO_KeyaiMYSxa9K9vSGLj416334GorN4qk3bOf-MVzRjNnYTIA_9mvX7sex-KZYHGeH5AYTe7T8ik6-T0qaYSJCyVZQOpp"),
   );
-  print(
+  debugPrint(
       "Response: ${response.statusCode} ${response.reasonPhrase} ${response.body}");
 }
 

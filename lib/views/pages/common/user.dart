@@ -3,7 +3,6 @@ import 'package:campi/components/btn/white.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/auth/user_repo.dart';
-import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';

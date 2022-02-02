@@ -24,10 +24,44 @@ class FcmRepo {
 
   FcmRepo({this.token});
 
+  Future<void> sendPushMessage() async {
+    try {
+      await http.post(
+        Uri.parse('https://api.rnfirebase.io/messaging/send'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+        body: constructFCMPayload(token),
+      );
+      debugPrint('FCM request for device sent!');
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  // Crude counter to make messages unique
+  int _messageCount = 0;
+
+  /// The API endpoint here accepts a raw FCM payload for demonstration purposes.
+  String constructFCMPayload(String? token) {
+    _messageCount++;
+    return jsonEncode({
+      'token': token,
+      'data': {
+        'via': 'FlutterFire Cloud Messaging!!!',
+        'count': _messageCount.toString(),
+      },
+      'notification': {
+        'title': 'Hello FlutterFire!',
+        'body': 'This notification (#$_messageCount) was created via FCM!',
+      },
+    });
+  }
+
   Future<void> initFcm() async {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
-// initialise the plugin. app_icon needs to be a added as a drawable resource to the Android head project
+    // TODO: Android Icon Img Locate
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final IOSInitializationSettings initializationSettingsIOS =
@@ -75,40 +109,6 @@ class FcmRepo {
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       debugPrint('A new onMessageOpenedApp event was published! $message');
-    });
-  }
-
-  Future<void> sendPushMessage() async {
-    try {
-      await http.post(
-        Uri.parse('https://api.rnfirebase.io/messaging/send'),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-        },
-        body: constructFCMPayload(token),
-      );
-      debugPrint('FCM request for device sent!');
-    } catch (e) {
-      debugPrint(e.toString());
-    }
-  }
-
-  // Crude counter to make messages unique
-  int _messageCount = 0;
-
-  /// The API endpoint here accepts a raw FCM payload for demonstration purposes.
-  String constructFCMPayload(String? token) {
-    _messageCount++;
-    return jsonEncode({
-      'token': token,
-      'data': {
-        'via': 'FlutterFire Cloud Messaging!!!',
-        'count': _messageCount.toString(),
-      },
-      'notification': {
-        'title': 'Hello FlutterFire!',
-        'body': 'This notification (#$_messageCount) was created via FCM!',
-      },
     });
   }
 }
