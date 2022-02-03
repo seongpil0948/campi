@@ -13,7 +13,16 @@
   * 댓글 남겼을때
   * 답글 남겼을때
   * 좋아요 눌렀을때
-* 
+* 자동 로그인 기능
+* 피드, 매거진 필터링 가능하게끔
+  * 피드는 팔로우한사람만
+  * 포스팅은 다보이게끔 (인기글, 최신글)
+* 드로워 랑 해서 다 레이아웃 줄거
+* 뒤로가기 누르면 앱꺼지는거
+* 로고 만들어지면 IOS, Android 출시 필요이미지, 아이콘이미지
+*  매거진   -> 캠핑포스팅
+*  피드    ->  캠핑피드
+
 * [DynamicDeepLink](https://firebase.flutter.dev/docs/dynamic-links/overview/)
 * [DynamicDeepLink](https://firebase.google.com/products/dynamic-links)
 * [DynamicDeepLink](https://eunjin3786.tistory.com/292)
