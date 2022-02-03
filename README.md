@@ -7,15 +7,7 @@
 
 
 # TODO:
-* 메시지 토큰을 이용하고, subscribe 토픽 이용해서 푸시 메시지 날리기
-  * 팔로우의 게시글 올렸을시
-  * 팔로워 증가시
-  * 댓글 남겼을때
-  * 답글 남겼을때
-  * 좋아요 눌렀을때
-* 자동 로그인 기능
 * 피드, 매거진 필터링 가능하게끔
-  * 피드는 팔로우한사람만
   * 포스팅은 다보이게끔 (인기글, 최신글)
 * 드로워 랑 해서 다 레이아웃 줄거
 * 뒤로가기 누르면 앱꺼지는거
@@ -23,6 +15,7 @@
 *  매거진   -> 캠핑포스팅
 *  피드    ->  캠핑피드
 
+*  백엔드 API 이후 fcm.sendPushMessage 활성화
 * [DynamicDeepLink](https://firebase.flutter.dev/docs/dynamic-links/overview/)
 * [DynamicDeepLink](https://firebase.google.com/products/dynamic-links)
 * [DynamicDeepLink](https://eunjin3786.tistory.com/292)

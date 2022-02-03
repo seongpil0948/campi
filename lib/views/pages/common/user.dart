@@ -1,5 +1,6 @@
 import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/components/btn/white.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/auth/user_repo.dart';
@@ -154,7 +155,13 @@ class _FollowBtnState extends State<FollowBtn> {
     final txt = aleady ? "팔로우 취소" : "팔로우";
     return ElevatedButton(
         onPressed: () {
+          final fcm = context.read<AppBloc>().fcm;
           followUser(widget.currUser, widget.targetUser, aleady);
+          if (!aleady) {
+            fcm.sendPushMessage(
+                tokens: widget.targetUser.messageToken,
+                data: {"type": "followUser"});
+          }
         },
         child: Text(txt));
   }

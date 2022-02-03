@@ -97,8 +97,13 @@ class FeedPostW extends StatelessWidget {
                           .collection(feedCollection)
                           .doc(newFeed.feedId)
                           .set(newFeed.toJson())
-                          .then((value) {
-                        context.read<AppBloc>().add(AppLoadingChange());
+                          .then((value) async {
+                        final appBloc = context.read<AppBloc>();
+                        appBloc.add(AppLoadingChange());
+                        final writer = await feed.writer;
+                        appBloc.fcm.sendPushMessage(
+                            tokens: writer.followers,
+                            data: {"tokenIsUid": true, "type": "postFeed"});
                         context.read<NavigationCubit>().pop();
                       });
                     } catch (e, s) {

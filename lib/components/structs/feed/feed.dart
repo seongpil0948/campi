@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/utils/io.dart';
@@ -108,6 +109,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
   Widget build(BuildContext context) {
     final U = widget.U;
     final F = widget.feed;
+    final fcm = context.read<AppBloc>().fcm;
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -115,10 +117,14 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
           children: <Widget>[
             U.favoriteFeeds.contains(F.feedId)
                 ? IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       U.favoriteFeeds.remove(F.feedId);
                       F.likeUserIds.remove(U.userId);
                       _updates(U);
+                      final w = await F.writer;
+                      fcm.sendPushMessage(
+                          tokens: w.messageToken,
+                          data: {"type": "postComment"});
                     },
                     icon: const Icon(
                       Icons.favorite,

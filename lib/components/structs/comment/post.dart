@@ -1,4 +1,5 @@
 import 'package:campi/components/btn/avatar.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/comment/comment.dart';
@@ -100,11 +101,28 @@ class CmtPostTxtField extends StatelessWidget {
   }
 }
 
-void _submit(CommentModel? target, String txt, PiUser user, FeedState feed,
-    BuildContext context, TextEditingController _commentController) {
-  target == null
-      ? postComment(txt, user, feed)
-      : postReply(txt, user, feed.feedId, target.id);
+Future<void> _submit(
+    CommentModel? target,
+    String txt,
+    PiUser user,
+    FeedState feed,
+    BuildContext context,
+    TextEditingController _commentController) async {
+  final fcm = context.read<AppBloc>().fcm;
+  final w = await feed.writer;
+  if (target == null) {
+    postComment(txt, user, feed);
+    fcm.sendPushMessage(
+        tokens: w.messageToken,
+        data: {"type": "postComment"},
+        topic: 'feed-${feed.feedId}');
+  } else {
+    postReply(txt, user, feed.feedId, target.id);
+    fcm.sendPushMessage(
+        tokens: [...w.messageToken],
+        data: {"type": "postReply"},
+        topic: 'feed-${feed.feedId}_comment-${target.id}');
+  }
   _commentController.clear();
   context
       .read<CommentBloc>()

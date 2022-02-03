@@ -18,8 +18,11 @@ class FcmRepo {
   String? token;
   FcmRepo({this.token});
 
-  Future<void> sendPushMessage(List<String> tokens, Map<String, dynamic> data,
-      Map<String, dynamic> noti, String? topic) async {
+  Future<void> sendPushMessage(
+      {required List<String> tokens,
+      Map<String, dynamic>? data,
+      Map<String, dynamic>? noti,
+      String? topic}) async {
     try {
       debugPrint(
           "Try To Send Push Msg Topic: $topic  tokens: $tokens, \n data: $data, \n noti: $noti ");
