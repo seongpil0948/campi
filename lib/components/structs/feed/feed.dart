@@ -206,10 +206,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
               future: F.writer,
               builder: (context, snapshot) {
                 return snapshot.hasData
-                    ? FollowBtn(
-                        currUser: U,
-                        targetUser: snapshot.data!,
-                      )
+                    ? FollowBtn(targetUser: snapshot.data!)
                     : const Center(child: CircularProgressIndicator());
               })
       ],

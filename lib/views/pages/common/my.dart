@@ -79,9 +79,7 @@ class _MyPageW extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                       const SizedBox(width: 5),
-                      FollowBtn(
-                          currUser: context.read<AuthRepo>().currentUser,
-                          targetUser: targetUser.user),
+                      FollowBtn(targetUser: targetUser.user),
                     ],
                   ),
                 ),

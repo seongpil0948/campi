@@ -1,3 +1,5 @@
+import 'package:campi/views/pages/chat/list.dart';
+import 'package:campi/views/pages/chat/room.dart';
 import 'package:campi/views/pages/common/login.dart';
 import 'package:campi/views/pages/common/my.dart';
 import 'package:campi/views/pages/common/splash.dart';
@@ -45,6 +47,6 @@ Map<String, Widget Function()> _routes = {
   storePath: () => const StorePage(),
   myPath: () => const MyPage(),
   storeDetailPath: () => const ProductDetailPage(),
-  chatPath: () => const FeedDetailPage(),
-  chatRoomPath: () => const FeedDetailPage(),
+  chatPath: () => const ChatPage(),
+  chatRoomPath: () => const ChatRoomPage(),
 };

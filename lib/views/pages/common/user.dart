@@ -89,7 +89,7 @@ void showFollow(
                 height: MediaQuery.of(context).size.height / 2,
                 child: ListView.builder(
                     itemBuilder: (context, idx) =>
-                        UserList(targetUser: users[idx], currUser: currUser),
+                        UserList(targetUser: users[idx]),
                     itemCount: users.length),
               ),
             ],
@@ -98,10 +98,8 @@ void showFollow(
 
 class UserList extends StatelessWidget {
   final PiUser targetUser;
-  final PiUser? currUser;
   const UserList({
     required this.targetUser,
-    this.currUser,
     Key? key,
   }) : super(key: key);
 
@@ -110,23 +108,17 @@ class UserList extends StatelessWidget {
     return ListTile(
         leading: PiUserAvatar(
             imgUrl: targetUser.profileImage, userId: targetUser.userId),
-        title: Text(targetUser.displayName ??
-            // targetUser.email?.split('@').first ??
-            targetUser.email ??
-            ""),
+        title: Text(targetUser.name),
         subtitle: Text(targetUser.email ?? ""),
         trailing: FollowBtn(
-          currUser: currUser!,
           targetUser: targetUser,
         ));
   }
 }
 
 class FollowBtn extends StatefulWidget {
-  final PiUser currUser;
   final PiUser targetUser;
-  const FollowBtn({Key? key, required this.currUser, required this.targetUser})
-      : super(key: key);
+  const FollowBtn({Key? key, required this.targetUser}) : super(key: key);
 
   @override
   _FollowBtnState createState() => _FollowBtnState();
@@ -150,13 +142,14 @@ class _FollowBtnState extends State<FollowBtn> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.targetUser == widget.currUser) return Container();
-    final aleady = widget.targetUser.followers.contains(widget.currUser.userId);
+    final currUser = context.watch<AuthRepo>().currentUser;
+    if (widget.targetUser == currUser) return Container();
+    final aleady = widget.targetUser.followers.contains(currUser.userId);
     final txt = aleady ? "팔로우 취소" : "팔로우";
     return ElevatedButton(
         onPressed: () {
           final fcm = context.read<AppBloc>().fcm;
-          followUser(widget.currUser, widget.targetUser, aleady);
+          followUser(currUser, widget.targetUser, aleady);
           if (!aleady) {
             fcm.sendPushMessage(
                 tokens: widget.targetUser.messageToken,

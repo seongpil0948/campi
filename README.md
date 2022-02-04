@@ -12,8 +12,6 @@
 * 드로워 랑 해서 다 레이아웃 줄거
 * 뒤로가기 누르면 앱꺼지는거
 * 로고 만들어지면 IOS, Android 출시 필요이미지, 아이콘이미지
-*  매거진   -> 캠핑포스팅
-*  피드    ->  캠핑피드
 
 *  백엔드 API 이후 fcm.sendPushMessage 활성화
 * [DynamicDeepLink](https://firebase.flutter.dev/docs/dynamic-links/overview/)

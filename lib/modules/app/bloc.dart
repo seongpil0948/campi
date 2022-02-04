@@ -14,7 +14,7 @@ part 'state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthRepo _authRepo;
   late final StreamSubscription<Future<PiUser>> _userSubscription;
-  late FcmRepo fcm;
+  final fcm = FcmRepo(token: null);
 
   AppBloc({required AuthRepo authRepo})
       : _authRepo = authRepo,
@@ -44,7 +44,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     final u = event.user;
     if (u.isNotEmpty) {
       FirebaseMessaging.instance.getToken().then((token) {
-        fcm = FcmRepo(token: token!);
+        fcm.token = token!;
         if (!u.messageToken.contains(token)) {
           u.messageToken.add(token);
         }

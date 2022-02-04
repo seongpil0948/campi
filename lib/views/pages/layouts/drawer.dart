@@ -118,7 +118,10 @@ class PiDrawer extends StatelessWidget {
         const Spacer(),
         ListTile(
           title: Text("로그아웃", style: tileT),
-          onTap: () => context.read<AuthRepo>().logOut(),
+          onTap: () async {
+            await context.read<AuthRepo>().logOut();
+            context.read<NavigationCubit>().push(loginPath);
+          },
         ),
       ],
     ));

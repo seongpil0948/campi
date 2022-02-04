@@ -33,7 +33,7 @@ class MgzFab extends StatelessWidget {
       onPressed: () {
         context.read<NavigationCubit>().push(mgzPostPath);
       },
-      child: const Text("매거진"),
+      child: const Text("캠핑포스팅"),
       shape: const CircleBorder(),
     );
   }
@@ -50,7 +50,7 @@ class FeedFab extends StatelessWidget {
       onPressed: () {
         context.read<NavigationCubit>().push(feedPostPath);
       },
-      child: const Text("피드"),
+      child: const Text("캠핑피드"),
       shape: const CircleBorder(),
     );
   }

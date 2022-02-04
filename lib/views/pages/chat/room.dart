@@ -1,32 +1,31 @@
 import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/chat/msg_state.dart';
 import 'package:campi/modules/common/collections.dart';
+import 'package:campi/views/router/config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+// ignore: implementation_imports
+import 'package:provider/src/provider.dart';
 import 'package:uuid/uuid.dart';
 
-class ChatRoom extends StatelessWidget {
-  final PiUser targetUser;
-  final PiUser currUser;
-  final String roomId;
-
-  const ChatRoom(
-      {Key? key,
-      required this.roomId,
-      required this.targetUser,
-      required this.currUser})
-      : super(key: key);
+class ChatRoomPage extends StatelessWidget {
+  const ChatRoomPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
+    final currUser = context.watch<AuthRepo>().currentUser;
+    final you = args.args['you'] as PiUser;
+    final roomId = args.args['roomId'] as String;
     final s = MediaQuery.of(context).size;
     return SizedBox(
         width: s.width + 30,
         height: s.height,
         child: Column(
           children: [
-            ChatRoomHeader(s: s, targetUser: targetUser),
+            ChatRoomHeader(s: s, you: you),
             Expanded(
               child: ChatRoomBody(roomId: roomId, currUser: currUser),
             ),
@@ -76,11 +75,11 @@ class ChatRoomHeader extends StatelessWidget {
   const ChatRoomHeader({
     Key? key,
     required this.s,
-    required this.targetUser,
+    required this.you,
   }) : super(key: key);
 
   final Size s;
-  final PiUser targetUser;
+  final PiUser you;
 
   @override
   Widget build(BuildContext context) {
@@ -97,15 +96,12 @@ class ChatRoomHeader extends StatelessWidget {
                 Navigator.of(context).pop();
               },
               icon: const Icon(Icons.backspace)),
-          GoMyAvatar(user: targetUser),
+          GoMyAvatar(user: you),
           Padding(
             padding: const EdgeInsets.only(top: 16.0, left: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(targetUser.displayName ?? ""),
-                Text(targetUser.email ?? "")
-              ],
+              children: [Text(you.displayName ?? ""), Text(you.email ?? "")],
             ),
           )
         ],

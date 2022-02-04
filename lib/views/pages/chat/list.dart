@@ -5,6 +5,8 @@ import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/views/pages/chat/room.dart';
 import 'package:campi/views/pages/common/user.dart';
+import 'package:campi/views/router/page.dart';
+import 'package:campi/views/router/state.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -13,8 +15,8 @@ import 'package:provider/src/provider.dart';
 
 const userRepo = UserRepo();
 
-class ChatCategoryView extends StatelessWidget {
-  const ChatCategoryView({Key? key}) : super(key: key);
+class ChatPage extends StatelessWidget {
+  const ChatPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -46,20 +48,8 @@ class ChatRoomList extends StatelessWidget {
                 return Slidable(
                   child: InkWell(
                     onTap: () {
-                      showGeneralDialog(
-                          context: context,
-                          pageBuilder: (BuildContext context2,
-                                  Animation animation,
-                                  Animation secondaryAnimation) =>
-                              Scaffold(
-                                body: SafeArea(
-                                  child: ChatRoom(
-                                    roomId: roomId,
-                                    targetUser: users[idx],
-                                    currUser: currUser,
-                                  ),
-                                ),
-                              ));
+                      context.read<NavigationCubit>().push(
+                          chatRoomPath, {"roomId": roomId, "you": users[idx]});
                     },
                     child: UserList(targetUser: users[idx]),
                   ),
