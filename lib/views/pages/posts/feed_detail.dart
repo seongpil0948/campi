@@ -3,7 +3,7 @@ import 'package:campi/components/geo/pymap.dart';
 import 'package:campi/components/structs/comment/list.dart';
 import 'package:campi/components/structs/comment/post.dart';
 import 'package:campi/components/structs/feed/feed.dart';
-import 'package:campi/components/structs/feed/place.dart';
+import 'package:campi/components/structs/feed/place_info.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/posts/feed/state.dart';
@@ -83,7 +83,7 @@ class FeedDetailW extends StatelessWidget {
                 )
               ],
               const _Divider(),
-              PlaceInfo(mq: mq, iconImgH: iconImgH, feed: feed),
+              PlaceInfo(iconImgH: iconImgH, feed: feed),
               Container(
                 margin: const EdgeInsets.symmetric(vertical: 20),
                 child: RichText(

@@ -7,16 +7,15 @@ import 'package:google_maps_place_picker/google_maps_place_picker.dart';
 class PlaceInfo extends StatelessWidget {
   const PlaceInfo({
     Key? key,
-    required this.mq,
     required this.iconImgH,
     required this.feed,
   }) : super(key: key);
 
-  final MediaQueryData mq;
   final double iconImgH;
   final FeedState feed;
   @override
   Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       width: mq.size.width,
@@ -26,27 +25,15 @@ class PlaceInfo extends StatelessWidget {
             width: mq.size.width,
             padding: const EdgeInsets.fromLTRB(60, 0, 23, 0),
             child: Row(children: [
-              Expanded(
-                  flex: 1,
-                  child: feed.campKind != null && feed.campKind!.isNotEmpty
-                      ? CampKind(iconImgH: iconImgH, feed: feed)
-                      : Container()),
-              Expanded(
-                  flex: 1,
-                  child: CampAddr(feed: feed, iconImgH: iconImgH, mq: mq)),
+              Expanded(child: CampKind(iconImgH: iconImgH, feed: feed)),
+              Expanded(child: CampAddr(feed: feed, iconImgH: iconImgH, mq: mq)),
             ])),
         Container(
             width: mq.size.width,
             padding: const EdgeInsets.fromLTRB(60, 0, 20, 0),
             child: Row(children: [
-              Expanded(
-                  flex: 1, child: CampPriceW(iconImgH: iconImgH, feed: feed)),
-              Expanded(
-                  flex: 1,
-                  child:
-                      feed.placeAround != null && feed.placeAround!.isNotEmpty
-                          ? CampAroundW(iconImgH: iconImgH, feed: feed)
-                          : Container()),
+              Expanded(child: CampPriceW(iconImgH: iconImgH, feed: feed)),
+              Expanded(child: CampAroundW(iconImgH: iconImgH, feed: feed)),
             ])),
       ]),
     );
@@ -71,7 +58,7 @@ class CampAroundW extends StatelessWidget {
         height: iconImgH - 7,
       ),
       Text(
-        "  ${feed.placeAround}",
+        "  ${feed.placeAround ?? ''}",
         overflow: TextOverflow.ellipsis,
       ),
     ]);
@@ -95,7 +82,7 @@ class CampPriceW extends StatelessWidget {
         "assets/images/won.png",
         height: iconImgH - 7,
       ),
-      Text("  ${feed.placePrice} 만원")
+      Text(feed.placePrice != null ? "  ${feed.placePrice} 만원" : '')
     ]);
   }
 }
@@ -117,7 +104,7 @@ class CampKind extends StatelessWidget {
         "assets/images/feed_icon_filled.png",
         height: iconImgH,
       ),
-      Text(" ${feed.campKind}")
+      Text(" ${feed.campKind ?? ''}")
     ]);
   }
 }
