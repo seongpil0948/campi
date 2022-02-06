@@ -2,14 +2,11 @@ import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/components/btn/fabs.dart';
 import 'package:campi/components/structs/feed/list.dart';
 import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/pages/layouts/drawer.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-// ignore: implementation_imports
 
 class MyPage extends StatelessWidget {
   const MyPage({Key? key}) : super(key: key);

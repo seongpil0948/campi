@@ -3,7 +3,6 @@ import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/common/collections.dart';
-import 'package:campi/views/pages/chat/room.dart';
 import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
