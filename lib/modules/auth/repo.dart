@@ -1,6 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
 
-import 'package:cache/cache.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -8,30 +8,28 @@ import 'package:firebase_auth_platform_interface/firebase_auth_platform_interfac
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepo {
   /// {@macro authentication_repository}
-  AuthRepo({
-    CacheClient? cache,
-    firebase_auth.FirebaseAuth? firebaseAuth,
-    GoogleSignIn? googleSignIn,
-  })  : _cache = cache ?? CacheClient(),
-        _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
+  AuthRepo(
+      {firebase_auth.FirebaseAuth? firebaseAuth,
+      GoogleSignIn? googleSignIn,
+      required this.prefs})
+      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
         _googleSignIn = googleSignIn ?? GoogleSignIn.standard();
 
-  final CacheClient _cache;
   final firebase_auth.FirebaseAuth _firebaseAuth;
   final GoogleSignIn _googleSignIn;
+  final SharedPreferences prefs;
 
   /// Whether or not the current environment is web
   /// Should only be overriden for testing purposes. Otherwise,
   /// defaults to [kIsWeb]
-  @visibleForTesting
   bool isWeb = kIsWeb;
 
   /// User cache key.
   /// Should only be used for testing purposes.
-  @visibleForTesting
   static const userCacheKey = '__user_cache_key__';
 
   /// Stream of [User] which will emit the current user when
@@ -41,18 +39,24 @@ class AuthRepo {
   Stream<Future<PiUser>> get user {
     return _firebaseAuth.authStateChanges().map((fireUser) async {
       late PiUser user;
+
       if (fireUser == null) {
-        user = PiUser.empty();
+        final usrStr = prefs.getString(userCacheKey);
+        return usrStr == null
+            ? PiUser.empty()
+            : PiUser.fromJson(jsonDecode(usrStr));
       }
       final c =
-          await getCollection(c: Collections.users).doc(fireUser!.uid).get();
+          await getCollection(c: Collections.users).doc(fireUser.uid).get();
       if (c.exists) {
         user = PiUser.fromJson(c.data() as Map<String, dynamic>);
       } else {
         user = PiUser(user: fireUser);
       }
-
-      _cache.write(key: userCacheKey, value: user);
+      final j = user.toJson();
+      j.remove('createdAt');
+      j.remove('updatedAt');
+      prefs.setString(userCacheKey, jsonEncode(j));
       return user;
     });
   }
@@ -60,7 +64,12 @@ class AuthRepo {
   /// Returns the current cached user.
   /// Defaults to [User.empty] if there is no cached user.
   PiUser get currentUser {
-    return _cache.read<PiUser>(key: userCacheKey) ?? PiUser.empty();
+    final usrStr = prefs.getString(userCacheKey);
+    if (usrStr != null) {
+      return PiUser.fromJson(jsonDecode(usrStr));
+    } else {
+      return PiUser.empty();
+    }
   }
 
   /// Creates a new user with the provided [email] and [password].
@@ -132,6 +141,7 @@ class AuthRepo {
   ///
   /// Throws a [LogOutFailure] if an exception occurs.
   Future<void> logOut() async {
+    prefs.remove(userCacheKey);
     try {
       await Future.wait([
         _firebaseAuth.signOut(),

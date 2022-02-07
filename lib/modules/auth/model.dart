@@ -86,12 +86,16 @@ class PiUser {
         favoriteFeeds = List<String>.from(j['favoriteFeeds']),
         followers = List<String>.from(j['followers']),
         follows = List<String>.from(j['follows']),
-        createdAt = j['createdAt'] is DateTime
-            ? j['createdAt']
-            : timeStamp2DateTime(j['createdAt']),
-        updatedAt = j['updatedAt'] is DateTime
-            ? j['updatedAt']
-            : timeStamp2DateTime(j['updatedAt']);
+        createdAt = j['createdAt'] == null
+            ? DateTime.now()
+            : j['createdAt'] is DateTime
+                ? j['createdAt']
+                : timeStamp2DateTime(j['createdAt']),
+        updatedAt = j['updatedAt'] == null
+            ? DateTime.now()
+            : j['updatedAt'] is DateTime
+                ? j['updatedAt']
+                : timeStamp2DateTime(j['updatedAt']);
 
   Map<String, dynamic> toJson() => {
         'userId': userId,
