@@ -32,9 +32,12 @@ class _PiSingleSelectState extends State<PiSingleSelect> {
         color: Theme.of(context).cardColor,
         width: mq.size.width / 4,
         child: DropdownButton<String>(
+          style: const TextStyle(color: Colors.red),
           alignment: AlignmentDirectional.centerEnd,
           value: dropdownValue,
-          hint: Text(widget.hint, style: sty),
+          hint: Padding(
+              padding: EdgeInsets.only(left: mq.size.width / 14),
+              child: Text(widget.hint, style: sty)),
           underline: Container(),
           menuMaxHeight: mq.size.height / 2,
           dropdownColor: Theme.of(context).cardColor,

@@ -1,7 +1,11 @@
+import 'dart:convert';
+
+import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/utils/moment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class PiUser {
   String userId;
@@ -34,9 +38,11 @@ class PiUser {
   bool operator ==(other) => userId == (other as PiUser).userId;
 
   Future<bool> update() async {
+    final prefs = await SharedPreferences.getInstance();
     updatedAt = DateTime.now();
     final doc = getCollection(c: Collections.users).doc(userId);
     await doc.set(toJson(), SetOptions(merge: true));
+    prefs.setString(AuthRepo.userCacheKey, jsonEncode(toJsonCache()));
     return true;
   }
 
@@ -86,13 +92,13 @@ class PiUser {
         favoriteFeeds = List<String>.from(j['favoriteFeeds']),
         followers = List<String>.from(j['followers']),
         follows = List<String>.from(j['follows']),
-        createdAt = j['createdAt'] == null
-            ? DateTime.now()
+        createdAt = j['createdAt'] is String
+            ? DateTime.parse(j['createdAt'])
             : j['createdAt'] is DateTime
                 ? j['createdAt']
                 : timeStamp2DateTime(j['createdAt']),
-        updatedAt = j['updatedAt'] == null
-            ? DateTime.now()
+        updatedAt = j['updatedAt'] is String
+            ? DateTime.parse(j['updatedAt'])
             : j['updatedAt'] is DateTime
                 ? j['updatedAt']
                 : timeStamp2DateTime(j['updatedAt']);
@@ -114,6 +120,13 @@ class PiUser {
         'createdAt': createdAt,
         'updatedAt': updatedAt,
       };
+  Map<String, dynamic> toJsonCache() {
+    final j = toJson();
+    j['createdAt'] = createdAt.toIso8601String();
+    j['updatedAt'] = updatedAt.toIso8601String();
+    return j;
+  }
+
   static Iterable<PiUser> mocks(int n) {
     return Iterable.generate(
         n,

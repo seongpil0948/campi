@@ -7,7 +7,6 @@ import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:meta/meta.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepo {
@@ -53,9 +52,7 @@ class AuthRepo {
       } else {
         user = PiUser(user: fireUser);
       }
-      final j = user.toJson();
-      j.remove('createdAt');
-      j.remove('updatedAt');
+      final j = user.toJsonCache();
       prefs.setString(userCacheKey, jsonEncode(j));
       return user;
     });

@@ -11,7 +11,7 @@
   * 포스팅은 다보이게끔 (인기글, 최신글)
 * 로고 만들어지면 IOS, Android 출시 필요이미지, 아이콘이미지
 
-*  백엔드 API 이후 fcm.sendPushMessage 활성화
+* 백엔드 API 이후 fcm.sendPushMessage 활성화
 * [DynamicDeepLink](https://firebase.flutter.dev/docs/dynamic-links/overview/)
 * [DynamicDeepLink](https://firebase.google.com/products/dynamic-links)
 * [DynamicDeepLink](https://eunjin3786.tistory.com/292)

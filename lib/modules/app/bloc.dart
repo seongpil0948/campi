@@ -32,6 +32,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       (user) async {
         final u = await user;
         add(AppUserChanged(u));
+        if (u.isEmpty) return;
         final c = await getCollection(c: Collections.users).doc(u.userId).get();
         if (!c.exists) {
           u.update();
