@@ -4,18 +4,31 @@
 # INFO
 * [FontAwesome](https://fontawesome.com/v5.15/icons?d=gallery&p=2)
 
+# Pending Design
+* 블로그 작성 레이아웃
+* 글 작성 선택 레이아웃
+* 피드 필터링 레이아웃
+* 자기소개 수정 레이아웃
+* 구글맵 비용 때문에 카드 받아야 할듯
+  * 성훈인 뭐든 돈나가야 아까워서 할 스타일
+* 이미지 받기
 
 
 # TODO:
+## 정식 배포 전
 * 피드, 매거진 필터링 가능하게끔
+  * 피드랑 매거진 컬렉션 유저랑 분리해야함 쿼리 비효율적인듯
   * 포스팅은 다보이게끔 (인기글, 최신글)
 * 로고 만들어지면 IOS, Android 출시 필요이미지, 아이콘이미지
-
 * 백엔드 API 이후 fcm.sendPushMessage 활성화
-* [DynamicDeepLink](https://firebase.flutter.dev/docs/dynamic-links/overview/)
-* [DynamicDeepLink](https://firebase.google.com/products/dynamic-links)
-* [DynamicDeepLink](https://eunjin3786.tistory.com/292)
-* [IOS CD](https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development)
+## 정식 배포 후
+* 버전 별 Git Tagging 해서 백업 및 Revert 정책 필요.
+* 인스타나 다른 앱에 연결하거나 공유할때
+  * [DynamicDeepLink](https://firebase.flutter.dev/docs/dynamic-links/overview/)
+  * [DynamicDeepLink](https://firebase.google.com/products/dynamic-links)
+  * [DynamicDeepLink](https://eunjin3786.tistory.com/292)
+* CI/CD
+  * [IOS CD](https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development)
 
 
 # Agenda
