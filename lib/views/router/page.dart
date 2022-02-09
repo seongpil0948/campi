@@ -35,10 +35,10 @@ MaterialPage getPage(PiPageConfig config) =>
     wgetToPage(config, _routes[config.route]?.call() ?? const UnknownPage());
 
 Map<String, Widget Function()> _routes = {
-  rootPath: () => const PostsListView(),
+  rootPath: () => const PostsListPage(),
   splashPath: () => const SplashPage(),
   loginPath: () => const LoginPage(),
-  postListPath: () => const PostsListView(),
+  postListPath: () => const PostsListPage(),
   mgzPostPath: () => const MgzPostPage(),
   feedPostPath: () => const FeedPostPage(),
   mgzDetailPath: () => const MgzDetailPage(),
