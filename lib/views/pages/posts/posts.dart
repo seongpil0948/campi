@@ -19,14 +19,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class PostsListPage extends StatefulWidget {
-  const PostsListPage({Key? key}) : super(key: key);
+class MgzListPage extends StatefulWidget {
+  const MgzListPage({Key? key}) : super(key: key);
 
   @override
   _PostsListState createState() => _PostsListState();
 }
 
-class _PostsListState extends State<PostsListPage> {
+class _PostsListState extends State<MgzListPage> {
   final _scrollController = ScrollController();
   final bloc = PostBloc();
 

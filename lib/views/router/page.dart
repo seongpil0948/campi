@@ -6,6 +6,7 @@ import 'package:campi/views/pages/common/splash.dart';
 import 'package:campi/views/pages/common/unknown.dart';
 import 'package:campi/views/pages/posts/feed_detail.dart';
 import 'package:campi/views/pages/posts/feed_post.dart';
+import 'package:campi/views/pages/posts/feeds.dart';
 import 'package:campi/views/pages/posts/mgz_detail.dart';
 import 'package:campi/views/pages/posts/mgz_post.dart';
 import 'package:campi/views/pages/posts/posts.dart';
@@ -18,11 +19,13 @@ const rootPath = '/';
 const myPath = '/my';
 const splashPath = '/splash';
 const loginPath = '/login';
-const postListPath = '/post/list';
-const mgzPostPath = '/post/mgz';
-const feedPostPath = '/post/feed';
-const mgzDetailPath = '/post/detail/mgz';
-const feedDetailPath = '/post/detail/feed';
+const mgzListPath = '/posts/mgz';
+const feedListPath = '/posts/feed';
+
+const mgzPostPath = '/posts/mgz/post';
+const feedPostPath = '/posts/feed/post';
+const mgzDetailPath = '/posts/mgz/detail';
+const feedDetailPath = '/posts/feed/detail';
 const storePath = '/store';
 const storeDetailPath = '/store/item/detail';
 const chatPath = '/chat';
@@ -35,10 +38,11 @@ MaterialPage getPage(PiPageConfig config) =>
     wgetToPage(config, _routes[config.route]?.call() ?? const UnknownPage());
 
 Map<String, Widget Function()> _routes = {
-  rootPath: () => const PostsListPage(),
+  rootPath: () => const MgzListPage(),
   splashPath: () => const SplashPage(),
   loginPath: () => const LoginPage(),
-  postListPath: () => const PostsListPage(),
+  mgzListPath: () => const MgzListPage(),
+  feedListPath: () => const FeedListPage(),
   mgzPostPath: () => const MgzPostPage(),
   feedPostPath: () => const FeedPostPage(),
   mgzDetailPath: () => const MgzDetailPage(),
