@@ -14,49 +14,44 @@ import 'package:campi/modules/posts/state.dart';
 import 'package:campi/utils/io.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class MgzListPage extends StatefulWidget {
   const MgzListPage({Key? key}) : super(key: key);
 
   @override
-  _PostsListState createState() => _PostsListState();
+  _MgzListState createState() => _MgzListState();
 }
 
-class _PostsListState extends State<MgzListPage> {
+class _MgzListState extends State<MgzListPage> {
   final _scrollController = ScrollController();
   final bloc = PostBloc();
 
   @override
   void initState() {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      AndroidGoogleMapsFlutter.useAndroidViewSurface = true;
-    }
     super.initState();
-    bloc.add(PostFetched());
+    bloc.add(MgzFetched());
     // _scrollController.addListener(_onScroll);
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-        value: bloc, child: PostListW(scrollController: _scrollController));
+        value: bloc, child: MgzListW(scrollController: _scrollController));
   }
 
   @override
   void dispose() {
-    // _scrollController
-    //   ..removeListener(_onScroll)
-    //   ..dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
-  // void _onScroll() {
-  //   if (_isBottom) bloc.add(PostFetched());
-  // }
+  void _onScroll() {
+    if (_isBottom) bloc.add(MgzFetched());
+  }
 
   // ignore: unused_element
   bool get _isBottom {
@@ -67,14 +62,13 @@ class _PostsListState extends State<MgzListPage> {
   }
 }
 
-class PostListW extends StatelessWidget {
-  const PostListW({
+class MgzListW extends StatelessWidget {
+  const MgzListW({
     Key? key,
-    required ScrollController scrollController,
-  })  : _scrollController = scrollController,
-        super(key: key);
+    required this.scrollController,
+  }) : super(key: key);
 
-  final ScrollController _scrollController;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -97,17 +91,14 @@ class PostListW extends StatelessWidget {
 
                 return ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
-                    // FIXME: required Pagination
-                    // return index >= state.posts.length
-                    // ? const BottomLoader()
-                    // : PostListItem(post: state.posts[index]);
-                    return PostListItem(post: state.posts[index]);
+                    return index >= state.posts.length
+                        ? const BottomLoader()
+                        : PostListItem(post: state.posts[index]);
                   },
-                  itemCount: state.posts.length,
-                  // itemCount: state.hasReachedMax
-                  // ? state.posts.length
-                  // : state.posts.length + 1,
-                  controller: _scrollController,
+                  itemCount: state.hasReachedMax
+                      ? state.posts.length
+                      : state.posts.length + 1,
+                  controller: scrollController,
                 );
               default:
                 return Container();

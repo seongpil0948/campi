@@ -21,30 +21,30 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostRepo postRepo = PostRepo();
   UserRepo userRepo = const UserRepo();
-  final postContoller = SearchValBloc().state.postController;
+  // final postContoller = SearchValBloc().state.postController;
   PostBloc() : super(const PostState()) {
-    on<PostFetched>(
-      _onPostFetched,
+    on<MgzFetched>(
+      _onMgzFetched,
       transformer: throttleDroppable(throttleDuration),
     );
-    add(PostFetched());
-    postContoller.addListener(() {
-      state.copyWith(
-          posts: state.posts
-              .where((element) =>
-                  (element.title as String).contains(postContoller.text))
-              .toList());
-    });
+    add(MgzFetched());
+    // postContoller.addListener(() {
+    //   state.copyWith(
+    //       posts: state.posts
+    //           .where((element) =>
+    //               (element.title as String).contains(postContoller.text))
+    //           .toList());
+    // });
   }
 
-  Future<void> _onPostFetched(
-    PostFetched event,
+  Future<void> _onMgzFetched(
+    MgzFetched event,
     Emitter<PostState> emit,
   ) async {
     if (state.hasReachedMax) return;
     try {
       if (state.status == PostStatus.initial) {
-        final posts = await _fetchPosts();
+        final posts = await _fetchPosts(); // FIXME!!!
         return emit(state.copyWith(
           status: PostStatus.success,
           posts: posts,
