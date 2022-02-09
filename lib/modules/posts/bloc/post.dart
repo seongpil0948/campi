@@ -67,5 +67,5 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   }
 
   Future<List<dynamic>> _fetchPosts([int startIndex = 0]) async =>
-      postRepo.getAllPosts(await userRepo.allUserIds);
+      postRepo.getAllPosts();
 }

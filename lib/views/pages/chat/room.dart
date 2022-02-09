@@ -50,7 +50,7 @@ class ChatRoomBody extends StatelessWidget {
     return StreamBuilder<QuerySnapshot>(
         stream: getCollection(c: Collections.messages, roomId: roomId)
             .orderBy("createdAt")
-            .limit(30)
+            .limit(100)
             .snapshots(),
         builder:
             (BuildContext context2, AsyncSnapshot<QuerySnapshot> snapshot) {

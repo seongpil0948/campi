@@ -1,42 +1,63 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum Collections { feeds, users, comments, messages, magazines }
+enum Collections {
+  feeds,
+  users,
+  comments,
+  replies,
+  messages,
+  magazines,
+  chatRooms,
+}
+
+DocumentReference getCmtTargetDocRef(String? feedId, String? mgzId) {
+  FirebaseFirestore store = FirebaseFirestore.instance;
+  DocumentReference d;
+  if (feedId != null) {
+    d = store.collection(feedCollection).doc(feedId);
+  } else if (mgzId != null) {
+    d = store.collection(magazineCollection).doc(mgzId);
+  } else {
+    throw ArgumentError("please enter Comment Target ID.");
+  }
+  return d;
+}
 
 CollectionReference getCollection(
-    {required Collections c, String? userId, String? feedId, String? roomId}) {
+    {required Collections c,
+    String? userId,
+    String? feedId,
+    String? mgzId,
+    String? roomId,
+    String? cmtId}) {
   FirebaseFirestore store = FirebaseFirestore.instance;
   switch (c) {
     case Collections.feeds:
-      if (userId == null) {
-        throw ArgumentError(
-            "If you want a feed collection, please enter your user ID.");
-      }
-      return store
-          .collection(userCollection)
-          .doc(userId)
-          .collection(feedCollection);
+      return store.collection(feedCollection);
     case Collections.comments:
-      if (userId == null || feedId == null)
-        // ignore: curly_braces_in_flow_control_structures
-        throw ArgumentError(
-            "If you want a CommentModel collection, please enter your user & feed ID.");
-      return store
-          .collection(userCollection)
-          .doc(userId)
-          .collection(feedCollection)
-          .doc(feedId)
-          .collection(commentCollection);
+      return getCmtTargetDocRef(feedId, mgzId).collection(commentCollection);
+    case Collections.replies:
+      if (cmtId == null) {
+        throw ArgumentError("please enter Comment ID For Reply Collection.");
+      }
+      return getCmtTargetDocRef(feedId, mgzId)
+          .collection(commentCollection)
+          .doc(cmtId)
+          .collection(replyCollection);
     case Collections.users:
       return store.collection(userCollection);
     case Collections.magazines:
-      return store
-          .collection(userCollection)
-          .doc(userId)
-          .collection(magazineCollection);
+      return store.collection(magazineCollection);
+    case Collections.chatRooms:
+      return store.collection(chatRoomCollection);
     case Collections.messages:
-      final c = store.collection(messagesCollection);
-      if (roomId == null) return c;
-      return c.doc(roomId).collection("msgs");
+      if (roomId == null) {
+        throw ArgumentError("please enter your Room ID.");
+      }
+      return store
+          .collection(chatRoomCollection)
+          .doc(roomId)
+          .collection(messagesCollection);
   }
 }
 
@@ -44,5 +65,6 @@ const userCollection = 'users';
 const feedCollection = 'feeds';
 const commentCollection = 'comments';
 const replyCollection = 'replies';
+const chatRoomCollection = 'chatRooms';
 const messagesCollection = 'messages';
 const magazineCollection = 'mgzs';

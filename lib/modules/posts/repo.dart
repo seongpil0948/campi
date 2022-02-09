@@ -6,36 +6,28 @@ class PostRepo {
   List<FeedState> feeds = [];
   List<MgzState> mgzs = [];
 
-  Future<List<dynamic>> getAllPosts(Iterable<String> userIds) async {
+  Future<List<dynamic>> getAllPosts() async {
     var r = [];
-    r.addAll(await getFeeds(userIds));
-    r.addAll(await getMgzs(userIds));
+    r.addAll(await getAllFeeds());
+    r.addAll(await getAllMgzs());
     return r;
   }
 
-  Future<List<FeedState>> getFeeds(Iterable<String> userIds) async {
-    final userC = getCollection(c: Collections.users);
-    for (var _id in userIds) {
-      var feeds = await userC
-          .doc(_id)
-          .collection(feedCollection)
-          .orderBy('updatedAt', descending: true)
-          .get();
-      var feedInfos = feeds.docs.map((f) => FeedState.fromJson(f.data()));
-      this.feeds.addAll(feedInfos);
-    }
-    return feeds;
+  Future<List<FeedState>> getAllFeeds() async {
+    final feedsDocs = await getCollection(c: Collections.feeds)
+        .orderBy('updatedAt', descending: true)
+        .get();
+    return feedsDocs.docs
+        .map((f) => FeedState.fromJson(f.data() as Map<String, dynamic>))
+        .toList();
   }
 
-  Future<List<MgzState>> getMgzs(Iterable<String> userIds) async {
-    for (var _id in userIds) {
-      final mgzs = await getCollection(c: Collections.magazines, userId: _id)
-          .orderBy('updatedAt', descending: true)
-          .get();
-      var mgzDatas = mgzs.docs
-          .map((m) => MgzState.fromJson(m.data() as Map<String, dynamic>));
-      this.mgzs.addAll(mgzDatas);
-    }
-    return mgzs;
+  Future<List<MgzState>> getAllMgzs() async {
+    final mgzsDocs = await getCollection(c: Collections.magazines)
+        .orderBy('updatedAt', descending: true)
+        .get();
+    return mgzsDocs.docs
+        .map((m) => MgzState.fromJson(m.data() as Map<String, dynamic>))
+        .toList();
   }
 }

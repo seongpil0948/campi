@@ -3,13 +3,13 @@ import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/comment/reply.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/posts/feed/state.dart';
+import 'package:campi/modules/posts/models/common.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 Future<List<CommentModel>> loadComment(String userId, String feedId) async {
-  final comments = await getCollection(
-          c: Collections.comments, userId: userId, feedId: feedId)
+  final comments = await getCollection(c: Collections.comments)
       .orderBy('createdAt', descending: true)
       .get();
   return comments.docs
@@ -17,13 +17,16 @@ Future<List<CommentModel>> loadComment(String userId, String feedId) async {
       .toList();
 }
 
-void postComment(String txt, PiUser writer, FeedState feed) {
+void postFeedComment(String txt, PiUser writer, FeedState feed) {
   final commentId = const Uuid().v4();
-  final comment =
-      CommentModel(id: commentId, writerId: writer.userId, content: txt);
+  final comment = CommentModel(
+      id: commentId,
+      writerId: writer.userId,
+      content: txt,
+      ctype: ContentType.feed,
+      ctypeId: feed.feedId);
   final cj = comment.toJson();
-  getCollection(
-          c: Collections.comments, userId: writer.userId, feedId: feed.feedId)
+  getCollection(c: Collections.comments, feedId: feed.feedId)
       .doc(commentId)
       .set(cj)
       .then((value) {
@@ -35,18 +38,17 @@ void postComment(String txt, PiUser writer, FeedState feed) {
   });
 }
 
-void postReply(String txt, PiUser writer, String feedId, String commentId) {
-  final replyId = const Uuid().v4();
+void postFeedReply(String txt, PiUser writer, String feedId, String commentId) {
   final reply = Reply(
       id: commentId,
       writerId: writer.userId,
       content: txt,
-      targetCmtId: commentId);
+      targetCmtId: commentId,
+      cTypeId: feedId,
+      ctype: ContentType.feed);
   final rj = reply.toJson();
-  getCollection(c: Collections.comments, userId: writer.userId, feedId: feedId)
-      .doc(commentId)
-      .collection(replyCollection)
-      .doc(replyId)
+  getCollection(c: Collections.replies, feedId: feedId, cmtId: commentId)
+      .doc(const Uuid().v4())
       .set(rj)
       .then((value) {
     debugPrint("Post Reply is Successed ");

@@ -59,7 +59,7 @@ class ChatRoomList extends StatelessWidget {
                         key: const ValueKey("1"),
                         onPressed: (context) {
                           try {
-                            getCollection(c: Collections.messages)
+                            getCollection(c: Collections.chatRooms)
                                 .doc(roomId)
                                 .delete();
                           } catch (e) {

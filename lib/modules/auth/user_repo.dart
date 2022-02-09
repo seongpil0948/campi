@@ -70,10 +70,11 @@ Future<CompleteUser> getCompleteUser(
   if (user.isEmpty) {
     context.read<NavigationCubit>().clearAndPush(loginPath);
   }
-  final pRepo = PostRepo();
-  final feeds = await pRepo.getFeeds([user.userId]);
-  final mgzs = await pRepo.getMgzs([user.userId]);
-  return CompleteUser(feeds: feeds, user: user, mgzs: mgzs);
+  // FIXME: Posts by Ids 유저의 포스트 아이디 목록을 추가해야함
+  // final pRepo = PostRepo();
+  // final feeds = await pRepo.getAllFeeds([user.userId]);
+  // final mgzs = await pRepo.getAllMgzs([user.userId]);
+  return CompleteUser(feeds: [], user: user, mgzs: []);
 }
 
 Future<PiUser?> getUser(String? userId) async {

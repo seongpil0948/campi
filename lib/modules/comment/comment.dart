@@ -6,7 +6,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CommentModel {
-  ContentType ctype = ContentType.comment;
+  ContentType ctype;
+  String ctypeId;
   final String id;
   String writerId;
   String content;
@@ -15,7 +16,11 @@ class CommentModel {
   PiUser? _writer;
 
   CommentModel(
-      {required this.id, required this.writerId, required this.content});
+      {required this.id,
+      required this.writerId,
+      required this.content,
+      required this.ctype,
+      required this.ctypeId});
 
   Future<PiUser> get writer async {
     if (_writer != null) return _writer!;
@@ -32,6 +37,7 @@ class CommentModel {
       : id = j['id'],
         writerId = j['writerId'],
         ctype = contentTypeFromString(j['ctype']),
+        ctypeId = j['ctypeId'],
         content = j['content'],
         createdAt = timeStamp2DateTime(j['createdAt']),
         updatedAt = timeStamp2DateTime(j['updatedAt']);
@@ -40,6 +46,7 @@ class CommentModel {
         'id': id,
         'writerId': writerId,
         'ctype': ctype.toCustomString(),
+        'ctypeId': ctypeId,
         'content': content,
         'updatedAt': updatedAt,
         'createdAt': createdAt,

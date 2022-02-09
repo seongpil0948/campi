@@ -97,6 +97,7 @@ class PostListW extends StatelessWidget {
 
                 return ListView.builder(
                   itemBuilder: (BuildContext context, int index) {
+                    // FIXME: required Pagination
                     // return index >= state.posts.length
                     // ? const BottomLoader()
                     // : PostListItem(post: state.posts[index]);

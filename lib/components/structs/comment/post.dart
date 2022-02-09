@@ -111,13 +111,13 @@ Future<void> _submit(
   final fcm = context.read<AppBloc>().fcm;
   final w = await feed.writer;
   if (target == null) {
-    postComment(txt, user, feed);
+    postFeedComment(txt, user, feed);
     fcm.sendPushMessage(
         tokens: w.messageToken,
         data: {"type": "postComment"},
         topic: 'feed-${feed.feedId}');
   } else {
-    postReply(txt, user, feed.feedId, target.id);
+    postFeedReply(txt, user, feed.feedId, target.id);
     fcm.sendPushMessage(
         tokens: [...w.messageToken],
         data: {"type": "postReply"},

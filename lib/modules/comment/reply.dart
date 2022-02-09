@@ -9,12 +9,24 @@ class Reply extends CommentModel {
       {required this.targetCmtId,
       required String id,
       required String writerId,
-      required String content})
-      : super(id: id, writerId: writerId, content: content);
+      required String content,
+      required String cTypeId,
+      required ContentType ctype})
+      : super(
+            id: id,
+            writerId: writerId,
+            content: content,
+            ctypeId: cTypeId,
+            ctype: ctype);
 
   Reply.fromJson(Map<String, dynamic> j)
       : targetCmtId = j['targetCmtId'],
-        super(content: j['content'], writerId: j['writerId'], id: j['id']);
+        super(
+            content: j['content'],
+            writerId: j['writerId'],
+            id: j['id'],
+            ctypeId: j['cTypeId'],
+            ctype: j['ctype']);
 
   @override
   Map<String, dynamic> toJson() {

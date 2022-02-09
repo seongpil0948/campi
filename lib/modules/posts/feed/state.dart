@@ -53,7 +53,7 @@ class FeedState extends Equatable {
 
   Future<bool> update() {
     updatedAt = DateTime.now();
-    final fc = getCollection(c: Collections.feeds, userId: writerId);
+    final fc = getCollection(c: Collections.feeds);
     return fc
         .doc(feedId)
         .set(toJson(), SetOptions(merge: true))

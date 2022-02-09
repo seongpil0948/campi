@@ -1,6 +1,6 @@
 import 'package:campi/utils/moment.dart';
 
-enum ContentType { feed, store, comment, reply }
+enum ContentType { feed, mgz, store, reply }
 
 extension ParseToString on ContentType {
   String toCustomString() {
@@ -14,10 +14,10 @@ ContentType contentTypeFromString(String ftype) {
       return ContentType.feed;
     case "store":
       return ContentType.store;
-    case "comment":
-      return ContentType.comment;
+    case "mgz":
+      return ContentType.mgz;
     default:
-      return ContentType.comment;
+      return ContentType.feed;
   }
 }
 
