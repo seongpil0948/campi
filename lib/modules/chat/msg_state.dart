@@ -26,18 +26,4 @@ class MsgState extends Time {
     j['content'] = content;
     return j;
   }
-
-  static Iterable<MsgState> mocks(int n) {
-    final users = PiUser.mocks(n).toList();
-    const uuid = Uuid();
-    return Iterable.generate(
-        n,
-        (i) => MsgState.fromJson({
-              "id": uuid.v4(),
-              "writer": users[i].toJson(),
-              "content": "asdasdl;vlx;cvldksfoakfoqkf;lkasdfl;kqo",
-              "createdAt": DateTime.now().add(const Duration(days: -1)),
-              "updatedAt": DateTime.now()
-            }));
-  }
 }

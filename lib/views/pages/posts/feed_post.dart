@@ -15,6 +15,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class FeedPostPage extends StatelessWidget {
   const FeedPostPage({Key? key}) : super(key: key);
@@ -77,6 +78,7 @@ class FeedPostW extends StatelessWidget {
                       context.read<AppBloc>().add(AppLoadingChange());
                       final feed = context.read<FeedCubit>().state;
                       final userId = feed.writerId;
+
                       if (feed.files.isEmpty ||
                           feed.files
                               .where((element) =>
@@ -85,22 +87,24 @@ class FeedPostW extends StatelessWidget {
                         oneMoreImg(context);
                         return;
                       }
+
                       for (var f in feed.files) {
                         var file = await uploadFilePathsToFirebase(
                             f: f, path: 'clientUploads/$userId/${f.fName}');
                         if (file != null) paths.add(file);
                       }
+
                       final newFeed = feed.copyWith(fs: paths);
-                      final doc =
-                          getCollection(c: Collections.users).doc(userId);
-                      doc
-                          .collection(feedCollection)
+                      getCollection(c: Collections.feeds)
                           .doc(newFeed.feedId)
                           .set(newFeed.toJson())
                           .then((value) async {
                         final appBloc = context.read<AppBloc>();
                         appBloc.add(AppLoadingChange());
+
                         final writer = await feed.writer;
+                        writer.feedIds.add(feed.feedId);
+                        writer.update();
                         appBloc.fcm.sendPushMessage(
                             tokens: writer.followers,
                             data: {"tokenIsUid": true, "type": "postFeed"});

@@ -5,12 +5,14 @@ import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:campi/components/inputs/text_controller.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/events.dart';
+import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/modules/posts/state.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 // const _postLimit = 20;
 const throttleDuration = Duration(milliseconds: 100);
+const mgzFetchPSize = 30;
 
 EventTransformer<E> throttleDroppable<E>(Duration duration) {
   return (events, mapper) {
@@ -51,8 +53,8 @@ class MgzBloc extends Bloc<PostEvent, PostState> {
       //     hasReachedMax: false,
       //   ));
       // }
-      final mgzs = await _fetchMgzs(state.posts.length);
-      mgzs.isEmpty
+      final mgzs = await _fetchMgzs();
+      mgzs.isEmpty || mgzs.length < mgzFetchPSize
           ? emit(state.copyWith(hasReachedMax: true))
           : emit(
               state.copyWith(
@@ -66,6 +68,13 @@ class MgzBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
-  Future<List<dynamic>> _fetchMgzs([int startIndex = 0]) async =>
-      postRepo.getAllMgzs();
+  Future<List<MgzState>> _fetchMgzs() async {
+    final len = state.posts.length;
+    final lastMgz = len > 0 ? state.posts[len - 1] as MgzState : null;
+    final mgzs =
+        await postRepo.getMgzs(lastObj: lastMgz, pageSize: mgzFetchPSize);
+    return mgzs.docs
+        .map((m) => MgzState.fromJson(m.data() as Map<String, dynamic>))
+        .toList();
+  }
 }

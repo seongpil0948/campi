@@ -11,10 +11,12 @@ class MgzCubit extends Cubit<MgzState> {
   void changeDoc(Document doc) =>
       emit(state.copyWith(title: doc.toDelta().first.value, content: doc));
 
-  void posting(BuildContext context) => getCollection(c: Collections.magazines)
-      .doc()
-      .set(state.toJson())
-      .then((value) => context.read<NavigationCubit>().pop());
+  void posting(BuildContext context) {
+    getCollection(c: Collections.magazines)
+        .doc(state.mgzId)
+        .set(state.toJson())
+        .then((value) => context.read<NavigationCubit>().pop());
+  }
 }
 
 String? docCheckMedia(Document dc, {checkImg = false, checkVideo = false}) {

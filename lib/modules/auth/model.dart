@@ -24,6 +24,8 @@ class PiUser {
   List<String> favoriteFeeds = [];
   List<String> followers = [];
   List<String> follows = [];
+  List<String> feedIds = [];
+  List<String> mgzIds = [];
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
 
@@ -90,6 +92,8 @@ class PiUser {
         tenantId = j['tenantId'],
         hash = j['hash'],
         favoriteFeeds = List<String>.from(j['favoriteFeeds']),
+        feedIds = List<String>.from(j['feedIds'] ?? []),
+        mgzIds = List<String>.from(j['mgzIds'] ?? []),
         followers = List<String>.from(j['followers']),
         follows = List<String>.from(j['follows']),
         createdAt = j['createdAt'] is String
@@ -115,6 +119,8 @@ class PiUser {
         'tenantId': tenantId,
         'hash': hash,
         'favoriteFeeds': favoriteFeeds,
+        'feedIds': feedIds,
+        'mgzIds': mgzIds,
         'followers': followers,
         'follows': follows,
         'createdAt': createdAt,
@@ -125,27 +131,5 @@ class PiUser {
     j['createdAt'] = createdAt.toIso8601String();
     j['updatedAt'] = updatedAt.toIso8601String();
     return j;
-  }
-
-  static Iterable<PiUser> mocks(int n) {
-    return Iterable.generate(
-        n,
-        (i) => PiUser.fromJson({
-              'userId': "spsp$i",
-              'displayName': "spspspsp",
-              'email': "seongpil0948@gmail.com",
-              'emailVerified': i % 2 == 0 ? true : false,
-              'phoneNumber': i % 2 == 0 ? "010-7184-0948" : null,
-              'photoURL': "https://picsum.photos/250?image=$i",
-              'refreshToken': "asdasfasfasfasfgadg",
-              'messageToken': "asdasfasfasfasfgadg",
-              'tenantId': "asdasfasfasfasfgadg",
-              'hash': 1010012312412,
-              'favoriteFeeds': [],
-              'followers': [],
-              'follows': [],
-              'createdAt': Timestamp.now(),
-              'updatedAt': Timestamp.now(),
-            }));
   }
 }

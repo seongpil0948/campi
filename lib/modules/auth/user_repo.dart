@@ -72,8 +72,8 @@ Future<CompleteUser> getCompleteUser(
   }
   // FIXME: Posts by Ids 유저의 포스트 아이디 목록을 추가해야함
   // final pRepo = PostRepo();
-  // final feeds = await pRepo.getAllFeeds([user.userId]);
-  // final mgzs = await pRepo.getAllMgzs([user.userId]);
+  // final feeds = await pRepo.getFeeds([user.userId]);
+  // final mgzs = await pRepo.getMgzs([user.userId]);
   return CompleteUser(feeds: [], user: user, mgzs: []);
 }
 

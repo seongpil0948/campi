@@ -6,7 +6,7 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onEvent(Bloc bloc, Object? event) {
     super.onEvent(bloc, event);
-    debugPrint(event.toString());
+    debugPrint("\n BLOC Event => $event");
   }
 
   @override
@@ -18,6 +18,6 @@ class AppBlocObserver extends BlocObserver {
   @override
   void onTransition(Bloc bloc, Transition transition) {
     super.onTransition(bloc, transition);
-    debugPrint(transition.toString());
+    debugPrint("\n BLOC Ttransition => $transition");
   }
 }

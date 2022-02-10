@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' as q;
 import 'package:tuple/tuple.dart';
+import 'package:uuid/uuid.dart';
 
 class MgzPostPage extends StatelessWidget {
   const MgzPostPage({Key? key}) : super(key: key);
