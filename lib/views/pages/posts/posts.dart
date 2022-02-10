@@ -26,7 +26,7 @@ class MgzListPage extends StatefulWidget {
 
 class _MgzListState extends State<MgzListPage> {
   final _scrollController = ScrollController();
-  final bloc = PostBloc();
+  final bloc = MgzBloc();
 
   @override
   void initState() {
@@ -74,7 +74,7 @@ class MgzListW extends StatelessWidget {
   Widget build(BuildContext context) {
     const txtSty = TextStyle(color: Colors.black);
     return Piffold(
-        body: BlocBuilder<PostBloc, PostState>(
+        body: BlocBuilder<MgzBloc, PostState>(
           builder: (context, state) {
             switch (state.status) {
               case PostStatus.failure:

@@ -18,11 +18,11 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
   };
 }
 
-class PostBloc extends Bloc<PostEvent, PostState> {
+class MgzBloc extends Bloc<PostEvent, PostState> {
   PostRepo postRepo = PostRepo();
   UserRepo userRepo = const UserRepo();
   // final postContoller = SearchValBloc().state.postController;
-  PostBloc() : super(const PostState()) {
+  MgzBloc() : super(const PostState()) {
     on<MgzFetched>(
       _onMgzFetched,
       transformer: throttleDroppable(throttleDuration),
@@ -43,21 +43,21 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   ) async {
     if (state.hasReachedMax) return;
     try {
-      if (state.status == PostStatus.initial) {
-        final posts = await _fetchPosts(); // FIXME!!!
-        return emit(state.copyWith(
-          status: PostStatus.success,
-          posts: posts,
-          hasReachedMax: false,
-        ));
-      }
-      final posts = await _fetchPosts(state.posts.length);
-      posts.isEmpty
+      // if (state.status == PostStatus.initial) {
+      //   final mgzs = await _fetchMgzs();
+      //   return emit(state.copyWith(
+      //     status: PostStatus.success,
+      //     posts: mgzs,
+      //     hasReachedMax: false,
+      //   ));
+      // }
+      final mgzs = await _fetchMgzs(state.posts.length);
+      mgzs.isEmpty
           ? emit(state.copyWith(hasReachedMax: true))
           : emit(
               state.copyWith(
                 status: PostStatus.success,
-                posts: List.of(state.posts)..addAll(posts),
+                posts: List.of(state.posts)..addAll(mgzs),
                 hasReachedMax: false,
               ),
             );
@@ -66,6 +66,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
-  Future<List<dynamic>> _fetchPosts([int startIndex = 0]) async =>
-      postRepo.getAllPosts();
+  Future<List<dynamic>> _fetchMgzs([int startIndex = 0]) async =>
+      postRepo.getAllMgzs();
 }

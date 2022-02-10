@@ -14,7 +14,7 @@ abstract class SearchEvent extends Equatable {
 class AppLogoutRequested extends SearchEvent {}
 
 class SearchValState extends Equatable {
-  final postController = TextEditingController();
+  final postController = TextEditingController(); // FIXME
   @override
   List<Object?> get props => [];
 }

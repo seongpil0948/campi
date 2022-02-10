@@ -12,7 +12,7 @@ class PiAppBarTextField extends StatelessWidget {
     return TextField(
       textAlign: TextAlign.center,
       style: Theme.of(context).textTheme.caption,
-      controller: searchVal.state.postController,
+      controller: searchVal.state.postController, // FIXME
       keyboardType: TextInputType.text,
       decoration: InputDecoration(
           labelText: "     캠핑라이프와 상품을 검색 해보세요",

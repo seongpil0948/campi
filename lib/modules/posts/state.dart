@@ -3,6 +3,7 @@ import 'package:equatable/equatable.dart';
 enum PostStatus { initial, success, failure }
 
 class PostState extends Equatable {
+  // use for Both Feed And Mgz
   const PostState({
     this.status = PostStatus.initial,
     this.posts = const [],

@@ -6,13 +6,6 @@ class PostRepo {
   List<FeedState> feeds = [];
   List<MgzState> mgzs = [];
 
-  Future<List<dynamic>> getAllPosts() async {
-    var r = [];
-    r.addAll(await getAllFeeds());
-    r.addAll(await getAllMgzs());
-    return r;
-  }
-
   Future<List<FeedState>> getAllFeeds() async {
     final feedsDocs = await getCollection(c: Collections.feeds)
         .orderBy('updatedAt', descending: true)

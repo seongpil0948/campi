@@ -21,7 +21,7 @@ class _FeedListPageState extends State<FeedListPage> {
   }
 
   final _scrollController = ScrollController();
-  final bloc = PostBloc();
+  final bloc = MgzBloc();
 
   @override
   Widget build(BuildContext context) {
