@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:campi/components/inputs/text_controller.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/events.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
@@ -54,12 +53,14 @@ class MgzBloc extends Bloc<PostEvent, PostState> {
       //   ));
       // }
       final mgzs = await _fetchMgzs();
+      var posts = List.of(state.posts)..addAll(mgzs);
       mgzs.isEmpty || mgzs.length < mgzFetchPSize
-          ? emit(state.copyWith(hasReachedMax: true))
+          ? emit(state.copyWith(
+              status: PostStatus.success, hasReachedMax: true, posts: posts))
           : emit(
               state.copyWith(
                 status: PostStatus.success,
-                posts: List.of(state.posts)..addAll(mgzs),
+                posts: posts,
                 hasReachedMax: false,
               ),
             );
