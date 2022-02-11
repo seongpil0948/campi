@@ -17,7 +17,7 @@ class Piffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    final toolbarH = mq.size.height / 6;
+    final toolbarH = mq.size.height / 7;
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(toolbarH),

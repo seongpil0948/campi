@@ -22,7 +22,6 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 class MgzBloc extends Bloc<PostEvent, PostState> {
   PostRepo postRepo = PostRepo();
   UserRepo userRepo = const UserRepo();
-  // final postContoller = SearchValBloc().state.postController;
   MgzBloc() : super(const PostState()) {
     on<MgzFetched>(
       _onMgzFetched,

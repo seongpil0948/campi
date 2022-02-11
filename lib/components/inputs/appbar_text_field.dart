@@ -9,18 +9,37 @@ class PiAppBarTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final searchVal = context.watch<SearchValBloc>();
-    return TextField(
-      textAlign: TextAlign.center,
-      style: Theme.of(context).textTheme.caption,
-      controller: searchVal.state.postController, // FIXME
-      keyboardType: TextInputType.text,
-      decoration: InputDecoration(
-          labelText: "     캠핑라이프와 상품을 검색 해보세요",
-          prefixIcon: Icon(
-            Icons.search_outlined,
-            size: 20,
-            color: Colors.blue.shade900,
-          )),
+    final b = UnderlineInputBorder(
+        borderSide:
+            BorderSide(width: 0.3, color: Theme.of(context).primaryColor));
+    return Row(
+      children: [
+        Expanded(
+          flex: 8,
+          child: TextField(
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.caption,
+              controller: searchVal.state.appSearchController, // FIXME
+              keyboardType: TextInputType.text,
+              decoration: InputDecoration(
+                  border: b,
+                  focusedBorder: b,
+                  enabledBorder: b,
+                  errorBorder: b,
+                  disabledBorder: b,
+                  label: Text("Camping Place",
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline5
+                          ?.copyWith(color: Theme.of(context).primaryColor)))),
+        ),
+        Expanded(
+            flex: 1,
+            child: IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.search_outlined,
+                    size: 35, color: Theme.of(context).primaryColor)))
+      ],
     );
   }
 }

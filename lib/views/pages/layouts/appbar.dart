@@ -23,44 +23,37 @@ class PiAppBar extends StatelessWidget {
       leading: Container(),
       toolbarHeight: toolbarH,
       flexibleSpace: Padding(
-        padding: EdgeInsets.fromLTRB(10, mq.padding.top, 25, 0),
-        child: Container(
-          margin: const EdgeInsets.only(top: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              IconButton(
-                icon: const Icon(
-                  Icons.menu,
-                  size: 35,
-                ),
-                onPressed: () {
-                  Scaffold.of(context).openDrawer();
-                },
-                tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+        padding: EdgeInsets.fromLTRB(20, mq.padding.top, 25, 0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            IconButton(
+              icon: const Icon(
+                Icons.menu,
+                size: 35,
               ),
-              const Spacer(),
-              InkWell(
-                  onTap: () => context
-                      .read<NavigationCubit>()
-                      .push(myPath, {"selectedUser": auth.currentUser}),
-                  child: GoMyAvatar(user: auth.currentUser))
-            ],
-          ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            ),
+            const Spacer(),
+            InkWell(
+                onTap: () => context
+                    .read<NavigationCubit>()
+                    .push(myPath, {"selectedUser": auth.currentUser}),
+                child: GoMyAvatar(user: auth.currentUser))
+          ],
         ),
       ),
       bottom: PreferredSize(
-          preferredSize: Size.fromHeight(toolbarH / 2),
+          preferredSize: Size.fromHeight(toolbarH / 3),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 30),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 SizedBox(
-                    height: toolbarH / 3, child: const PiAppBarTextField()),
-                Container(
-                    margin: const EdgeInsets.fromLTRB(0, 2, 0, 10),
-                    child: const Divider())
+                    height: toolbarH / 1.5, child: const PiAppBarTextField()),
               ],
             ),
           )),

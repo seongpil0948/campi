@@ -1,4 +1,3 @@
-import 'package:campi/modules/chat/msg_state.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
