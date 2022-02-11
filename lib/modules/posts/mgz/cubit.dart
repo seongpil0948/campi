@@ -8,8 +8,8 @@ import 'package:flutter_quill/flutter_quill.dart';
 class MgzCubit extends Cubit<MgzState> {
   MgzCubit(String writerId)
       : super(MgzState(writerId: writerId, content: Document(), title: ''));
-  void changeDoc(Document doc) =>
-      emit(state.copyWith(title: doc.toDelta().first.value, content: doc));
+  void changeDoc(String title, Document doc) =>
+      emit(state.copyWith(title: title, content: doc));
 
   void posting(BuildContext context) {
     getCollection(c: Collections.magazines)

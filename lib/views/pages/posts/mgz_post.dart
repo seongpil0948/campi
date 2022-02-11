@@ -10,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' as q;
 import 'package:tuple/tuple.dart';
-import 'package:uuid/uuid.dart';
 
 class MgzPostPage extends StatelessWidget {
   const MgzPostPage({Key? key}) : super(key: key);
@@ -23,9 +22,27 @@ class MgzPostPage extends StatelessWidget {
   }
 }
 
-class MgzPostW extends StatelessWidget {
+class MgzPostW extends StatefulWidget {
   final PiUser user;
   const MgzPostW({Key? key, required this.user}) : super(key: key);
+
+  @override
+  _MgzPostWState createState() => _MgzPostWState();
+}
+
+class _MgzPostWState extends State<MgzPostW> {
+  late TextEditingController _titleContoller;
+  @override
+  void initState() {
+    _titleContoller = TextEditingController();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _titleContoller.dispose();
+    super.dispose();
+  }
 
   Future<String> _assetPickCallback(File file, bool isVideo, PiUser u) async {
     final f = PiFile.file(
@@ -38,11 +55,11 @@ class MgzPostW extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future<String> _onImagePickCallback(File file) async {
-      return await _assetPickCallback(file, false, user);
+      return await _assetPickCallback(file, false, widget.user);
     }
 
     Future<String> _onVideoPickCallback(File file) async {
-      return await _assetPickCallback(file, true, user);
+      return await _assetPickCallback(file, true, widget.user);
     }
 
     final _controller = q.QuillController.basic();
@@ -91,6 +108,27 @@ class MgzPostW extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             toolbar,
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: TextField(
+                  style: const TextStyle(
+                      fontSize: 30, fontWeight: FontWeight.bold),
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              width: 0.3,
+                              color: Theme.of(context).primaryColor)),
+                      enabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      contentPadding: const EdgeInsets.only(
+                          left: 15, bottom: 11, top: 11, right: 15),
+                      label: Text("제목을 입력 해..주세요",
+                          style:
+                              TextStyle(color: Theme.of(context).cardColor))),
+                  controller: _titleContoller),
+            ),
             Expanded(
               flex: 10,
               child: Container(
@@ -110,7 +148,7 @@ class MgzPostW extends StatelessWidget {
             return;
           }
           final c = context.read<MgzCubit>();
-          c.changeDoc(_controller.document);
+          c.changeDoc(_titleContoller.text, _controller.document);
           c.posting(context);
         },
         child: const Text("제출하기"),
