@@ -30,7 +30,7 @@ class PiDrawer extends StatelessWidget {
             children: [
               ListTile(
                 title: Text("캠핑포스트", style: tileT),
-                onTap: () => context.read<NavigationCubit>().push(mgzListPath),
+                onTap: () => context.read<NavigationCubit>().push(postListPath),
               ),
               ListTile(
                 title: Text("스토어", style: tileT),

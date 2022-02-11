@@ -17,14 +17,14 @@ import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MgzListPage extends StatefulWidget {
-  const MgzListPage({Key? key}) : super(key: key);
+class PostListPage extends StatefulWidget {
+  const PostListPage({Key? key}) : super(key: key);
 
   @override
-  _MgzListState createState() => _MgzListState();
+  _PostListState createState() => _PostListState();
 }
 
-class _MgzListState extends State<MgzListPage> {
+class _PostListState extends State<PostListPage> {
   final _scrollController = ScrollController();
   final bloc = MgzBloc();
 

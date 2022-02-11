@@ -18,7 +18,7 @@ const rootPath = '/';
 const myPath = '/my';
 const splashPath = '/splash';
 const loginPath = '/login';
-const mgzListPath = '/posts/mgz';
+const postListPath = '/posts/mgz';
 
 const mgzPostPath = '/posts/mgz/post';
 const feedPostPath = '/posts/feed/post';
@@ -36,10 +36,10 @@ MaterialPage getPage(PiPageConfig config) =>
     wgetToPage(config, _routes[config.route]?.call() ?? const UnknownPage());
 
 Map<String, Widget Function()> _routes = {
-  rootPath: () => const MgzListPage(),
+  rootPath: () => const PostListPage(),
   splashPath: () => const SplashPage(),
   loginPath: () => const LoginPage(),
-  mgzListPath: () => const MgzListPage(),
+  postListPath: () => const PostListPage(),
   mgzPostPath: () => const MgzPostPage(),
   feedPostPath: () => const FeedPostPage(),
   mgzDetailPath: () => const MgzDetailPage(),
