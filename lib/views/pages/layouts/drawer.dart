@@ -21,33 +21,39 @@ class PiDrawer extends StatelessWidget {
     final tileT = Theme.of(context).textTheme.bodyText2;
     final currUser = context.watch<AuthRepo>().currentUser;
     return Drawer(
-        child: ListView(
-      padding: EdgeInsets.zero,
+        child: Column(
       children: [
         _DrawerHeader(currUser: currUser, mq: mq),
-        ListTile(
-          title: Text("캠핑플레이스", style: tileT),
-          onTap: () => context.read<NavigationCubit>().push(feedListPath),
-        ),
-        ListTile(
-          title: Text("캠핑포스트", style: tileT),
-          onTap: () => context.read<NavigationCubit>().push(mgzListPath),
-        ),
-        ListTile(
-          title: Text("스토어", style: tileT),
-          onTap: () => context.read<NavigationCubit>().push(storePath),
-        ),
-        ListTile(
-          title: Text("커뮤니케이션", style: tileT),
-          onTap: () => context.read<NavigationCubit>().push(chatPath),
-        ),
-        const Spacer(),
-        ListTile(
-          title: Text("로그아웃", style: tileT),
-          onTap: () async {
-            await context.read<AuthRepo>().logOut();
-            context.read<NavigationCubit>().push(loginPath);
-          },
+        Expanded(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              ListTile(
+                title: Text("캠핑플레이스", style: tileT),
+                onTap: () => context.read<NavigationCubit>().push(feedListPath),
+              ),
+              ListTile(
+                title: Text("캠핑포스트", style: tileT),
+                onTap: () => context.read<NavigationCubit>().push(mgzListPath),
+              ),
+              ListTile(
+                title: Text("스토어", style: tileT),
+                onTap: () => context.read<NavigationCubit>().push(storePath),
+              ),
+              ListTile(
+                title: Text("커뮤니케이션", style: tileT),
+                onTap: () => context.read<NavigationCubit>().push(chatPath),
+              ),
+              const Spacer(),
+              ListTile(
+                title: Text("로그아웃", style: tileT),
+                onTap: () async {
+                  await context.read<AuthRepo>().logOut();
+                  context.read<NavigationCubit>().push(loginPath);
+                },
+              ),
+            ],
+          ),
         ),
       ],
     ));
@@ -66,13 +72,13 @@ class _DrawerHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => context
-          .read<NavigationCubit>()
-          .push(myPath, {"selectedUser": currUser}),
-      child: Container(
-        decoration: BoxDecoration(color: Theme.of(context).primaryColor),
-        padding: EdgeInsets.fromLTRB(10, mq.padding.top / 2, 25, 20),
+    return Container(
+      decoration: BoxDecoration(color: Theme.of(context).primaryColor),
+      padding: EdgeInsets.fromLTRB(10, mq.padding.top / 2, 25, 20),
+      child: InkWell(
+        onTap: () => context
+            .read<NavigationCubit>()
+            .push(myPath, {"selectedUser": currUser}),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -86,8 +92,11 @@ class _DrawerHeader extends StatelessWidget {
                   onPressed: () {},
                 ),
                 const Spacer(),
-                Image.asset('assets/images/logo_w_1.png',
-                    fit: BoxFit.contain, height: 60),
+                Padding(
+                  padding: const EdgeInsets.only(top: 12.0),
+                  child: Image.asset('assets/images/logo_w_1.png',
+                      fit: BoxFit.contain, height: 60),
+                ),
               ],
             ),
             Container(
