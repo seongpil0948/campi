@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/components/btn/fabs.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/components/structs/feed/feed.dart';
@@ -62,6 +63,17 @@ class _PostListState extends State<PostListPage> {
   }
 }
 
+class FeedListW extends StatelessWidget {
+  const FeedListW({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final searchBloc = context.read<SearchValBloc>();
+    searchBloc.add(AppSearchInit(context: context));
+    return const Text("FeedListW");
+  }
+}
+
 class MgzListW extends StatelessWidget {
   const MgzListW({
     Key? key,
@@ -73,7 +85,8 @@ class MgzListW extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const txtSty = TextStyle(color: Colors.black);
-    final size = MediaQuery.of(context).size;
+    final searchBloc = context.read<SearchValBloc>();
+    searchBloc.add(AppSearchInit(context: context));
     return Piffold(
         body: BlocBuilder<MgzBloc, PostState>(
           builder: (context, state) {
@@ -102,21 +115,6 @@ class MgzListW extends StatelessWidget {
           },
         ),
         fButton: const PostingFab());
-  }
-}
-
-class BottomLoader extends StatelessWidget {
-  const BottomLoader({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: SizedBox(
-        height: 24,
-        width: 24,
-        child: CircularProgressIndicator(strokeWidth: 1.5),
-      ),
-    );
   }
 }
 

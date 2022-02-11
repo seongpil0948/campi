@@ -1,27 +1,14 @@
 import 'package:campi/modules/posts/feed/cubit.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
 
-abstract class SearchEvent extends Equatable {
-  const SearchEvent();
-
-  @override
-  List<Object> get props => [];
-}
-
-class AppLogoutRequested extends SearchEvent {}
-
-class SearchValState extends Equatable {
-  final appSearchController = TextEditingController(); // FIXME
-  @override
-  List<Object?> get props => [];
-}
-
-class SearchValBloc extends Bloc<SearchEvent, SearchValState> {
-  SearchValBloc() : super(SearchValState());
-}
+Map<RegExp, TextStyle> tagPatternMap(BuildContext c) => {
+      RegExp("#[|ㄱ-ㅎ가-힣a-zA-Z0-9]+"): Theme.of(c).primaryTextTheme.bodyText2!,
+      RegExp(r"@[|ㄱ-ㅎ가-힣a-zA-Z0-9]+"): Theme.of(c).primaryTextTheme.bodyText1!,
+      RegExp(r"![|ㄱ-ㅎ가-힣a-zA-Z0-9]+"):
+          TextStyle(color: Theme.of(c).colorScheme.error),
+    };
 
 class PiFeedEditors extends StatefulWidget {
   const PiFeedEditors({Key? key}) : super(key: key);
@@ -42,14 +29,7 @@ class _PiEditorsState extends State<PiFeedEditors> {
   void didChangeDependencies() {
     if (once == false) {
       _contentController = RichTextController(
-          patternMatchMap: {
-            RegExp("#[|ㄱ-ㅎ가-힣a-zA-Z0-9]+"):
-                Theme.of(context).primaryTextTheme.bodyText2!,
-            RegExp(r"@[|ㄱ-ㅎ가-힣a-zA-Z0-9]+"):
-                Theme.of(context).primaryTextTheme.bodyText1!,
-            RegExp(r"![|ㄱ-ㅎ가-힣a-zA-Z0-9]+"):
-                TextStyle(color: Theme.of(context).colorScheme.error),
-          },
+          patternMatchMap: tagPatternMap(context),
           onMatch: (matches) {
             setHashTags(context, matches);
             return matches.join(" ");

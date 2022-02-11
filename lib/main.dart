@@ -56,7 +56,10 @@ class CampingApp extends StatelessWidget {
           providers: [
             BlocProvider.value(value: navi),
             BlocProvider(create: (_) => AppBloc(authRepo: auth)),
-            BlocProvider(create: (ctx) => SearchValBloc())
+            BlocProvider(create: (ctx) {
+              final searchBloc = SearchValBloc(context: ctx);
+              return searchBloc;
+            })
           ],
           child: MaterialApp.router(
             title: 'Camping & Picknic',

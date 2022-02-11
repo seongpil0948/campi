@@ -1,4 +1,4 @@
-import 'package:campi/components/inputs/text_controller.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
@@ -8,7 +8,7 @@ class PiAppBarTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchVal = context.watch<SearchValBloc>();
+    final searchBloc = context.watch<SearchValBloc>();
     final b = UnderlineInputBorder(
         borderSide:
             BorderSide(width: 0.3, color: Theme.of(context).primaryColor));
@@ -19,7 +19,7 @@ class PiAppBarTextField extends StatelessWidget {
           child: TextField(
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.caption,
-              controller: searchVal.state.appSearchController, // FIXME
+              controller: searchBloc.state.appSearchController, // FIXME
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                   border: b,

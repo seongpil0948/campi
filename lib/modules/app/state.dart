@@ -33,3 +33,26 @@ class AppState extends Equatable {
   @override
   List<Object> get props => [status, user];
 }
+
+class SearchValState extends Equatable {
+  final BuildContext context;
+  final List<String> tags;
+  final RichTextController appSearchController;
+
+  const SearchValState(
+      {required this.context,
+      this.tags = const [],
+      required this.appSearchController});
+
+  SearchValState copyWith(
+          {BuildContext? context,
+          List<String>? tags,
+          RichTextController? appSearchController}) =>
+      SearchValState(
+          context: context ?? this.context,
+          tags: tags ?? this.tags,
+          appSearchController: appSearchController ?? this.appSearchController);
+
+  @override
+  List<Object?> get props => [tags, context];
+}

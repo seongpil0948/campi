@@ -19,3 +19,17 @@ class AppUserChanged extends AppEvent {
   @override
   List<Object> get props => [user];
 }
+
+abstract class SearchEvent extends Equatable {
+  const SearchEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class AppSearchInit extends SearchEvent {
+  final BuildContext context;
+  const AppSearchInit({required this.context});
+}
+
+class AppOnSearch extends SearchEvent {}

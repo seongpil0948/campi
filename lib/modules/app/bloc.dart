@@ -1,12 +1,15 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:campi/components/inputs/text_controller.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/common/fcm/repo.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
+import 'package:rich_text_controller/rich_text_controller.dart';
 
 part 'event.dart';
 part 'state.dart';
@@ -65,4 +68,34 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     _userSubscription.cancel();
     return super.close();
   }
+}
+
+class SearchValBloc extends Bloc<SearchEvent, SearchValState> {
+  /// Must Init while Building Page Before use Search Text Controller
+  BuildContext context;
+  SearchValBloc({required this.context})
+      : super(SearchValState(
+            context: context,
+            appSearchController: RichTextController(
+                patternMatchMap: tagPatternMap(context),
+                onMatch: (matches) {}))) {
+    on<AppSearchInit>(_onInit);
+    on<AppOnSearch>(_onSearch);
+  }
+  void _onInit(AppSearchInit event, Emitter<SearchValState> emit) {
+    final c = event.context;
+    final newState = state.copyWith(
+        context: c,
+        appSearchController: RichTextController(
+            patternMatchMap: tagPatternMap(c),
+            onMatch: (matches) {
+              state.tags.addAll(matches);
+              emit(state.copyWith(tags: state.tags));
+
+              return matches.join(" ");
+            }));
+    emit(newState);
+  }
+
+  void _onSearch(AppOnSearch event, Emitter<SearchValState> emit) {}
 }
