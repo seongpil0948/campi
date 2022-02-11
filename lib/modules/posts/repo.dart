@@ -18,11 +18,11 @@ class PostRepo {
   }
 
   Future<QuerySnapshot> getMgzs(
-      {required MgzState? lastObj, int pageSize = 30}) async {
+      {required MgzState? lastObj, required int pageSize}) async {
     var startQuery = getCollection(c: Collections.magazines)
         .orderBy('updatedAt', descending: true);
     if (lastObj != null) {
-      startQuery = startQuery.startAt([lastObj]);
+      startQuery = startQuery.startAfter([lastObj.toJson()['updatedAt']]);
     }
     return startQuery.limit(pageSize).get();
   }

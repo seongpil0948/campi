@@ -32,7 +32,7 @@ class _PostListState extends State<PostListPage> {
   void initState() {
     super.initState();
     bloc.add(MgzFetched());
-    // _scrollController.addListener(_onScroll);
+    _scrollController.addListener(_onScroll);
   }
 
   @override
@@ -73,6 +73,7 @@ class MgzListW extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const txtSty = TextStyle(color: Colors.black);
+    final size = MediaQuery.of(context).size;
     return Piffold(
         body: BlocBuilder<MgzBloc, PostState>(
           builder: (context, state) {
@@ -90,14 +91,9 @@ class MgzListW extends StatelessWidget {
                 }
 
                 return ListView.builder(
-                  itemBuilder: (BuildContext context, int index) {
-                    return index >= state.posts.length
-                        ? const BottomLoader()
-                        : PostListItem(post: state.posts[index]);
-                  },
-                  itemCount: state.hasReachedMax
-                      ? state.posts.length
-                      : state.posts.length + 1,
+                  itemBuilder: (BuildContext context, int index) =>
+                      PostListItem(post: state.posts[index]),
+                  itemCount: state.posts.length,
                   controller: scrollController,
                 );
               default:

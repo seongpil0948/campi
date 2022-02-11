@@ -11,7 +11,7 @@ import 'package:stream_transform/stream_transform.dart';
 
 // const _postLimit = 20;
 const throttleDuration = Duration(milliseconds: 100);
-const mgzFetchPSize = 30;
+const mgzFetchPSize = 3;
 
 EventTransformer<E> throttleDroppable<E>(Duration duration) {
   return (events, mapper) {
@@ -29,13 +29,6 @@ class MgzBloc extends Bloc<PostEvent, PostState> {
       transformer: throttleDroppable(throttleDuration),
     );
     add(MgzFetched());
-    // postContoller.addListener(() {
-    //   state.copyWith(
-    //       posts: state.posts
-    //           .where((element) =>
-    //               (element.title as String).contains(postContoller.text))
-    //           .toList());
-    // });
   }
 
   Future<void> _onMgzFetched(
@@ -44,14 +37,6 @@ class MgzBloc extends Bloc<PostEvent, PostState> {
   ) async {
     if (state.hasReachedMax) return;
     try {
-      // if (state.status == PostStatus.initial) {
-      //   final mgzs = await _fetchMgzs();
-      //   return emit(state.copyWith(
-      //     status: PostStatus.success,
-      //     posts: mgzs,
-      //     hasReachedMax: false,
-      //   ));
-      // }
       final mgzs = await _fetchMgzs();
       var posts = List.of(state.posts)..addAll(mgzs);
       mgzs.isEmpty || mgzs.length < mgzFetchPSize
@@ -71,7 +56,7 @@ class MgzBloc extends Bloc<PostEvent, PostState> {
 
   Future<List<MgzState>> _fetchMgzs() async {
     final len = state.posts.length;
-    final lastMgz = len > 0 ? state.posts[len - 1] as MgzState : null;
+    final lastMgz = len > 0 ? state.posts.last as MgzState : null;
     final mgzs =
         await postRepo.getMgzs(lastObj: lastMgz, pageSize: mgzFetchPSize);
     return mgzs.docs
