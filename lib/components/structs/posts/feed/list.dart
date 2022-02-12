@@ -1,4 +1,4 @@
-import 'package:campi/components/structs/feed/feed.dart';
+import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/modules/posts/feed/utils.dart';
