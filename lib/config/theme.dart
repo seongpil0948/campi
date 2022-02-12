@@ -22,6 +22,7 @@ class PiTheme extends PiThemeInterface {
     final primaryColor = Colors.blue.shade900; //1
     const primaryVarColor = Colors.deepPurple;
     const secondColor = Colors.grey; //1
+    const bodyTxt2 = TextStyle(color: Colors.black);
     final origin = ThemeData.light();
     return ThemeData(
       brightness: Brightness.light,
@@ -38,7 +39,8 @@ class PiTheme extends PiThemeInterface {
       ),
       textTheme: TextTheme(
           bodyText1: const TextStyle(color: Colors.white),
-          bodyText2: const TextStyle(color: Colors.black),
+          bodyText2: bodyTxt2,
+          subtitle2: bodyTxt2.copyWith(color: primaryColor),
           overline: origin.textTheme.overline!.copyWith(color: Colors.white)),
       primaryTextTheme: TextTheme(
           bodyText1: TextStyle(

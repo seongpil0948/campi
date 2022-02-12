@@ -1,3 +1,5 @@
+// ignore_for_file: unused_field
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/components/btn/fabs.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
@@ -39,7 +41,7 @@ class _PostListState extends State<PostListPage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider.value(
-        value: bloc, child: MgzListW(scrollController: _scrollController));
+        value: bloc, child: PostListTab(scrollController: _scrollController));
   }
 
   @override
@@ -74,47 +76,153 @@ class FeedListW extends StatelessWidget {
   }
 }
 
-class MgzListW extends StatelessWidget {
-  const MgzListW({
+class PostListTab extends StatefulWidget {
+  final ScrollController scrollController;
+  const PostListTab({
     Key? key,
     required this.scrollController,
   }) : super(key: key);
 
-  final ScrollController scrollController;
+  @override
+  _PostListTabState createState() => _PostListTabState();
+}
+
+class _PostListTabState extends State<PostListTab>
+    with AutomaticKeepAliveClientMixin<PostListTab>, TickerProviderStateMixin {
+  late final TabController _controller;
+  late int _selectedIndex;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TabController(length: 2, vsync: this);
+    _selectedIndex = 0;
+    _controller.addListener(() {
+      setState(() {
+        _selectedIndex = _controller.index;
+      });
+      debugPrint("Selected Index: " + _controller.index.toString());
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    const txtSty = TextStyle(color: Colors.black);
+    super.build(context);
     final searchBloc = context.read<SearchValBloc>();
     searchBloc.add(AppSearchInit(context: context));
+    final size = MediaQuery.of(context).size;
+    final T = Theme.of(context);
     return Piffold(
-        body: BlocBuilder<MgzBloc, PostState>(
-          builder: (context, state) {
-            switch (state.status) {
-              case PostStatus.failure:
-                return const Center(
-                    child: Text('게시글들을 받아오는데에 실패 하였습니다.', style: txtSty));
-              case PostStatus.success:
-                if (state.posts.isEmpty) {
-                  return const Center(
-                      child: Text(
-                    'no posts',
-                    style: txtSty,
-                  ));
-                }
-
-                return ListView.builder(
-                  itemBuilder: (BuildContext context, int index) =>
-                      PostListItem(post: state.posts[index]),
-                  itemCount: state.posts.length,
-                  controller: scrollController,
-                );
-              default:
-                return Container();
-            }
-          },
+        body: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  margin: EdgeInsets.only(left: size.width / 23, bottom: 10),
+                  height: size.height / 30,
+                  width: size.width / 2.2,
+                  child: TabBar(
+                      controller: _controller,
+                      indicator: BoxDecoration(
+                          borderRadius: BorderRadius.circular(50),
+                          color: T.primaryColor),
+                      tabs: [
+                        _Tab(
+                            targetIndex: 0,
+                            txt: "캠핑 포스팅",
+                            selectedIndex: _selectedIndex,
+                            T: T),
+                        _Tab(
+                            targetIndex: 1,
+                            txt: "캠핑 SNS",
+                            selectedIndex: _selectedIndex,
+                            T: T)
+                      ]),
+                ),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(controller: _controller, children: [
+                PostListW(widget: widget),
+                const FeedListW(),
+              ]),
+            )
+          ],
         ),
         fButton: const PostingFab());
+    // return super.build(context);
+  }
+}
+
+class _Tab extends StatelessWidget {
+  const _Tab({
+    Key? key,
+    required this.txt,
+    required this.targetIndex,
+    required this.selectedIndex,
+    required this.T,
+  }) : super(key: key);
+  final String txt;
+  final int selectedIndex;
+  final int targetIndex;
+  final ThemeData T;
+
+  @override
+  Widget build(BuildContext context) {
+    return Tab(
+        child: Text(txt,
+            style: selectedIndex == targetIndex
+                ? T.textTheme.caption!.copyWith(color: Colors.white)
+                : T.textTheme.caption!.copyWith(color: T.primaryColor)));
+  }
+}
+
+class PostListW extends StatelessWidget {
+  const PostListW({
+    Key? key,
+    required this.widget,
+  }) : super(key: key);
+
+  final PostListTab widget;
+
+  @override
+  Widget build(BuildContext context) {
+    final txtSty = Theme.of(context).textTheme.bodyText2;
+    return BlocBuilder<MgzBloc, PostState>(
+      builder: (context, state) {
+        switch (state.status) {
+          case PostStatus.failure:
+            return Center(child: Text('게시글들을 받아오는데에 실패 하였습니다.', style: txtSty));
+          case PostStatus.success:
+            if (state.posts.isEmpty) {
+              return Center(
+                  child: Text(
+                'no posts',
+                style: txtSty,
+              ));
+            }
+
+            return ListView.builder(
+              itemBuilder: (BuildContext context, int index) =>
+                  PostListItem(post: state.posts[index]),
+              itemCount: state.posts.length,
+              controller: widget.scrollController,
+            );
+          default:
+            return Container();
+        }
+      },
+    );
   }
 }
 
