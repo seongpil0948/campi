@@ -19,8 +19,6 @@ class FeedListW extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchBloc = context.read<SearchValBloc>();
-    searchBloc.add(AppSearchInit(context: context));
     final txtSty = Theme.of(context).textTheme.bodyText2;
     final mq = MediaQuery.of(context);
     return BlocBuilder<PostBloc, PostState>(
