@@ -12,6 +12,33 @@ import 'package:provider/src/provider.dart';
 
 enum ThumnailSize { medium, small }
 
+class FeedW extends StatelessWidget {
+  const FeedW({Key? key, required this.mq, required this.f}) : super(key: key);
+
+  final MediaQueryData mq;
+  final FeedState f;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<PiUser>(
+        future: f.writer,
+        builder: (context, snapshot) {
+          return snapshot.hasData
+              ? Container(
+                  margin: const EdgeInsets.all(20),
+                  height: mq.size.height / 3,
+                  child: FeedThumnail(
+                      mq: mq,
+                      img: f.files.firstWhere(
+                          (element) => element.ftype == PiFileType.image),
+                      feedInfo: f,
+                      tSize: ThumnailSize.medium,
+                      writer: snapshot.data!))
+              : Container();
+        });
+  }
+}
+
 class FeedThumnail extends StatelessWidget {
   const FeedThumnail({
     Key? key,

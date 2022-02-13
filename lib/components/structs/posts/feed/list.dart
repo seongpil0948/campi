@@ -1,12 +1,24 @@
 import 'package:campi/components/structs/posts/feed/feed.dart';
+import 'package:campi/components/structs/posts/mgz/thumnail.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/modules/posts/feed/utils.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:campi/utils/io.dart';
-import 'package:campi/views/pages/posts/posts.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+class FeedListW extends StatelessWidget {
+  const FeedListW({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final searchBloc = context.read<SearchValBloc>();
+    searchBloc.add(AppSearchInit(context: context));
+    return const Text("FeedListW");
+  }
+}
 
 class GridFeeds extends StatelessWidget {
   const GridFeeds({
@@ -34,6 +46,7 @@ class GridFeeds extends StatelessWidget {
           mainAxisSpacing: 10,
         ),
         itemBuilder: (context, idx) {
+          // FIXME
           return posts[idx] is FeedState
               ? Card(
                   elevation: 4.0,
@@ -79,7 +92,8 @@ class GridFeeds extends StatelessWidget {
                       ],
                     ),
                   ))
-              : MgzW(mgz: posts[idx] as MgzState, tSize: ThumnailSize.small);
+              : MgzThumnail(
+                  mgz: posts[idx] as MgzState, tSize: ThumnailSize.small);
         });
   }
 }
