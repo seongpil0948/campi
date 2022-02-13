@@ -180,10 +180,13 @@ class _Tab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tab(
-        child: Text(txt,
-            style: selectedIndex == targetIndex
-                ? T.textTheme.caption!.copyWith(color: Colors.white)
-                : T.textTheme.caption!.copyWith(color: T.primaryColor)));
+        child: Padding(
+      padding: const EdgeInsets.only(top: 4.0),
+      child: Text(txt,
+          style: selectedIndex == targetIndex
+              ? T.textTheme.caption!.copyWith(color: Colors.white)
+              : T.textTheme.caption!.copyWith(color: T.primaryColor)),
+    ));
   }
 }
 
