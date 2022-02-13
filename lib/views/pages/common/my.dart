@@ -16,8 +16,8 @@ class MyPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final arg = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
     final selectedUser = arg.args['selectedUser'] as PiUser;
-    final body = FutureBuilder<CompleteUser>(
-      future: getCompleteUser(context: context, selectedUser: selectedUser),
+    final body = FutureBuilder<PostsUser>(
+      future: getPostsUser(context: context, selectedUser: selectedUser),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const Center(child: CircularProgressIndicator());
@@ -26,22 +26,18 @@ class MyPage extends StatelessWidget {
         return _MyPageW(currUser: targetUser);
       },
     );
-    return Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: const PostingFab(),
-        drawer: const PiDrawer(),
-        body: body);
+    return Scaffold(drawer: const PiDrawer(), body: body);
   }
 }
 
 class _MyPageW extends StatelessWidget {
   const _MyPageW({
     Key? key,
-    required CompleteUser currUser,
+    required PostsUser currUser,
   })  : targetUser = currUser,
         super(key: key);
 
-  final CompleteUser targetUser;
+  final PostsUser targetUser;
 
   @override
   Widget build(BuildContext context) {
@@ -97,8 +93,10 @@ class _MyPageW extends StatelessWidget {
       ),
       SizedBox(
           height: mq.size.height - (mq.size.height / 2.3),
-          child: PostListTab(
-              thumbSize: ThumnailSize.small, targetUser: targetUser))
+          child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: PostListTab(
+                  thumbSize: ThumnailSize.small, targetUser: targetUser)))
     ]);
   }
 }

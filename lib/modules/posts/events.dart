@@ -6,3 +6,5 @@ abstract class PostEvent extends Equatable {
 }
 
 class MgzFetched extends PostEvent {}
+
+class FeedFetched extends PostEvent {}

@@ -3,7 +3,7 @@ import 'package:campi/components/structs/posts/feed/list.dart';
 import 'package:campi/components/structs/posts/mgz/list.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/user_repo.dart';
-import 'package:campi/modules/posts/bloc/post.dart';
+import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/modules/posts/events.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +11,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PostListTab extends StatefulWidget {
   final ThumnailSize thumbSize;
-  final CompleteUser? targetUser;
+  final PostsUser? targetUser;
   final scrollController = ScrollController();
+  int selectedIndex = 0;
   PostListTab({Key? key, required this.thumbSize, this.targetUser})
       : super(key: key);
 
@@ -23,9 +24,9 @@ class PostListTab extends StatefulWidget {
 class _PostListTabState extends State<PostListTab>
     with AutomaticKeepAliveClientMixin<PostListTab>, TickerProviderStateMixin {
   late final TabController _controller;
-  late int _selectedIndex;
 
-  final mgzBloc = MgzBloc();
+  final mgzBloc = PostBloc();
+  final feedBloc = PostBloc();
 
   @override
   bool get wantKeepAlive => true;
@@ -34,12 +35,12 @@ class _PostListTabState extends State<PostListTab>
   void initState() {
     super.initState();
     _controller = TabController(length: 2, vsync: this);
-    _selectedIndex = 0;
     mgzBloc.add(MgzFetched());
+    feedBloc.add(FeedFetched());
     widget.scrollController.addListener(_onScroll);
     _controller.addListener(() {
       setState(() {
-        _selectedIndex = _controller.index;
+        widget.selectedIndex = _controller.index;
       });
       debugPrint("Selected Index: " + _controller.index.toString());
     });
@@ -53,7 +54,9 @@ class _PostListTabState extends State<PostListTab>
   }
 
   void _onScroll() {
-    if (_isBottom) mgzBloc.add(MgzFetched());
+    if (_isBottom) {
+      mgzBloc.add(widget.selectedIndex == 0 ? MgzFetched() : FeedFetched());
+    }
   }
 
   @override
@@ -90,34 +93,34 @@ class _PostListTabState extends State<PostListTab>
                     _Tab(
                         targetIndex: 0,
                         txt: "캠핑 포스팅",
-                        selectedIndex: _selectedIndex,
+                        selectedIndex: widget.selectedIndex,
                         T: T),
                     _Tab(
                         targetIndex: 1,
                         txt: "캠핑 SNS",
-                        selectedIndex: _selectedIndex,
+                        selectedIndex: widget.selectedIndex,
                         T: T)
                   ]),
             ),
           ],
         ),
         Expanded(
-          child: MultiBlocProvider(
-              providers: [BlocProvider.value(value: mgzBloc)],
-              child: TabBarView(
-                  controller: _controller,
-                  children: widget.thumbSize == ThumnailSize.small &&
-                          widget.targetUser != null
-                      ? [
-                          GridMgzs(mgzs: widget.targetUser!.mgzs),
-                          GridFeeds(
-                              feeds: widget.targetUser!.feeds,
-                              currUser: widget.targetUser!.user)
-                        ]
-                      : [
-                          MgzListW(widget: widget),
-                          const FeedListW(),
-                        ])),
+          child: TabBarView(
+              controller: _controller,
+              children: widget.thumbSize == ThumnailSize.small &&
+                      widget.targetUser != null
+                  ? [
+                      GridMgzs(mgzs: widget.targetUser!.mgzs),
+                      GridFeeds(
+                          feeds: widget.targetUser!.feeds,
+                          currUser: widget.targetUser!.user)
+                    ]
+                  : [
+                      BlocProvider.value(
+                          value: mgzBloc, child: MgzListW(widget: widget)),
+                      BlocProvider.value(
+                          value: feedBloc, child: FeedListW(widget: widget)),
+                    ]),
         )
       ],
     );

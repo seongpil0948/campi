@@ -3,6 +3,7 @@ import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
+import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -51,14 +52,14 @@ class UserRepo {
       (await getAllUsers()).map((u) => u.userId).toList();
 }
 
-class CompleteUser {
+class PostsUser {
   PiUser user;
   List<FeedState> feeds;
   List<MgzState> mgzs;
-  CompleteUser({required this.user, required this.feeds, required this.mgzs});
+  PostsUser({required this.user, required this.feeds, required this.mgzs});
 }
 
-Future<CompleteUser> getCompleteUser(
+Future<PostsUser> getPostsUser(
     {required BuildContext context, PiUser? selectedUser}) async {
   late PiUser user;
   if (selectedUser != null) {
@@ -69,11 +70,10 @@ Future<CompleteUser> getCompleteUser(
   if (user.isEmpty) {
     context.read<NavigationCubit>().clearAndPush(loginPath);
   }
-  // FIXME: Posts by Ids 유저의 포스트 아이디 목록을 추가해야함
-  // final pRepo = PostRepo();
-  // final feeds = await pRepo.getFeeds([user.userId]);
-  // final mgzs = await pRepo.getMgzs([user.userId]);
-  return CompleteUser(feeds: [], user: user, mgzs: []);
+  final pRepo = PostRepo();
+  final feeds = await pRepo.getFeedByUser(user.userId);
+  final mgzs = await pRepo.getMgzByUser(user.userId);
+  return PostsUser(feeds: feeds, user: user, mgzs: mgzs);
 }
 
 Future<PiUser?> getUser(String? userId) async {

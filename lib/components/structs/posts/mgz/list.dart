@@ -1,7 +1,7 @@
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/list.dart';
 import 'package:campi/components/structs/posts/mgz/thumnail.dart';
-import 'package:campi/modules/posts/bloc/post.dart';
+import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:campi/modules/posts/state.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +18,7 @@ class MgzListW extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final txtSty = Theme.of(context).textTheme.bodyText2;
-    return BlocBuilder<MgzBloc, PostState>(
+    return BlocBuilder<PostBloc, PostState>(
       builder: (context, state) {
         switch (state.status) {
           case PostStatus.failure:

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:campi/components/signs/files.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/upload_file.dart';
 import 'package:campi/modules/posts/mgz/cubit.dart';
 import 'package:campi/utils/io.dart';
@@ -150,6 +151,8 @@ class _MgzPostWState extends State<MgzPostW> {
           final c = context.read<MgzCubit>();
           c.changeDoc(_titleContoller.text, _controller.document);
           c.posting(context);
+          widget.user.mgzIds.add(c.state.mgzId);
+          widget.user.update();
         },
         child: const Text("제출하기"),
       ),
