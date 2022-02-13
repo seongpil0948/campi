@@ -1,6 +1,8 @@
 import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/components/btn/fabs.dart';
+import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/feed/list.dart';
+import 'package:campi/components/structs/posts/list.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/views/pages/common/user.dart';
@@ -96,15 +98,8 @@ class _MyPageW extends StatelessWidget {
       ),
       SizedBox(
           height: mq.size.height - (mq.size.height / 2.3),
-          child: Stack(
-            children: [
-              GridFeeds(
-                  feeds: targetUser.feeds,
-                  mgzs: targetUser.mgzs,
-                  mq: mq,
-                  currUser: targetUser.user),
-            ],
-          ))
+          child: PostListTab(
+              thumbSize: ThumnailSize.small, targetUser: targetUser))
     ]);
   }
 }

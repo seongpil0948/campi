@@ -1,9 +1,9 @@
 import 'package:campi/components/structs/posts/feed/feed.dart';
+import 'package:campi/components/structs/posts/list.dart';
 import 'package:campi/components/structs/posts/mgz/thumnail.dart';
 import 'package:campi/modules/posts/bloc/post.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:campi/modules/posts/state.dart';
-import 'package:campi/views/pages/posts/posts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,8 +33,6 @@ class MgzListW extends StatelessWidget {
             }
 
             return ListView.builder(
-              // FIXME: argument as thumnail size
-              // return FeedW(mq: mq, f: post as FeedState);
               itemBuilder: (BuildContext context, int index) => MgzThumnail(
                   mgz: state.posts[index] as MgzState,
                   tSize: ThumnailSize.medium),
@@ -46,5 +44,27 @@ class MgzListW extends StatelessWidget {
         }
       },
     );
+  }
+}
+
+class GridMgzs extends StatelessWidget {
+  const GridMgzs({
+    Key? key,
+    required this.mgzs,
+  }) : super(key: key);
+
+  final List<MgzState> mgzs;
+
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+        itemCount: mgzs.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+        ),
+        itemBuilder: (context, idx) =>
+            MgzThumnail(mgz: mgzs[idx], tSize: ThumnailSize.small));
   }
 }

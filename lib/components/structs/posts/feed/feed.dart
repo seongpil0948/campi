@@ -12,6 +12,62 @@ import 'package:provider/src/provider.dart';
 
 enum ThumnailSize { medium, small }
 
+class FeedTopStatus extends StatelessWidget {
+  const FeedTopStatus({
+    Key? key,
+    required PiUser currUser,
+    required this.post,
+  })  : _currUser = currUser,
+        super(key: key);
+
+  final PiUser _currUser;
+  final FeedState post;
+
+  @override
+  Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
+    return Card(
+        elevation: 4.0,
+        child: SizedBox(
+          width: mq.size.width / 2.5,
+          height: mq.size.height / 3,
+          child: Column(
+            children: [
+              Expanded(
+                  flex: 1,
+                  child: Provider.value(
+                      value: _currUser,
+                      child: FeedStatusRow(
+                        feed: post,
+                        tSize: ThumnailSize.small,
+                        U: _currUser,
+                      ))),
+              Expanded(
+                  flex: 3,
+                  child: FutureBuilder<PiUser>(
+                      future: post.writer,
+                      builder: (context, snapshot) {
+                        if (!snapshot.hasData) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        final writer = snapshot.data;
+                        return writer != null
+                            ? FeedThumnail(
+                                mq: mq,
+                                img: post.files.firstWhere((element) =>
+                                    element.ftype == PiFileType.image),
+                                feedInfo: post,
+                                tSize: ThumnailSize.medium,
+                                writer: writer)
+                            : Container();
+                      }))
+            ],
+          ),
+        ));
+  }
+}
+
 class FeedW extends StatelessWidget {
   const FeedW({Key? key, required this.mq, required this.f}) : super(key: key);
 
