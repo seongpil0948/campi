@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:campi/modules/posts/models/common.dart';
 import 'package:campi/utils/moment.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_quill/flutter_quill.dart';

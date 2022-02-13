@@ -3,7 +3,6 @@ import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
-import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

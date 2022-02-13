@@ -1,4 +1,3 @@
-import 'package:campi/components/inputs/text_controller.dart';
 import 'package:campi/config/theme.dart';
 import 'package:campi/firebase_options.dart';
 import 'package:campi/modules/app/bloc.dart';

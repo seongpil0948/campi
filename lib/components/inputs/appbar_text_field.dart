@@ -19,7 +19,7 @@ class PiAppBarTextField extends StatelessWidget {
           child: TextField(
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.caption,
-              controller: searchBloc.state.appSearchController, // FIXME
+              controller: searchBloc.state.appSearchController,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                   border: b,

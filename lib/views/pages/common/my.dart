@@ -1,7 +1,6 @@
 import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/components/btn/fabs.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
-import 'package:campi/components/structs/posts/feed/list.dart';
 import 'package:campi/components/structs/posts/list.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/user_repo.dart';
