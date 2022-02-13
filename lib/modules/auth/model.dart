@@ -26,6 +26,7 @@ class PiUser {
   List<String> follows = [];
   List<String> feedIds = [];
   List<String> mgzIds = [];
+  String desc = "이 시대 진정한 인싸 캠핑러 정보 공유 DM 환영 ";
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
 
@@ -91,6 +92,7 @@ class PiUser {
         messageToken = List<String>.from(j['messageToken']),
         tenantId = j['tenantId'],
         hash = j['hash'],
+        desc = j['desc'] ?? '',
         favoriteFeeds = List<String>.from(j['favoriteFeeds']),
         feedIds = List<String>.from(j['feedIds'] ?? []),
         mgzIds = List<String>.from(j['mgzIds'] ?? []),
@@ -125,6 +127,7 @@ class PiUser {
         'follows': follows,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        'desc': desc
       };
   Map<String, dynamic> toJsonCache() {
     final j = toJson();

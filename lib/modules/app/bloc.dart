@@ -6,6 +6,7 @@ import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/common/fcm/repo.dart';
+import 'package:campi/modules/posts/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -80,21 +81,27 @@ class SearchValBloc extends Bloc<SearchEvent, SearchValState> {
                 patternMatchMap: tagPatternMap(context),
                 onMatch: (matches) {}))) {
     on<AppSearchInit>(_onInit);
+    on<OnChangedTag>(_onChangeTags,
+        transformer: throttleDroppable(const Duration(milliseconds: 500)));
     on<AppOnSearch>(_onSearch);
   }
   void _onInit(AppSearchInit event, Emitter<SearchValState> emit) {
     final c = event.context;
     final newState = state.copyWith(
         context: c,
+        tags: [],
         appSearchController: RichTextController(
             patternMatchMap: tagPatternMap(c),
             onMatch: (matches) {
-              state.tags.addAll(matches);
-              emit(state.copyWith(tags: state.tags));
+              add(OnChangedTag(tags: [...state.tags, ...matches]));
 
               return matches.join(" ");
             }));
     emit(newState);
+  }
+
+  void _onChangeTags(OnChangedTag event, Emitter<SearchValState> emit) {
+    emit(state.copyWith(tags: event.tags));
   }
 
   void _onSearch(AppOnSearch event, Emitter<SearchValState> emit) {}

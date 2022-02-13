@@ -84,8 +84,10 @@ class _MyPageW extends StatelessWidget {
                       numUserPosts:
                           targetUser.feeds.length + targetUser.mgzs.length),
                 ),
-                Text("이 시대 진정한 인싸 캠핑러 \n 정보 공유 DM 환영 ",
-                    style: Theme.of(context).textTheme.bodyText1),
+                SizedBox(
+                  width: mq.size.width / 2,
+                  child: UserDesc(user: targetUser.user),
+                ),
               ],
             ),
           )
@@ -98,5 +100,72 @@ class _MyPageW extends StatelessWidget {
               child: PostListTab(
                   thumbSize: ThumnailSize.small, targetUser: targetUser)))
     ]);
+  }
+}
+
+class UserDesc extends StatefulWidget {
+  final PiUser user;
+  const UserDesc({
+    Key? key,
+    required this.user,
+  }) : super(key: key);
+
+  @override
+  _UserDescState createState() => _UserDescState();
+}
+
+class _UserDescState extends State<UserDesc> {
+  bool editMode = false;
+  late final TextEditingController _controller;
+  @override
+  void initState() {
+    _controller = TextEditingController(text: widget.user.desc);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: TextField(
+              style: Theme.of(context).textTheme.bodyText1,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                focusedBorder: editMode == true
+                    ? Theme.of(context).inputDecorationTheme.focusedBorder
+                    : InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+              ),
+              readOnly: !editMode,
+              maxLines: 2,
+              controller: _controller),
+          // child: Text(user.desc,
+          //     maxLines: 2, style: Theme.of(context).textTheme.bodyText1),
+        ),
+        editMode == false
+            ? IconButton(
+                onPressed: () {
+                  setState(() {
+                    editMode = true;
+                  });
+                },
+                icon: const Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ))
+            : ElevatedButton(
+                onPressed: () async {
+                  widget.user.desc = _controller.text;
+                  await widget.user.update();
+                  setState(() {
+                    editMode = false;
+                  });
+                },
+                child: const Text("제출"))
+      ],
+    );
   }
 }

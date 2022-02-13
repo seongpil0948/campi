@@ -33,3 +33,8 @@ class AppSearchInit extends SearchEvent {
 }
 
 class AppOnSearch extends SearchEvent {}
+
+class OnChangedTag extends SearchEvent {
+  List<String> tags;
+  OnChangedTag({required this.tags});
+}
