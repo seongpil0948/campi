@@ -24,10 +24,12 @@
 * 백엔드 API 이후 fcm.sendPushMessage 활성화
 ## 정식 배포 후
 * 버전 별 Git Tagging 해서 백업 및 Revert 정책 필요.
+* Kakao
+  * https://pub.dev/packages/kakao_flutter_sdk
 * 인스타나 다른 앱에 연결하거나 공유할때
-  * [DynamicDeepLink](https://firebase.flutter.dev/docs/dynamic-links/overview/)
-  * [DynamicDeepLink](https://firebase.google.com/products/dynamic-links)
-  * [DynamicDeepLink](https://eunjin3786.tistory.com/292)
+  * https://firebase.flutter.dev/docs/dynamic-links/overview/
+  * https://firebase.google.com/products/dynamic-links
+  * https://eunjin3786.tistory.com/292
 * CI/CD
   * [IOS CD](https://docs.github.com/en/actions/deployment/deploying-xcode-applications/installing-an-apple-certificate-on-macos-runners-for-xcode-development)
 

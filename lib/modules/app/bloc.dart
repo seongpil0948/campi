@@ -73,6 +73,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
 class SearchValBloc extends Bloc<SearchEvent, SearchValState> {
   /// Must Init while Building Page Before use Search Text Controller
+  /// FIXME: 어떤 로직이든 검색조건을 넣으면 그거에 맞게 페이지네이션 포스트를 로딩 할 수 있도록
   BuildContext context;
   SearchValBloc({required this.context})
       : super(SearchValState(

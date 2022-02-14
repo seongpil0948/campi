@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:campi/components/signs/files.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/upload_file.dart';
 import 'package:campi/modules/posts/mgz/cubit.dart';
 import 'package:campi/utils/io.dart';

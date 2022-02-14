@@ -1,6 +1,5 @@
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/list.dart';
-import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/modules/posts/feed/state.dart';
