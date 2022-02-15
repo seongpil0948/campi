@@ -1,3 +1,4 @@
+import 'package:campi/modules/posts/state.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class PostEvent extends Equatable {
@@ -8,3 +9,8 @@ abstract class PostEvent extends Equatable {
 class MgzFetched extends PostEvent {}
 
 class FeedFetched extends PostEvent {}
+
+class PostTurnChange extends PostEvent {
+  final bool myTurn;
+  PostTurnChange({required this.myTurn});
+}

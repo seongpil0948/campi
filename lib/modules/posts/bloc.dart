@@ -2,12 +2,14 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/events.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/modules/posts/state.dart';
+import 'package:flutter/material.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 // const _postLimit = 20;
@@ -24,7 +26,20 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostRepo postRepo = PostRepo();
   UserRepo userRepo = const UserRepo();
-  PostBloc() : super(const PostState()) {
+  SearchValBloc? _searchBloc;
+
+  set searchBloc(SearchValBloc? sBloc) {
+    if (sBloc != null && _searchBloc == null) {
+      _searchBloc = sBloc;
+      _searchBloc!.stream.listen((searchState) {
+        if (state.myTurn) {
+          debugPrint("===> PostBloc App Search Val For ${state.postType}");
+        }
+      });
+    }
+  }
+
+  PostBloc(PostType postType) : super(PostState(postType: postType)) {
     on<FeedFetched>(
       _onFeedFetched,
       transformer: throttleDroppable(throttleDuration),
@@ -33,6 +48,11 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       _onMgzFetched,
       transformer: throttleDroppable(throttleDuration),
     );
+    on<PostTurnChange>(_postTurnChaged);
+  }
+
+  _postTurnChaged(PostTurnChange event, Emitter<PostState> emit) {
+    emit(state.copyWith(myTurn: event.myTurn));
   }
 
   Future<void> _onFeedFetched(

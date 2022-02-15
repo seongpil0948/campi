@@ -36,7 +36,9 @@ class PiAppBarTextField extends StatelessWidget {
         Expanded(
             flex: 1,
             child: IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  searchBloc.add(AppOnSearch());
+                },
                 icon: Icon(Icons.search_outlined,
                     size: 35, color: Theme.of(context).primaryColor)))
       ],

@@ -5,11 +5,13 @@ import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/modules/posts/events.dart';
+import 'package:campi/modules/posts/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: implementation_imports
 
 class PostListTab extends StatefulWidget {
+  /// FIXME: 탭바뀔때마다 두번씩 로드되고 있습니다.
   final ThumnailSize thumbSize;
   final PostsUser? targetUser;
   final scrollController = ScrollController();
@@ -25,15 +27,19 @@ class _PostListTabState extends State<PostListTab>
     with AutomaticKeepAliveClientMixin<PostListTab>, TickerProviderStateMixin {
   late final TabController _controller;
 
-  final mgzBloc = PostBloc();
-  final feedBloc = PostBloc();
+  final mgzBloc = PostBloc(PostType.mgz);
+  final feedBloc = PostBloc(PostType.feed);
 
   @override
   bool get wantKeepAlive => true;
+  bool get isMgzIdx => widget.selectedIndex == 0 ? true : false;
 
   @override
   void initState() {
     super.initState();
+    mgzBloc.searchBloc = context.read<SearchValBloc>();
+    feedBloc.searchBloc = context.read<SearchValBloc>();
+    changeTurn();
     _controller = TabController(length: 2, vsync: this);
     mgzBloc.add(MgzFetched());
     feedBloc.add(FeedFetched());
@@ -41,9 +47,21 @@ class _PostListTabState extends State<PostListTab>
     _controller.addListener(() {
       setState(() {
         widget.selectedIndex = _controller.index;
+        changeTurn();
       });
-      debugPrint("Selected Index: " + _controller.index.toString());
+      debugPrint("Selected Index: ${_controller.index}");
     });
+  }
+
+  void changeTurn() {
+    debugPrint("isMgzIdx: $isMgzIdx");
+    if (isMgzIdx == true) {
+      mgzBloc.add(PostTurnChange(myTurn: true));
+      feedBloc.add(PostTurnChange(myTurn: false));
+    } else {
+      mgzBloc.add(PostTurnChange(myTurn: false));
+      feedBloc.add(PostTurnChange(myTurn: true));
+    }
   }
 
   bool get _isBottom {
@@ -55,7 +73,7 @@ class _PostListTabState extends State<PostListTab>
 
   void _onScroll() {
     if (_isBottom) {
-      mgzBloc.add(widget.selectedIndex == 0 ? MgzFetched() : FeedFetched());
+      mgzBloc.add(isMgzIdx ? MgzFetched() : FeedFetched());
     }
   }
 
@@ -71,8 +89,6 @@ class _PostListTabState extends State<PostListTab>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    final searchBloc = context.read<SearchValBloc>();
-    searchBloc.add(AppSearchInit(context: context));
     final size = MediaQuery.of(context).size;
     final T = Theme.of(context);
     return Column(
