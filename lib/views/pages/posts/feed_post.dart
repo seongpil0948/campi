@@ -1,6 +1,7 @@
 import 'package:campi/components/assets/carousel.dart';
 import 'package:campi/components/geo/pymap.dart';
 import 'package:campi/components/inputs/text_controller.dart';
+import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/components/select/single.dart';
 import 'package:campi/components/signs/files.dart';
@@ -21,7 +22,7 @@ class FeedPostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _user = context.select((AppBloc bloc) => bloc.state.user);
+    final _user = context.select((AuthRepo repo) => repo.currentUser);
     return Piffold(
         body: SingleChildScrollView(
             child: BlocProvider(

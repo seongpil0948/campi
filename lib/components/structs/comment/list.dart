@@ -15,7 +15,8 @@ class CommentList extends StatefulWidget {
   final String userId;
   final Stream<QuerySnapshot> commentStream;
   CommentList({Key? key, required this.userId, required this.feedId})
-      : commentStream = getCollection(c: Collections.comments).snapshots(),
+      : commentStream =
+            getCollection(c: Collections.comments, feedId: feedId).snapshots(),
         super(key: key);
 
   @override
@@ -131,7 +132,7 @@ class ReplyList extends StatelessWidget {
   Widget build(BuildContext context) {
     const _margin = EdgeInsets.fromLTRB(40, 5, 10, 5);
     return StreamBuilder<QuerySnapshot>(
-        stream: getCollection(c: Collections.comments)
+        stream: getCollection(c: Collections.comments, feedId: feedId)
             .doc(c.id)
             .collection(replyCollection)
             .snapshots(),

@@ -32,10 +32,7 @@ class UserSnsInfo extends StatelessWidget {
         widget: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          "포스팅 ${numUserPosts.toString()}",
-          style: sty,
-        ),
+        Text("포스팅 $numUserPosts", style: sty),
         TextButton(
           onPressed: () async => showFollow(
               context: context,

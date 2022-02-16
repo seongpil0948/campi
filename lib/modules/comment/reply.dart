@@ -25,8 +25,8 @@ class Reply extends CommentModel {
             content: j['content'],
             writerId: j['writerId'],
             id: j['id'],
-            ctypeId: j['cTypeId'],
-            ctype: j['ctype']);
+            ctypeId: j['ctypeId'],
+            ctype: contentTypeFromString(j['ctype']));
 
   @override
   Map<String, dynamic> toJson() {
