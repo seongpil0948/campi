@@ -1,4 +1,5 @@
 // import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
@@ -10,9 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
+import 'package:uuid/uuid.dart';
 
-Widget getAvatar(double? radius, String imgUrl) =>
-    CircleAvatar(radius: radius, backgroundImage: NetworkImage(imgUrl));
+const uuid = Uuid();
+
+Widget getAvatar(double? radius, String imgUrl) => CircleAvatar(
+    radius: radius, backgroundImage: CachedNetworkImageProvider(imgUrl));
 
 class GoMyAvatar extends StatelessWidget {
   final double? radius;
@@ -67,11 +71,11 @@ class PiUserAvatar extends StatelessWidget {
 
 class PiEditAvatar extends StatefulWidget {
   final double? radius;
-  final String? userId;
+  final PiUser user;
   const PiEditAvatar({
     Key? key,
     this.radius,
-    this.userId,
+    required this.user,
   }) : super(key: key);
   @override
   _PiEditAvatarState createState() => _PiEditAvatarState();
@@ -80,7 +84,6 @@ class PiEditAvatar extends StatefulWidget {
 class _PiEditAvatarState extends State<PiEditAvatar> {
   @override
   Widget build(BuildContext context) {
-    final U = context.watch<AuthRepo>().currentUser;
     return InkWell(
         onTap: () async {
           final _picker = ImagePicker();
@@ -88,14 +91,15 @@ class _PiEditAvatarState extends State<PiEditAvatar> {
           if (f == null) return;
           final pyfile = PiFile.fromXfile(f: f, ftype: PiFileType.image);
           final uploaded = await uploadFilePathsToFirebase(
-              f: pyfile, path: 'userProfile/${widget.userId}');
+              f: pyfile,
+              path: 'userProfile/${widget.user.userId}/${uuid.v4()}');
           if (uploaded != null) {
             setState(() {
-              U.photoURL = uploaded.url!;
+              widget.user.photoURL = uploaded.url!;
             });
-            await U.update();
+            await widget.user.update();
           }
         },
-        child: getAvatar(widget.radius, U.profileImage));
+        child: getAvatar(widget.radius, widget.user.profileImage));
   }
 }

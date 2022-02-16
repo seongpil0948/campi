@@ -61,7 +61,7 @@ class _MyPageW extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 20),
-                PiEditAvatar(radius: 40, userId: targetUser.user.userId),
+                PiEditAvatar(radius: 40, user: targetUser.user),
                 Container(
                   margin: const EdgeInsets.only(top: 10),
                   child: Row(
@@ -92,8 +92,7 @@ class _MyPageW extends StatelessWidget {
           )
         ]),
       ),
-      SizedBox(
-          height: mq.size.height - (mq.size.height / 2.3),
+      Expanded(
           child: Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: PostListTab(
@@ -128,6 +127,8 @@ class _UserDescState extends State<UserDesc> {
       children: [
         Expanded(
           child: TextField(
+              textAlign: TextAlign.center,
+              textAlignVertical: TextAlignVertical.center,
               style: Theme.of(context).textTheme.bodyText1,
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -141,8 +142,6 @@ class _UserDescState extends State<UserDesc> {
               readOnly: !editMode,
               maxLines: 2,
               controller: _controller),
-          // child: Text(user.desc,
-          //     maxLines: 2, style: Theme.of(context).textTheme.bodyText1),
         ),
         editMode == false
             ? IconButton(
