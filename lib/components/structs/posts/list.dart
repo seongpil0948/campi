@@ -15,8 +15,15 @@ class PostListTab extends StatefulWidget {
   final ThumnailSize thumbSize;
   final PostsUser? targetUser;
   final scrollController = ScrollController();
+  final PostBloc mgzBloc;
+  final PostBloc feedBloc;
   int selectedIndex = 0;
-  PostListTab({Key? key, required this.thumbSize, this.targetUser})
+  PostListTab(
+      {Key? key,
+      required this.thumbSize,
+      this.targetUser,
+      required this.mgzBloc,
+      required this.feedBloc})
       : super(key: key);
 
   @override
@@ -27,9 +34,6 @@ class _PostListTabState extends State<PostListTab>
     with AutomaticKeepAliveClientMixin<PostListTab>, TickerProviderStateMixin {
   late final TabController _controller;
 
-  final mgzBloc = PostBloc(PostType.mgz);
-  final feedBloc = PostBloc(PostType.feed);
-
   @override
   bool get wantKeepAlive => true;
   bool get isMgzIdx => widget.selectedIndex == 0 ? true : false;
@@ -37,12 +41,12 @@ class _PostListTabState extends State<PostListTab>
   @override
   void initState() {
     super.initState();
-    mgzBloc.searchBloc = context.read<SearchValBloc>();
-    feedBloc.searchBloc = context.read<SearchValBloc>();
+    widget.mgzBloc.searchBloc = context.read<SearchValBloc>();
+    widget.feedBloc.searchBloc = context.read<SearchValBloc>();
     changeTurn();
     _controller = TabController(length: 2, vsync: this);
-    mgzBloc.add(MgzFetched());
-    feedBloc.add(FeedFetched());
+    widget.mgzBloc.add(MgzFetched());
+    widget.feedBloc.add(FeedFetched());
     widget.scrollController.addListener(_onScroll);
     _controller.addListener(() {
       setState(() {
@@ -56,11 +60,11 @@ class _PostListTabState extends State<PostListTab>
   void changeTurn() {
     debugPrint("isMgzIdx: $isMgzIdx");
     if (isMgzIdx == true) {
-      mgzBloc.add(PostTurnChange(myTurn: true));
-      feedBloc.add(PostTurnChange(myTurn: false));
+      widget.mgzBloc.add(PostTurnChange(myTurn: true));
+      widget.feedBloc.add(PostTurnChange(myTurn: false));
     } else {
-      mgzBloc.add(PostTurnChange(myTurn: false));
-      feedBloc.add(PostTurnChange(myTurn: true));
+      widget.mgzBloc.add(PostTurnChange(myTurn: false));
+      widget.feedBloc.add(PostTurnChange(myTurn: true));
     }
   }
 
@@ -73,7 +77,7 @@ class _PostListTabState extends State<PostListTab>
 
   void _onScroll() {
     if (_isBottom) {
-      mgzBloc.add(isMgzIdx ? MgzFetched() : FeedFetched());
+      widget.mgzBloc.add(isMgzIdx ? MgzFetched() : FeedFetched());
     }
   }
 
@@ -133,9 +137,11 @@ class _PostListTabState extends State<PostListTab>
                     ]
                   : [
                       BlocProvider.value(
-                          value: mgzBloc, child: MgzListW(widget: widget)),
+                          value: widget.mgzBloc,
+                          child: MgzListW(widget: widget)),
                       BlocProvider.value(
-                          value: feedBloc, child: FeedListW(widget: widget)),
+                          value: widget.feedBloc,
+                          child: FeedListW(widget: widget)),
                     ]),
         )
       ],

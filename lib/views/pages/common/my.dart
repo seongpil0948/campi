@@ -3,6 +3,8 @@ import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/list.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/user_repo.dart';
+import 'package:campi/modules/posts/bloc.dart';
+import 'package:campi/modules/posts/state.dart';
 import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/pages/layouts/drawer.dart';
 import 'package:campi/views/router/config.dart';
@@ -41,7 +43,8 @@ class _MyPageW extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-
+    final mgzBloc = PostBloc(PostType.mgz);
+    final feedBloc = PostBloc(PostType.feed);
     return Column(children: [
       SizedBox(
         height: mq.size.height / 2.3,
@@ -96,7 +99,10 @@ class _MyPageW extends StatelessWidget {
           child: Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: PostListTab(
-                  thumbSize: ThumnailSize.small, targetUser: targetUser)))
+                  thumbSize: ThumnailSize.small,
+                  targetUser: targetUser,
+                  mgzBloc: mgzBloc,
+                  feedBloc: feedBloc)))
     ]);
   }
 }

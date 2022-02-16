@@ -1,6 +1,8 @@
 import 'package:campi/components/btn/fabs.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/list.dart';
+import 'package:campi/modules/posts/bloc.dart';
+import 'package:campi/modules/posts/state.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +13,14 @@ class PostListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final W = PostListTab(thumbSize: ThumnailSize.medium);
+    final mgzBloc = PostBloc(PostType.mgz);
+    final feedBloc = PostBloc(PostType.feed);
     return Piffold(
-        body: W,
+        body: PostListTab(
+            thumbSize: ThumnailSize.medium,
+            mgzBloc: mgzBloc,
+            feedBloc: feedBloc),
         fButton: PostingFab(
-            postKind: W.selectedIndex == 0 ? PostKind.mgz : PostKind.feed));
+            postKind: mgzBloc.state.myTurn ? PostKind.mgz : PostKind.feed));
   }
 }
