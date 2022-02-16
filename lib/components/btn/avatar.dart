@@ -34,41 +34,6 @@ class GoMyAvatar extends StatelessWidget {
   }
 }
 
-class PiUserAvatar extends StatelessWidget {
-  final String imgUrl;
-  final double? radius;
-  final String userId;
-  const PiUserAvatar({
-    Key? key,
-    this.radius,
-    required this.userId,
-    required this.imgUrl,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final avatar = getAvatar(radius, imgUrl);
-    return InkWell(
-        onTap: () async {
-          final doc =
-              await getCollection(c: Collections.users).doc(userId).get();
-          final user = PiUser.fromJson(doc.data() as Map<String, dynamic>);
-
-          final _picker = ImagePicker();
-          final f = await _picker.pickImage(source: ImageSource.gallery);
-          if (f == null) return;
-          final pyfile = PiFile.fromXfile(f: f, ftype: PiFileType.image);
-          final uploaded = await uploadFilePathsToFirebase(
-              f: pyfile, path: 'userProfile/$userId');
-          if (uploaded != null) {
-            user.photoURL = uploaded.url!;
-            await user.update();
-          }
-        },
-        child: avatar);
-  }
-}
-
 class PiEditAvatar extends StatefulWidget {
   final double? radius;
   final PiUser user;

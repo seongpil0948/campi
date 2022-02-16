@@ -38,11 +38,10 @@ class CommentPostW extends StatelessWidget {
           Expanded(
               flex: 1,
               child: Padding(
-                padding: const EdgeInsets.all(1.0),
-                child: BlocBuilder<CommentBloc, CommentState>(
-                    builder: (context, state) => PiUserAvatar(
-                        radius: 17, imgUrl: U.profileImage, userId: U.userId)),
-              )),
+                  padding: const EdgeInsets.all(1.0),
+                  child: BlocBuilder<CommentBloc, CommentState>(
+                      builder: (context, state) =>
+                          GoMyAvatar(radius: 17, user: U)))),
           Expanded(
               flex: 6,
               child: CmtPostTxtField(

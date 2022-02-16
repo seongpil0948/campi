@@ -107,10 +107,7 @@ class _DrawerHeader extends StatelessWidget {
             ),
             Row(
               children: [
-                PiUserAvatar(
-                    imgUrl: currUser.profileImage,
-                    radius: 30,
-                    userId: currUser.userId),
+                GoMyAvatar(radius: 30, user: currUser),
                 const SizedBox(width: 20),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

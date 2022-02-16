@@ -103,8 +103,7 @@ class UserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-        leading: PiUserAvatar(
-            imgUrl: targetUser.profileImage, userId: targetUser.userId),
+        leading: GoMyAvatar(user: targetUser),
         title: Text(targetUser.name),
         subtitle: Text(targetUser.email ?? ""),
         trailing: FollowBtn(
@@ -177,16 +176,10 @@ class UserRow extends StatelessWidget {
                       .push(myPath, {"selectedUser": snapshot.data}),
                   child: Row(
                     children: [
-                      PiUserAvatar(
-                        radius: 15,
-                        userId: snapshot.data!.userId,
-                        imgUrl: snapshot.data!.profileImage,
-                      ),
+                      GoMyAvatar(radius: 15, user: snapshot.data!),
                       const SizedBox(width: 10),
-                      Text(
-                        snapshot.data?.email ?? "",
-                        style: Theme.of(context).textTheme.bodyText1,
-                      )
+                      Text(snapshot.data?.email ?? "",
+                          style: Theme.of(context).textTheme.bodyText1)
                     ],
                   ),
                 )
