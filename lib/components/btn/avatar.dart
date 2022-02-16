@@ -1,8 +1,6 @@
 // import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/repo.dart';
-import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/common/upload_file.dart';
 import 'package:campi/utils/io.dart';
 import 'package:campi/views/router/page.dart';

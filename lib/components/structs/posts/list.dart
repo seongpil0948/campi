@@ -5,7 +5,6 @@ import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/modules/posts/events.dart';
-import 'package:campi/modules/posts/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: implementation_imports

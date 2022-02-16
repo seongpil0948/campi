@@ -1,4 +1,3 @@
-import 'package:campi/modules/posts/state.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class PostEvent extends Equatable {
