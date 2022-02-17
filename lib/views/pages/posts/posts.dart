@@ -1,10 +1,11 @@
 import 'package:campi/components/btn/fabs.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/list.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/posts/bloc.dart';
-import 'package:campi/modules/posts/state.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 enum PostKind { feed, mgz }
 
@@ -13,14 +14,18 @@ class PostListPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mgzBloc = PostBloc(PostType.mgz);
-    final feedBloc = PostBloc(PostType.feed);
-    return Piffold(
-        body: PostListTab(
-            thumbSize: ThumnailSize.medium,
-            mgzBloc: mgzBloc,
-            feedBloc: feedBloc),
-        fButton: PostingFab(
-            postKind: mgzBloc.state.myTurn ? PostKind.mgz : PostKind.feed));
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+            create: (context) =>
+                FeedBloc(context.read<SearchValBloc>(), context)),
+        BlocProvider(
+            create: (context) =>
+                MgzBloc(context.read<SearchValBloc>(), context))
+      ],
+      child: Piffold(
+          body: PostListTab(thumbSize: ThumnailSize.medium),
+          fButton: const PostingFab()),
+    );
   }
 }

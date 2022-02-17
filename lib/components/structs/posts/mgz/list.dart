@@ -18,7 +18,7 @@ class MgzListW extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final txtSty = Theme.of(context).textTheme.bodyText2;
-    return BlocBuilder<PostBloc, PostState>(
+    return BlocBuilder<MgzBloc, PostState>(
       builder: (context, state) {
         switch (state.status) {
           case PostStatus.failure:

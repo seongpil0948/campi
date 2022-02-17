@@ -1,27 +1,22 @@
-import 'package:campi/views/pages/posts/posts.dart';
+import 'package:campi/modules/posts/bloc.dart';
+import 'package:campi/modules/posts/state.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';
-// ignore: implementation_imports
-import 'package:provider/src/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class PostingFab extends StatelessWidget {
-  final PostKind postKind;
-  const PostingFab({Key? key, required this.postKind}) : super(key: key);
+  const PostingFab({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-        onPressed: () {
-          switch (postKind) {
-            case PostKind.feed:
-              return context.read<NavigationCubit>().push(feedPostPath);
-            case PostKind.mgz:
-              return context.read<NavigationCubit>().push(mgzPostPath);
-            default:
-              return context.read<NavigationCubit>().push(feedPostPath);
-          }
-        },
-        child: const Icon(Icons.add));
+    return BlocBuilder<MgzBloc, PostState>(
+        builder: (context, state) => FloatingActionButton(
+            onPressed: () => state.myTurn
+                ? context.read<NavigationCubit>().push(mgzPostPath)
+                : context.read<NavigationCubit>().push(feedPostPath),
+            child: const Icon(Icons.add)));
   }
 }

@@ -23,23 +23,27 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
   };
 }
 
+class MgzBloc extends PostBloc {
+  MgzBloc(SearchValBloc sBloc, BuildContext context)
+      : super(searchBloc: sBloc, postType: PostType.mgz) {
+    add(MgzFetched());
+  }
+}
+
+class FeedBloc extends PostBloc {
+  FeedBloc(SearchValBloc sBloc, BuildContext context)
+      : super(searchBloc: sBloc, postType: PostType.feed) {
+    add(FeedFetched());
+  }
+}
+
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostRepo postRepo = PostRepo();
   UserRepo userRepo = const UserRepo();
-  SearchValBloc? _searchBloc;
+  final SearchValBloc searchBloc;
 
-  set searchBloc(SearchValBloc? sBloc) {
-    if (sBloc != null && _searchBloc == null) {
-      _searchBloc = sBloc;
-      _searchBloc!.stream.listen((searchState) {
-        if (state.myTurn) {
-          debugPrint("===> PostBloc App Search Val For ${state.postType}");
-        }
-      });
-    }
-  }
-
-  PostBloc(PostType postType) : super(PostState(postType: postType)) {
+  PostBloc({required this.searchBloc, required PostType postType})
+      : super(PostState(postType: postType)) {
     on<FeedFetched>(
       _onFeedFetched,
       transformer: throttleDroppable(throttleDuration),
@@ -49,6 +53,11 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       transformer: throttleDroppable(throttleDuration),
     );
     on<PostTurnChange>(_postTurnChaged);
+    searchBloc.stream.listen((searchState) {
+      if (state.myTurn) {
+        debugPrint("===> PostBloc App Search Val For ${state.postType}");
+      }
+    });
   }
 
   _postTurnChaged(PostTurnChange event, Emitter<PostState> emit) {

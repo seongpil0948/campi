@@ -18,7 +18,7 @@ class FeedListW extends StatelessWidget {
   Widget build(BuildContext context) {
     final txtSty = Theme.of(context).textTheme.bodyText2;
     final mq = MediaQuery.of(context);
-    return BlocBuilder<PostBloc, PostState>(
+    return BlocBuilder<FeedBloc, PostState>(
       builder: (context, state) {
         switch (state.status) {
           case PostStatus.failure:
