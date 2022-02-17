@@ -21,7 +21,6 @@ class CommentPostW extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final U = context.watch<AuthRepo>().currentUser;
     final mq = MediaQuery.of(context);
     return Container(
       width: mq.size.width - 40,
@@ -39,9 +38,12 @@ class CommentPostW extends StatelessWidget {
               flex: 1,
               child: Padding(
                   padding: const EdgeInsets.all(1.0),
-                  child: BlocBuilder<CommentBloc, CommentState>(
-                      builder: (context, state) =>
-                          GoMyAvatar(radius: 17, user: U)))),
+                  child: BlocBuilder<AppBloc, AppState>(
+                      builder: (context, appState) {
+                    return BlocBuilder<CommentBloc, CommentState>(
+                        builder: (context, state) =>
+                            GoMyAvatar(radius: 17, user: appState.user));
+                  }))),
           Expanded(
               flex: 6,
               child: CmtPostTxtField(
@@ -65,7 +67,7 @@ class CmtPostTxtField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final U = context.watch<AuthRepo>().currentUser;
+    final U = context.watch<AppBloc>().state.user;
     final target = context.select((CommentBloc bloc) => bloc.state.targetCmt);
     TextField txtFieldW(String? labelTxt) => TextField(
         controller: _commentController,

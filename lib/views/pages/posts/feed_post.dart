@@ -22,13 +22,13 @@ class FeedPostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _user = context.select((AuthRepo repo) => repo.currentUser);
-    return Piffold(
-        body: SingleChildScrollView(
-            child: BlocProvider(
-      create: (_) => FeedCubit(_user.userId),
-      child: const FeedPostW(),
-    )));
+    return BlocBuilder<AppBloc, AppState>(
+        builder: (context, state) => Piffold(
+                body: SingleChildScrollView(
+                    child: BlocProvider(
+              create: (_) => FeedCubit(state.user.userId),
+              child: const FeedPostW(),
+            ))));
   }
 }
 

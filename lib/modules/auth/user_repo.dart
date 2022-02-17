@@ -1,3 +1,4 @@
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
@@ -61,12 +62,7 @@ class PostsUser {
 
 Future<PostsUser> getPostsUser(
     {required BuildContext context, PiUser? selectedUser}) async {
-  late PiUser user;
-  if (selectedUser != null) {
-    user = selectedUser;
-  } else {
-    user = context.watch<AuthRepo>().currentUser;
-  }
+  final user = selectedUser ?? context.watch<AppBloc>().state.user;
   if (user.isEmpty) {
     context.read<NavigationCubit>().clearAndPush(loginPath);
   }

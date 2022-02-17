@@ -7,6 +7,7 @@ import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 
@@ -27,34 +28,34 @@ class UserSnsInfo extends StatelessWidget {
         fontWeight: FontWeight.bold,
         fontSize: 12);
 
-    final currUser = context.watch<AuthRepo>().currentUser;
-    return PiWhiteButton(
-        widget: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text("포스팅 $numUserPosts", style: sty),
-        TextButton(
-          onPressed: () async => showFollow(
-              context: context,
-              currUser: currUser,
-              users: await userRepo.usersByIds(currUser.followers)),
-          child: Text(
-            "팔로워 ${currUser.followers.length}",
-            style: sty,
-          ),
-        ),
-        TextButton(
-          onPressed: () async => showFollow(
-              context: context,
-              currUser: currUser,
-              users: await userRepo.usersByIds(currUser.follows)),
-          child: Text(
-            "팔로우 ${currUser.follows.length}",
-            style: sty,
-          ),
-        )
-      ],
-    ));
+    return BlocBuilder<AppBloc, AppState>(
+        builder: (context, state) => PiWhiteButton(
+                widget: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text("포스팅 $numUserPosts", style: sty),
+                TextButton(
+                  onPressed: () async => showFollow(
+                      context: context,
+                      currUser: state.user,
+                      users: await userRepo.usersByIds(state.user.followers)),
+                  child: Text(
+                    "팔로워 ${state.user.followers.length}",
+                    style: sty,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () async => showFollow(
+                      context: context,
+                      currUser: state.user,
+                      users: await userRepo.usersByIds(state.user.follows)),
+                  child: Text(
+                    "팔로우 ${state.user.follows.length}",
+                    style: sty,
+                  ),
+                )
+              ],
+            )));
   }
 }
 
@@ -138,7 +139,7 @@ class _FollowBtnState extends State<FollowBtn> {
 
   @override
   Widget build(BuildContext context) {
-    final currUser = context.watch<AuthRepo>().currentUser;
+    final currUser = context.watch<AppBloc>().state.user;
     if (widget.targetUser == currUser) return Container();
     final aleady = widget.targetUser.followers.contains(currUser.userId);
     final txt = aleady ? "팔로우 취소" : "팔로우";

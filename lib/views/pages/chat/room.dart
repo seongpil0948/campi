@@ -1,4 +1,5 @@
 import 'package:campi/components/btn/avatar.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/chat/msg_state.dart';
@@ -16,7 +17,7 @@ class ChatRoomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
-    final currUser = context.watch<AuthRepo>().currentUser;
+    final currUser = context.watch<AppBloc>().state.user;
     final you = args.args['you'] as PiUser;
     final roomId = args.args['roomId'] as String;
     final s = MediaQuery.of(context).size;

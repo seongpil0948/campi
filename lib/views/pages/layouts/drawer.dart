@@ -1,5 +1,6 @@
 import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/components/btn/white.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/views/pages/common/user.dart';
@@ -18,7 +19,7 @@ class PiDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
     final tileT = Theme.of(context).textTheme.bodyText2;
-    final currUser = context.watch<AuthRepo>().currentUser;
+    final currUser = context.watch<AppBloc>().state.user;
     return Drawer(
         child: Column(
       children: [

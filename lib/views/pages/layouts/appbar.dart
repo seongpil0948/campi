@@ -1,9 +1,11 @@
 import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/components/inputs/appbar_text_field.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
 
@@ -18,7 +20,6 @@ class PiAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    final auth = context.watch<AuthRepo>();
     return AppBar(
       leading: Container(),
       toolbarHeight: toolbarH,
@@ -38,11 +39,12 @@ class PiAppBar extends StatelessWidget {
               tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             ),
             const Spacer(),
-            InkWell(
-                onTap: () => context
-                    .read<NavigationCubit>()
-                    .push(myPath, {"selectedUser": auth.currentUser}),
-                child: GoMyAvatar(user: auth.currentUser))
+            BlocBuilder<AppBloc, AppState>(
+                builder: (context, state) => InkWell(
+                    onTap: () => context
+                        .read<NavigationCubit>()
+                        .push(myPath, {"selectedUser": state.user}),
+                    child: GoMyAvatar(user: state.user)))
           ],
         ),
       ),

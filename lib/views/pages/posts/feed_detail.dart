@@ -4,6 +4,7 @@ import 'package:campi/components/structs/comment/list.dart';
 import 'package:campi/components/structs/comment/post.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/feed/place_info.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/posts/feed/state.dart';
@@ -45,7 +46,7 @@ class FeedDetailW extends StatelessWidget {
   Widget build(BuildContext context) {
     const leftPadding = 20.0;
     const iconImgH = 24.0;
-    final U = context.watch<AuthRepo>().currentUser;
+    final U = context.watch<AppBloc>().state.user;
     final mq = MediaQuery.of(context);
 
     Map<String, Text> tagMap = {};

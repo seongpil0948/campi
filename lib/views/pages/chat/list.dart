@@ -1,3 +1,4 @@
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
@@ -36,7 +37,7 @@ class ChatRoomList extends StatelessWidget {
             return const Center(child: CircularProgressIndicator());
           }
 
-          final currUser = context.watch<AuthRepo>().currentUser;
+          final currUser = context.watch<AppBloc>().state.user;
           final List<PiUser> users =
               snapshot.data!.where((e) => e != currUser).toList();
           return ListView.builder(
