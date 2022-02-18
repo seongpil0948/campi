@@ -1,50 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoW extends StatefulWidget {
+class VideoW extends StatelessWidget {
   final VideoPlayerController controller;
-  @override
-  _VideoWState createState() => _VideoWState();
-
-  const VideoW({required this.controller, Key? key}) : super(key: key);
-}
-
-class _VideoWState extends State<VideoW> {
-  @override
-  void initState() {
-    super.initState();
-    // ignore: avoid_single_cascade_in_expression_statements
-    widget.controller
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
-    debugPrint("");
-  }
+  const VideoW({
+    Key? key,
+    required this.controller,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    var _controller = widget.controller;
-    if (_controller.value.isInitialized) {
-      _controller.play();
-      return InkWell(
-        onTap: () => _controller.value.isPlaying
-            ? _controller.pause()
-            : _controller.play(),
-        child: AspectRatio(
-          aspectRatio: _controller.value.aspectRatio,
-          child: VideoPlayer(_controller),
-        ),
-      );
-    } else {
-      return const Center(
-          child: SizedBox(height: 40, child: CircularProgressIndicator()));
-    }
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    widget.controller.dispose();
+    return FutureBuilder(
+      future: controller.initialize(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          // 만약 VideoPlayerController 초기화가 끝나면, 제공된 데이터를 사용하여
+          // VideoPlayer의 종횡비를 제한하세요.
+          return InkWell(
+            onTap: () => controller.value.isPlaying
+                ? controller.pause()
+                : controller.play(),
+            child: AspectRatio(
+              aspectRatio: controller.value.aspectRatio,
+              child: VideoPlayer(controller),
+            ),
+          );
+        } else {
+          // 만약 VideoPlayerController가 여전히 초기화 중이라면,
+          // 로딩 스피너를 보여줍니다.
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
+    );
   }
 }

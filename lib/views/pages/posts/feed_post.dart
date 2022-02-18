@@ -32,12 +32,24 @@ class FeedPostPage extends StatelessWidget {
   }
 }
 
-class FeedPostW extends StatelessWidget {
+class FeedPostW extends StatefulWidget {
   const FeedPostW({Key? key}) : super(key: key);
 
   @override
+  _FeedPostWState createState() => _FeedPostWState();
+}
+
+class _FeedPostWState extends State<FeedPostW> {
+  var loading = false;
+  @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
+    if (loading == true) {
+      return SizedBox(
+          width: mq.size.width,
+          height: mq.size.height,
+          child: const Center(child: CircularProgressIndicator()));
+    }
     return Column(
       children: [
         SizedBox(
@@ -73,6 +85,9 @@ class FeedPostW extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(60, 0, 60, 30),
                 child: ElevatedButton(
                   onPressed: () async {
+                    setState(() {
+                      loading = true;
+                    });
                     List<PiFile> paths = [];
                     try {
                       context.read<AppBloc>().add(AppLoadingChange());
@@ -85,6 +100,9 @@ class FeedPostW extends StatelessWidget {
                                   element.ftype == PiFileType.image)
                               .isEmpty) {
                         oneMoreImg(context);
+                        setState(() {
+                          loading = false;
+                        });
                         return;
                       }
 
