@@ -1,5 +1,6 @@
 // import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/common/upload_file.dart';
 import 'package:campi/utils/io.dart';
@@ -49,6 +50,7 @@ class _PiEditAvatarState extends State<PiEditAvatar> {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () async {
+          if (context.read<AppBloc>().state.user != widget.user) return;
           final _picker = ImagePicker();
           final f = await _picker.pickImage(source: ImageSource.gallery);
           if (f == null) return;

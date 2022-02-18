@@ -133,9 +133,7 @@ class _DrawerHeader extends StatelessWidget {
             Container(
                 margin: const EdgeInsets.only(top: 15),
                 height: 35,
-                child: UserSnsInfo(
-                    numUserPosts:
-                        currUser.feedIds.length + currUser.mgzIds.length))
+                child: UserSnsInfo(user: currUser))
           ],
         ),
       ),

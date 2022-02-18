@@ -112,9 +112,7 @@ class _MyProfileInfo extends StatelessWidget {
                       Container(
                           margin: const EdgeInsets.symmetric(vertical: 15),
                           width: mSize.width / 1.5,
-                          child: UserSnsInfo(
-                              numUserPosts: targetUser.feeds.length +
-                                  targetUser.mgzs.length)),
+                          child: UserSnsInfo(user: user)),
                       SizedBox(
                           width: mSize.width / 2, child: UserDesc(user: user))
                     ],
@@ -172,6 +170,7 @@ class _UserDescState extends State<UserDesc> {
         editMode == false
             ? IconButton(
                 onPressed: () {
+                  if (context.read<AppBloc>().state.user != widget.user) return;
                   setState(() {
                     editMode = true;
                   });

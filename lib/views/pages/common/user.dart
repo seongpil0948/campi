@@ -2,24 +2,21 @@ import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/components/btn/white.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-// ignore: implementation_imports
-import 'package:provider/src/provider.dart';
 
 const userRepo = UserRepo();
 
 class UserSnsInfo extends StatelessWidget {
   const UserSnsInfo({
     Key? key,
-    required this.numUserPosts,
+    required this.user,
   }) : super(key: key);
 
-  final int numUserPosts;
+  final PiUser user;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +30,8 @@ class UserSnsInfo extends StatelessWidget {
                 widget: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("포스팅 $numUserPosts", style: sty),
+                Text("포스팅 ${user.feedIds.length + user.mgzIds.length}",
+                    style: sty),
                 TextButton(
                   onPressed: () async => showFollow(
                       context: context,
