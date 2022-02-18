@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:stream_transform/stream_transform.dart';
 
 // const _postLimit = 20;
-const throttleDuration = Duration(milliseconds: 100);
+const throttleDuration = Duration(milliseconds: 1000);
 const mgzFetchPSize = 3;
 const feedFetchPSize = 3;
 

@@ -1,10 +1,11 @@
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/feed/list.dart';
 import 'package:campi/components/structs/posts/mgz/list.dart';
-import 'package:campi/modules/app/bloc.dart';
+import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/modules/posts/events.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: implementation_imports
@@ -126,9 +127,20 @@ class _PostListTabState extends State<PostListTab>
                       widget.targetUser != null
                   ? [
                       GridMgzs(mgzs: widget.targetUser!.mgzs),
-                      GridFeeds(
-                          feeds: widget.targetUser!.feeds,
-                          currUser: widget.targetUser!.user)
+                      StreamBuilder<DocumentSnapshot>(
+                          stream: widget.targetUser!.userStream,
+                          builder: (context, snapshot) {
+                            if (snapshot.hasData) {
+                              final user = PiUser.fromJson(snapshot.data!.data()
+                                  as Map<String, dynamic>);
+                              return GridFeeds(
+                                  feeds: widget.targetUser!.feeds,
+                                  currUser: user);
+                            } else {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            }
+                          })
                     ]
                   : [
                       MgzListW(widget: widget),

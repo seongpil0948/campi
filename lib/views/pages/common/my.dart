@@ -5,10 +5,10 @@ import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/bloc.dart';
-import 'package:campi/modules/posts/state.dart';
 import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/pages/layouts/drawer.dart';
 import 'package:campi/views/router/config.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -44,57 +44,8 @@ class _MyPageW extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
     return Column(children: [
-      SizedBox(
-        height: mq.size.height / 2.3,
-        width: mq.size.width,
-        child: Stack(children: [
-          Image.asset(
-            "assets/images/splash_back_1.png",
-            width: mq.size.width,
-            fit: BoxFit.cover,
-          ),
-          Opacity(
-              opacity: 0.4,
-              child: Container(color: Theme.of(context).primaryColor)),
-          SizedBox(
-            width: mq.size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const SizedBox(height: 20),
-                PiEditAvatar(radius: 40, user: targetUser.user),
-                Container(
-                  margin: const EdgeInsets.only(top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "@${targetUser.user.name}",
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      const SizedBox(width: 5),
-                      FollowBtn(targetUser: targetUser.user),
-                    ],
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(vertical: 15),
-                  width: mq.size.width / 1.5,
-                  child: UserSnsInfo(
-                      numUserPosts:
-                          targetUser.feeds.length + targetUser.mgzs.length),
-                ),
-                SizedBox(
-                  width: mq.size.width / 2,
-                  child: UserDesc(user: targetUser.user),
-                ),
-              ],
-            ),
-          )
-        ]),
-      ),
+      _MyProfileInfo(targetUser: targetUser),
       Expanded(
           child: Padding(
               padding: const EdgeInsets.only(top: 8.0),
@@ -110,6 +61,70 @@ class _MyPageW extends StatelessWidget {
                   child: PostListTab(
                       thumbSize: ThumnailSize.small, targetUser: targetUser))))
     ]);
+  }
+}
+
+class _MyProfileInfo extends StatelessWidget {
+  const _MyProfileInfo({
+    Key? key,
+    required this.targetUser,
+  }) : super(key: key);
+
+  final PostsUser targetUser;
+
+  @override
+  Widget build(BuildContext context) {
+    final mSize = MediaQuery.of(context).size;
+    return StreamBuilder<DocumentSnapshot>(
+        stream: targetUser.userStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final user =
+                PiUser.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+            return SizedBox(
+              height: mSize.height / 2.3,
+              width: mSize.width,
+              child: Stack(children: [
+                Image.asset("assets/images/splash_back_1.png",
+                    width: mSize.width, fit: BoxFit.cover),
+                Opacity(
+                    opacity: 0.4,
+                    child: Container(color: Theme.of(context).primaryColor)),
+                SizedBox(
+                  width: mSize.width,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20),
+                      PiEditAvatar(radius: 40, user: user),
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("@${user.name}",
+                                style: Theme.of(context).textTheme.bodyText1),
+                            const SizedBox(width: 5),
+                            FollowBtn(targetUser: user)
+                          ],
+                        ),
+                      ),
+                      Container(
+                          margin: const EdgeInsets.symmetric(vertical: 15),
+                          width: mSize.width / 1.5,
+                          child: UserSnsInfo(
+                              numUserPosts: targetUser.feeds.length +
+                                  targetUser.mgzs.length)),
+                      SizedBox(
+                          width: mSize.width / 2, child: UserDesc(user: user))
+                    ],
+                  ),
+                )
+              ]),
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        });
   }
 }
 
@@ -143,14 +158,13 @@ class _UserDescState extends State<UserDesc> {
               textAlignVertical: TextAlignVertical.center,
               style: Theme.of(context).textTheme.bodyText1,
               decoration: InputDecoration(
-                border: InputBorder.none,
-                focusedBorder: editMode == true
-                    ? Theme.of(context).inputDecorationTheme.focusedBorder
-                    : InputBorder.none,
-                enabledBorder: InputBorder.none,
-                errorBorder: InputBorder.none,
-                disabledBorder: InputBorder.none,
-              ),
+                  border: InputBorder.none,
+                  focusedBorder: editMode == true
+                      ? Theme.of(context).inputDecorationTheme.focusedBorder
+                      : InputBorder.none,
+                  enabledBorder: InputBorder.none,
+                  errorBorder: InputBorder.none,
+                  disabledBorder: InputBorder.none),
               readOnly: !editMode,
               maxLines: 2,
               controller: _controller),
@@ -162,10 +176,7 @@ class _UserDescState extends State<UserDesc> {
                     editMode = true;
                   });
                 },
-                icon: const Icon(
-                  Icons.edit,
-                  color: Colors.white,
-                ))
+                icon: const Icon(Icons.edit, color: Colors.white))
             : ElevatedButton(
                 onPressed: () async {
                   widget.user.desc = _controller.text;

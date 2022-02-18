@@ -54,10 +54,13 @@ class UserRepo {
 }
 
 class PostsUser {
-  PiUser user;
-  List<FeedState> feeds;
-  List<MgzState> mgzs;
-  PostsUser({required this.user, required this.feeds, required this.mgzs});
+  final String userId;
+  final List<FeedState> feeds;
+  final List<MgzState> mgzs;
+  final Stream<DocumentSnapshot> userStream;
+  PostsUser({required this.userId, required this.feeds, required this.mgzs})
+      : userStream =
+            getCollection(c: Collections.users).doc(userId).snapshots();
 }
 
 Future<PostsUser> getPostsUser(
@@ -69,7 +72,7 @@ Future<PostsUser> getPostsUser(
   final pRepo = PostRepo();
   final feeds = await pRepo.getFeedByUser(user.userId);
   final mgzs = await pRepo.getMgzByUser(user.userId);
-  return PostsUser(feeds: feeds, user: user, mgzs: mgzs);
+  return PostsUser(feeds: feeds, userId: user.userId, mgzs: mgzs);
 }
 
 Future<PiUser?> getUser(String? userId) async {
