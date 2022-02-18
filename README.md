@@ -13,12 +13,7 @@
 * 마이페이지 좁은 화면에서 
 * 게시글 올렸을때 피드에 안뜬다.
 * 로딩기능 구현 
-* 포스팅 읽을때는 커서 활성화 안되도록
-* 소개글 자기만 바꿀 수 있게 끔
-* 팔로우 누를 경우 계정이 바뀐다
-* 팔로울 두명눌렀는데 4명 팔로우 라고 뜬다
-* 무조건 피드작성 페이지로 이동한다 -> O
-* BlocBuilder 나 Provider들 Consumer 나 Selector 사용해서 최적화
+
 
 
 ## 정식 배포 전
@@ -28,6 +23,7 @@
 * 로고 만들어지면 IOS, Android 출시 필요이미지, 아이콘이미지
 * 백엔드 API 이후 fcm.sendPushMessage 활성화
 ## 정식 배포 후
+* BlocBuilder 나 Provider들 Consumer 나 Selector 사용해서 최적화
 * 버전 별 Git Tagging 해서 백업 및 Revert 정책 필요.
 * Kakao
   * https://pub.dev/packages/kakao_flutter_sdk

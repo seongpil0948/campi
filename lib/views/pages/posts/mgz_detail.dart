@@ -55,6 +55,7 @@ class MgzDetailPage extends StatelessWidget {
             readOnly: true,
             expands: true,
             padding: const EdgeInsets.all(8),
+            showCursor: false,
           ),
           // ),
         ),
