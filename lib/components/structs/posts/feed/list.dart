@@ -50,12 +50,11 @@ class GridFeeds extends StatelessWidget {
   const GridFeeds({
     Key? key,
     required this.feeds,
-    required PiUser currUser,
-  })  : _currUser = currUser,
-        super(key: key);
+    required this.currUser,
+  }) : super(key: key);
 
   final List<FeedState> feeds;
-  final PiUser _currUser;
+  final PiUser currUser;
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +66,6 @@ class GridFeeds extends StatelessWidget {
           mainAxisSpacing: 10,
         ),
         itemBuilder: (context, idx) =>
-            FeedTopStatus(currUser: _currUser, post: feeds[idx]));
+            FeedTopStatus(currUser: currUser, post: feeds[idx]));
   }
 }

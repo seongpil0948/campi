@@ -15,12 +15,10 @@ class PostListTab extends StatefulWidget {
   final ThumnailSize thumbSize;
   final PostsUser? targetUser;
   final scrollController = ScrollController();
-  int selectedIndex = 0;
   PostListTab({
-    Key? key,
     required this.thumbSize,
     this.targetUser,
-  }) : super(key: key);
+  }) : super(key: UniqueKey());
 
   @override
   _PostListTabState createState() => _PostListTabState();
@@ -31,10 +29,11 @@ class _PostListTabState extends State<PostListTab>
   late final TabController _controller;
   late final FeedBloc feedBloc;
   late final MgzBloc mgzBloc;
+  int selectedIndex = 0;
 
   @override
   bool get wantKeepAlive => true;
-  bool get isMgzIdx => widget.selectedIndex == 0 ? true : false;
+  bool get isMgzIdx => selectedIndex == 0 ? true : false;
 
   @override
   void initState() {
@@ -46,7 +45,7 @@ class _PostListTabState extends State<PostListTab>
     widget.scrollController.addListener(_onScroll);
     _controller.addListener(() {
       setState(() {
-        widget.selectedIndex = _controller.index;
+        selectedIndex = _controller.index;
         changeTurn();
       });
       debugPrint("Selected Index: ${_controller.index}");
@@ -109,12 +108,12 @@ class _PostListTabState extends State<PostListTab>
                     _Tab(
                         targetIndex: 0,
                         txt: "캠핑 포스팅",
-                        selectedIndex: widget.selectedIndex,
+                        selectedIndex: selectedIndex,
                         T: T),
                     _Tab(
                         targetIndex: 1,
                         txt: "캠핑 SNS",
-                        selectedIndex: widget.selectedIndex,
+                        selectedIndex: selectedIndex,
                         T: T)
                   ]),
             ),
@@ -127,20 +126,15 @@ class _PostListTabState extends State<PostListTab>
                       widget.targetUser != null
                   ? [
                       GridMgzs(mgzs: widget.targetUser!.mgzs),
-                      StreamBuilder<DocumentSnapshot>(
-                          stream: widget.targetUser!.userStream,
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              final user = PiUser.fromJson(snapshot.data!.data()
-                                  as Map<String, dynamic>);
-                              return GridFeeds(
+                      FutureBuilder<PiUser>(
+                          future:
+                              UserRepo.getUserById(widget.targetUser!.userId),
+                          builder: (context, snapshot) => snapshot.hasData
+                              ? GridFeeds(
                                   feeds: widget.targetUser!.feeds,
-                                  currUser: user);
-                            } else {
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            }
-                          })
+                                  currUser: snapshot.data!)
+                              : const Center(
+                                  child: CircularProgressIndicator())),
                     ]
                   : [
                       MgzListW(widget: widget),
