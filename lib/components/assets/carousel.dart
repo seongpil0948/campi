@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:campi/components/assets/upload.dart';
 import 'package:campi/components/geo/dot.dart';
 import 'package:campi/modules/posts/feed/cubit.dart';
 import 'package:campi/utils/io.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
@@ -66,6 +69,19 @@ class PiAssetCarousel extends StatelessWidget {
     }
     final imgs = await _picker.pickMultiImage();
     if (imgs != null) {
+      showDialog(
+          context: context,
+          builder: (BuildContext nestedcontext) {
+            return CarouselSlider.builder(
+                itemCount: imgs.length,
+                itemBuilder:
+                    (BuildContext context, int idx, int pageViewIndex) {
+                  final xImg = imgs[idx];
+                  var file = File(xImg.path);
+                  return AdjRatioImgW(file: file);
+                },
+                options: pyCarouselOption);
+          });
       for (var i in imgs) {
         files.add(PiFile.fromXfile(f: i, ftype: PiFileType.image));
       }
@@ -123,5 +139,88 @@ class _PiDotCorouselState extends State<PiDotCorousel> {
         ),
       ),
     ]);
+  }
+}
+
+class AdjRatioImgW extends StatefulWidget {
+  final File file;
+  const AdjRatioImgW({Key? key, required this.file}) : super(key: key);
+
+  @override
+  _AdjRatioImgWState createState() => _AdjRatioImgWState();
+}
+
+class _AdjRatioImgWState extends State<AdjRatioImgW> {
+  // double scale = 0.0;
+  double _scaleFactor = 1.0;
+  double _baseScaleFactor = 1.0;
+  Offset _dy = const Offset(0, 0);
+  // TODO: https://stackoverflow.com/questions/60924384/creating-resizable-view-that-resizes-when-pinch-or-drag-from-corners-and-sides-i
+  @override
+  Widget build(BuildContext context) {
+    var f = widget.file;
+    List<int> bytes = f.readAsBytesSync();
+    img.Image? image = img.decodeImage(bytes);
+    if (image == null) {
+      debugPrint("decodeImage is Null: ${f.path}");
+    }
+    List<int> trimRect = img.findTrim(image!,
+        mode: img.TrimMode.transparent); // x, y, width, height
+    final ratio = trimRect[2] / trimRect[3];
+    final mq = MediaQuery.of(context);
+    final stackWidth = mq.size.width * ratio;
+    final stackHeight = stackWidth / ratio;
+    final marginV = (mq.size.height - stackHeight) / 2;
+    debugPrint("MediaQuery Size: ${mq.size}");
+    debugPrint(
+        "trimRect: $trimRect, squareSide: $ratio, stackHeight: $stackHeight, stackWidth: $stackWidth marginV: $marginV");
+    return SizedBox(
+      width: stackWidth,
+      height: mq.size.height * ratio, // equal to mq.size.width
+      child: Stack(children: [
+        Transform.scale(
+            scale: _scaleFactor, child: Image.file(f, fit: BoxFit.cover)),
+        GestureDetector(
+          behavior: HitTestBehavior.translucent,
+          onScaleStart: (details) {
+            _baseScaleFactor = _scaleFactor;
+            debugPrint("_baseScaleFactor: $_baseScaleFactor");
+            debugPrint("start Position: ${details.focalPoint}");
+          },
+          onScaleUpdate: (details) {
+            setState(() {
+              _scaleFactor = _baseScaleFactor * details.scale;
+              debugPrint(
+                  "focalPoint: ${details.focalPoint} dx: ${details.focalPoint.dx} dy: ${details.focalPoint.dy}");
+              debugPrint("focalPointDelta: ${details.focalPointDelta}");
+              debugPrint("before dy = : $_dy");
+
+              // if (mq.size.height + marginV > details.focalPoint.dy &&
+              //     mq.size.height - details.focalPoint.dy > marginV) {
+              //   _dy = Offset(0, _dy.dy + details.focalPointDelta.dy);
+              // }
+              _dy = Offset(0, _dy.dy + details.focalPointDelta.dy);
+              // 여기도 좌표 없누..
+              final temp = Transform.translate(offset: _dy).transform;
+
+              debugPrint(
+                  "After set State -->  _scaleFactor: $_scaleFactor, _dy: $_dy");
+            });
+          },
+          child: AspectRatio(
+              aspectRatio: 1,
+              child: AnimatedContainer(
+                  transform: Transform.translate(offset: _dy).transform,
+                  curve: Curves.bounceInOut,
+                  duration: const Duration(microseconds: 500),
+                  decoration: BoxDecoration(
+                      color: Colors.transparent,
+                      border: Border.all(
+                          color: Colors.black,
+                          style: BorderStyle.solid,
+                          width: 5)))),
+        )
+      ]),
+    );
   }
 }
