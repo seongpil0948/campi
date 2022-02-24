@@ -154,8 +154,10 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
   // double scale = 0.0;
   double _scaleFactor = 1.0;
   double _baseScaleFactor = 1.0;
-  Offset _dy = const Offset(0, 0);
-  // TODO: https://stackoverflow.com/questions/60924384/creating-resizable-view-that-resizes-when-pinch-or-drag-from-corners-and-sides-i
+  Offset coord = const Offset(0, 0);
+
+  /// TODO: https://api.flutter.dev/flutter/widgets/AnimatedSize-class.html
+  /// https://api.flutter.dev/flutter/widgets/AnimatedWidgetBaseState-class.html
   @override
   Widget build(BuildContext context) {
     var f = widget.file;
@@ -168,58 +170,51 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
         mode: img.TrimMode.transparent); // x, y, width, height
     final ratio = trimRect[2] / trimRect[3];
     final mq = MediaQuery.of(context);
-    final stackWidth = mq.size.width * ratio;
-    final stackHeight = stackWidth / ratio;
-    final marginV = (mq.size.height - stackHeight) / 2;
-    debugPrint("MediaQuery Size: ${mq.size}");
-    debugPrint(
-        "trimRect: $trimRect, squareSide: $ratio, stackHeight: $stackHeight, stackWidth: $stackWidth marginV: $marginV");
+    final photoWidth = mq.size.width * ratio;
+    final photoHeight = photoWidth / ratio;
+    final boxWidth = mq.size.width * ratio; // 0.8 is picture ratio
+    final boxHeight = boxWidth;
+    final marginVertical = (mq.size.height - boxHeight) / 2;
+    final marginHorizon = (mq.size.width - boxWidth) / 2;
+    final maxHeight = photoHeight;
+    final positionRect = // Crop Target
+        Rect.fromLTRB(0, coord.dy, mq.size.width, coord.dy + boxHeight);
+
     return SizedBox(
-      width: stackWidth,
-      height: mq.size.height * ratio, // equal to mq.size.width
+      width: photoWidth,
       child: Stack(children: [
         Transform.scale(
             scale: _scaleFactor, child: Image.file(f, fit: BoxFit.cover)),
-        GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onScaleStart: (details) {
-            _baseScaleFactor = _scaleFactor;
-            debugPrint("_baseScaleFactor: $_baseScaleFactor");
-            debugPrint("start Position: ${details.focalPoint}");
-          },
-          onScaleUpdate: (details) {
-            setState(() {
-              _scaleFactor = _baseScaleFactor * details.scale;
-              debugPrint(
-                  "focalPoint: ${details.focalPoint} dx: ${details.focalPoint.dx} dy: ${details.focalPoint.dy}");
-              debugPrint("focalPointDelta: ${details.focalPointDelta}");
-              debugPrint("before dy = : $_dy");
-
-              // if (mq.size.height + marginV > details.focalPoint.dy &&
-              //     mq.size.height - details.focalPoint.dy > marginV) {
-              //   _dy = Offset(0, _dy.dy + details.focalPointDelta.dy);
-              // }
-              _dy = Offset(0, _dy.dy + details.focalPointDelta.dy);
-              // 여기도 좌표 없누..
-              final temp = Transform.translate(offset: _dy).transform;
-
-              debugPrint(
-                  "After set State -->  _scaleFactor: $_scaleFactor, _dy: $_dy");
-            });
-          },
-          child: AspectRatio(
-              aspectRatio: 1,
-              child: AnimatedContainer(
-                  transform: Transform.translate(offset: _dy).transform,
-                  curve: Curves.bounceInOut,
-                  duration: const Duration(microseconds: 500),
-                  decoration: BoxDecoration(
+        Positioned.fromRect(
+            rect: positionRect,
+            child: GestureDetector(
+                behavior: HitTestBehavior.translucent,
+                onScaleStart: (details) {
+                  _baseScaleFactor = _scaleFactor;
+                },
+                onScaleUpdate: (details) {
+                  setState(() {
+                    _scaleFactor = _baseScaleFactor * details.scale;
+                    debugPrint(
+                        "before dy: ${coord.dy} delta y: ${details.focalPointDelta.dy}");
+                    var newDy = coord.dy + details.focalPointDelta.dy;
+                    if (newDy < 0) {
+                      newDy = 0;
+                    } else if (positionRect.bottom > maxHeight) {
+                      newDy = maxHeight - positionRect.height;
+                    }
+                    coord = Offset(0, newDy);
+                    debugPrint(
+                        "after setState coord: $coord maxHeight: $maxHeight, rect bottom: ${positionRect.bottom}");
+                  });
+                },
+                child: Container(
+                    width: boxWidth,
+                    height: boxHeight,
+                    decoration: BoxDecoration(
                       color: Colors.transparent,
-                      border: Border.all(
-                          color: Colors.black,
-                          style: BorderStyle.solid,
-                          width: 5)))),
-        )
+                      border: Border.all(color: Colors.blueGrey),
+                    ))))
       ]),
     );
   }
