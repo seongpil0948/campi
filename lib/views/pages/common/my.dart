@@ -113,10 +113,10 @@ class _MyProfileInfo extends StatelessWidget {
                       ),
                       Container(
                           margin: const EdgeInsets.symmetric(vertical: 15),
-                          width: mSize.width / 1.5,
+                          width: mSize.width / 1.3,
                           child: UserSnsInfo(user: user)),
                       SizedBox(
-                          width: mSize.width / 2, child: UserDesc(user: user))
+                          width: mSize.width / 1.3, child: UserDesc(user: user))
                     ],
                   ),
                 )
@@ -142,6 +142,7 @@ class UserDesc extends StatefulWidget {
 class _UserDescState extends State<UserDesc> {
   bool editMode = false;
   late final TextEditingController _controller;
+  FocusNode descFocusNode = FocusNode();
   @override
   void initState() {
     _controller = TextEditingController(text: widget.user.desc);
@@ -150,43 +151,54 @@ class _UserDescState extends State<UserDesc> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    final isMe = context.read<AppBloc>().state.user == widget.user;
+    final T = Theme.of(context);
+
+    return Column(
       children: [
-        Expanded(
-          child: TextField(
-              textAlign: TextAlign.center,
-              textAlignVertical: TextAlignVertical.center,
-              style: Theme.of(context).textTheme.bodyText1,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  focusedBorder: editMode == true
-                      ? Theme.of(context).inputDecorationTheme.focusedBorder
-                      : InputBorder.none,
-                  enabledBorder: InputBorder.none,
-                  errorBorder: InputBorder.none,
-                  disabledBorder: InputBorder.none),
-              readOnly: !editMode,
-              maxLines: 2,
-              controller: _controller),
-        ),
-        editMode == false
-            ? IconButton(
-                onPressed: () {
-                  if (context.read<AppBloc>().state.user != widget.user) return;
-                  setState(() {
-                    editMode = true;
-                  });
-                },
-                icon: const Icon(Icons.edit, color: Colors.white))
-            : ElevatedButton(
-                onPressed: () async {
-                  widget.user.desc = _controller.text;
-                  await widget.user.update();
-                  setState(() {
-                    editMode = false;
-                  });
-                },
-                child: const Text("제출"))
+        TextField(
+            focusNode: descFocusNode,
+            textAlign: TextAlign.center,
+            textAlignVertical: TextAlignVertical.center,
+            style: editMode ? T.textTheme.bodyText2 : T.textTheme.bodyText1,
+            decoration: InputDecoration(
+                border: InputBorder.none,
+                fillColor: Colors.white,
+                filled: editMode,
+                focusedBorder: editMode == true
+                    ? Theme.of(context)
+                        .inputDecorationTheme
+                        .focusedBorder!
+                        .copyWith(borderSide: BorderSide(color: Colors.black))
+                    : InputBorder.none,
+                enabledBorder: InputBorder.none,
+                errorBorder: InputBorder.none,
+                disabledBorder: InputBorder.none),
+            readOnly: !editMode,
+            maxLines: 1,
+            controller: _controller),
+        ElevatedButton(
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.white)),
+            onPressed: () async {
+              if (!isMe) return;
+              setState(() {
+                editMode = !editMode;
+              });
+              if (editMode == false) {
+                widget.user.desc = _controller.text;
+                await widget.user.update();
+              } else {
+                descFocusNode.requestFocus();
+              }
+            },
+            child: editMode
+                ? Text("소개글 제출",
+                    style: T.textTheme.caption!.copyWith(color: T.primaryColor))
+                : Text("소개글 편집",
+                    style:
+                        T.textTheme.caption!.copyWith(color: T.primaryColor)))
       ],
     );
   }
