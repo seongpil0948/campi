@@ -29,7 +29,9 @@ class MyPage extends StatelessWidget {
         return _MyPageW(currUser: targetUser);
       },
     );
-    return Scaffold(drawer: const PiDrawer(), body: body);
+    return Scaffold(
+        // drawer: const PiDrawer(),
+        body: body);
   }
 }
 

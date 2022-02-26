@@ -23,7 +23,7 @@ class FeedDetailPage extends StatelessWidget {
     final feed = args.args['selectedFeed'] as FeedState;
     var _commentController = TextEditingController();
     return Scaffold(
-        drawer: const PiDrawer(),
+        // drawer: const PiDrawer(),
         body: BlocProvider(
             create: (_) => CommentBloc(),
             child: FeedDetailW(

@@ -22,7 +22,7 @@ class Piffold extends StatelessWidget {
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(toolbarH),
           child: PiAppBar(toolbarH: toolbarH)),
-      drawer: const PiDrawer(),
+      // drawer: const PiDrawer(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: fButton,
       body: body,

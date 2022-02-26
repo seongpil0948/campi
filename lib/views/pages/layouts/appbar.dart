@@ -28,16 +28,16 @@ class PiAppBar extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            IconButton(
-              icon: const Icon(
-                Icons.menu,
-                size: 35,
-              ),
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
-              },
-              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
-            ),
+            // IconButton(
+            //   icon: const Icon(
+            //     Icons.menu,
+            //     size: 35,
+            //   ),
+            //   onPressed: () {
+            //     Scaffold.of(context).openDrawer();
+            //   },
+            //   tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            // ),
             const Spacer(),
             BlocBuilder<AppBloc, AppState>(
                 builder: (context, state) => InkWell(
