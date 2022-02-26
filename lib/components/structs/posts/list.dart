@@ -48,12 +48,12 @@ class _PostListTabState extends State<PostListTab>
         selectedIndex = _controller.index;
         changeTurn();
       });
-      debugPrint("Selected Index: ${_controller.index}");
+      // debugPrint("Selected Index: ${_controller.index}");
     });
   }
 
   void changeTurn() {
-    debugPrint("isMgzIdx: $isMgzIdx");
+    // debugPrint("isMgzIdx: $isMgzIdx");
     if (isMgzIdx == true) {
       mgzBloc.add(PostTurnChange(myTurn: true));
       feedBloc.add(PostTurnChange(myTurn: false));

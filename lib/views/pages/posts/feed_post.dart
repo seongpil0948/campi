@@ -129,8 +129,7 @@ class _FeedPostWState extends State<FeedPostW> {
                         context.read<NavigationCubit>().pop();
                       });
                     } catch (e, s) {
-                      debugPrint(
-                          '!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
+                      // debugPrint('!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
                       FirebaseCrashlytics.instance.recordError(e, s,
                           reason: 'Post Feed Error', fatal: true);
                     }

@@ -24,8 +24,7 @@ class FcmRepo {
       Map<String, dynamic>? noti,
       String? topic}) async {
     try {
-      debugPrint(
-          "Try To Send Push Msg Topic: $topic  tokens: $tokens, \n data: $data, \n noti: $noti ");
+      // debugPrint("Try To Send Push Msg Topic: $topic  tokens: $tokens, \n data: $data, \n noti: $noti ");
       // final res =
       //     await http.post(Uri.parse('https://api.rnfirebase.io/messaging/send'),
       //         headers: <String, String>{
@@ -39,7 +38,7 @@ class FcmRepo {
       //         }));
       // debugPrint("Send Push Msg Succeed ${res.toString()}");
     } catch (e) {
-      debugPrint(e.toString());
+      // debugPrint(e.toString());
     }
   }
 
@@ -59,8 +58,7 @@ class FcmRepo {
       String? body,
       String? payload,
     ) async {
-      debugPrint(
-          "=========> Local Noti FCM IOS id: $id title: $title, body: $body, payload: $payload");
+      // debugPrint("=========> Local Noti FCM IOS id: $id title: $title, body: $body, payload: $payload");
     });
     const MacOSInitializationSettings initializationSettingsMacOS =
         MacOSInitializationSettings();
@@ -80,7 +78,7 @@ class FcmRepo {
       sound: true,
     );
 
-    debugPrint('User granted permission: ${settings.authorizationStatus}');
+    // debugPrint('User granted permission: ${settings.authorizationStatus}');
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     /// Update the iOS foreground notification presentation options to allow
@@ -97,7 +95,7 @@ class FcmRepo {
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      debugPrint('A new onMessageOpenedApp event was published! $message');
+      // debugPrint('A new onMessageOpenedApp event was published! $message');
     });
   }
 }

@@ -9,7 +9,7 @@ class MgzDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
-    debugPrint("Magazine Detail View Arguments : $args");
+    // debugPrint("Magazine Detail View Arguments : $args");
     MgzState mgz = args.args['magazine'];
     // debugPrint("Magazine : $mgz");
     final FocusNode _focusNode = FocusNode();

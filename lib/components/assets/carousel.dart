@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:campi/components/assets/upload.dart';
 import 'package:campi/components/geo/dot.dart';
+import 'package:campi/components/gesture/resize_img.dart';
 import 'package:campi/modules/posts/feed/cubit.dart';
 import 'package:campi/utils/io.dart';
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:image/image.dart' as img;
+
 import 'package:image_picker/image_picker.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
@@ -27,7 +28,7 @@ class PiCarousel extends StatelessWidget {
   Widget build(BuildContext context) {
     return CarouselSlider.builder(
         itemCount: fs.length,
-        itemBuilder: (BuildContext context, int idx, int pageViewIndex) {
+        itemBuilder: (BuildContext context, int idx, int _) {
           var f = fs[idx];
           return loadFile(f: f, context: context);
         },
@@ -45,7 +46,7 @@ class PiAssetCarousel extends StatelessWidget {
     final fs = context.select((FeedCubit c) => c.state.files);
     return CarouselSlider.builder(
         itemCount: fs.length + 1,
-        itemBuilder: (BuildContext context, int idx, int pageViewIndex) {
+        itemBuilder: (BuildContext context, int idx, int _) {
           if (idx == fs.length) {
             return AssetUploadCard(
                 photoPressed: () => _pressAssetButton(false, fs, context),
@@ -68,24 +69,29 @@ class PiAssetCarousel extends StatelessWidget {
       return null;
     }
     final imgs = await _picker.pickMultiImage();
+    final feedCubit = context.read<FeedCubit>();
     if (imgs != null) {
-      showDialog(
+      await showDialog(
           context: context,
           builder: (BuildContext nestedcontext) {
             return CarouselSlider.builder(
                 itemCount: imgs.length,
-                itemBuilder:
-                    (BuildContext context, int idx, int pageViewIndex) {
+                itemBuilder: (BuildContext context, int idx, int _) {
                   final xImg = imgs[idx];
                   var file = File(xImg.path);
-                  return AdjRatioImgW(file: file);
+                  return AdjRatioImgW(
+                      file: file,
+                      onCutted: (newFile) {
+                        debugPrint("On Cutts");
+                        files.add(PiFile.file(
+                            file: newFile, ftype: PiFileType.image));
+                        debugPrint("changeFs: $files");
+                        feedCubit.changeFs(files);
+                      });
                 },
                 options: pyCarouselOption);
           });
-      for (var i in imgs) {
-        files.add(PiFile.fromXfile(f: i, ftype: PiFileType.image));
-      }
-      context.read<FeedCubit>().changeFs(files);
+      // feedCubit.changeFs(files);
     }
   }
 }
@@ -107,8 +113,7 @@ class _PiDotCorouselState extends State<PiDotCorousel> {
       CarouselSlider.builder(
         itemCount: widget.imgs.length,
         carouselController: _controller,
-        itemBuilder: (BuildContext context, int idx, int pageViewIndex) =>
-            widget.imgs[idx],
+        itemBuilder: (BuildContext context, int idx, int _) => widget.imgs[idx],
         options: CarouselOptions(
             autoPlay: true,
             // enlargeCenterPage: true,
@@ -139,83 +144,5 @@ class _PiDotCorouselState extends State<PiDotCorousel> {
         ),
       ),
     ]);
-  }
-}
-
-class AdjRatioImgW extends StatefulWidget {
-  final File file;
-  const AdjRatioImgW({Key? key, required this.file}) : super(key: key);
-
-  @override
-  _AdjRatioImgWState createState() => _AdjRatioImgWState();
-}
-
-class _AdjRatioImgWState extends State<AdjRatioImgW> {
-  // double scale = 0.0;
-  double _scaleFactor = 1.0;
-  double _baseScaleFactor = 1.0;
-  Offset coord = const Offset(0, 0);
-
-  /// TODO: https://api.flutter.dev/flutter/widgets/AnimatedSize-class.html
-  /// https://api.flutter.dev/flutter/widgets/AnimatedWidgetBaseState-class.html
-  @override
-  Widget build(BuildContext context) {
-    var f = widget.file;
-    List<int> bytes = f.readAsBytesSync();
-    img.Image? image = img.decodeImage(bytes);
-    if (image == null) {
-      debugPrint("decodeImage is Null: ${f.path}");
-    }
-    List<int> trimRect = img.findTrim(image!,
-        mode: img.TrimMode.transparent); // x, y, width, height
-    final ratio = trimRect[2] / trimRect[3];
-    final mq = MediaQuery.of(context);
-    final photoWidth = mq.size.width * ratio;
-    final photoHeight = photoWidth / ratio;
-    final boxWidth = mq.size.width * ratio; // 0.8 is picture ratio
-    final boxHeight = boxWidth;
-    final marginVertical = (mq.size.height - boxHeight) / 2;
-    final marginHorizon = (mq.size.width - boxWidth) / 2;
-    final maxHeight = photoHeight;
-    final positionRect = // Crop Target
-        Rect.fromLTRB(0, coord.dy, mq.size.width, coord.dy + boxHeight);
-
-    return SizedBox(
-      width: photoWidth,
-      child: Stack(children: [
-        Transform.scale(
-            scale: _scaleFactor, child: Image.file(f, fit: BoxFit.cover)),
-        Positioned.fromRect(
-            rect: positionRect,
-            child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onScaleStart: (details) {
-                  _baseScaleFactor = _scaleFactor;
-                },
-                onScaleUpdate: (details) {
-                  setState(() {
-                    _scaleFactor = _baseScaleFactor * details.scale;
-                    debugPrint(
-                        "before dy: ${coord.dy} delta y: ${details.focalPointDelta.dy}");
-                    var newDy = coord.dy + details.focalPointDelta.dy;
-                    if (newDy < 0) {
-                      newDy = 0;
-                    } else if (positionRect.bottom > maxHeight) {
-                      newDy = maxHeight - positionRect.height;
-                    }
-                    coord = Offset(0, newDy);
-                    debugPrint(
-                        "after setState coord: $coord maxHeight: $maxHeight, rect bottom: ${positionRect.bottom}");
-                  });
-                },
-                child: Container(
-                    width: boxWidth,
-                    height: boxHeight,
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      border: Border.all(color: Colors.blueGrey),
-                    ))))
-      ]),
-    );
   }
 }

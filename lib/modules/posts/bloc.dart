@@ -55,7 +55,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<PostTurnChange>(_postTurnChaged);
     searchBloc.stream.listen((searchState) {
       if (state.myTurn) {
-        debugPrint("===> PostBloc App Search Val For ${state.postType}");
+        // debugPrint("===> PostBloc App Search Val For ${state.postType}");
       }
     });
   }

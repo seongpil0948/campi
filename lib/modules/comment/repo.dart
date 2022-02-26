@@ -30,9 +30,9 @@ void postFeedComment(String txt, PiUser writer, FeedState feed) {
       .doc(commentId)
       .set(cj)
       .then((value) {
-    debugPrint("Post CommentModel is Successed ");
+    // debugPrint("Post CommentModel is Successed ");
   }).catchError((e) {
-    debugPrint("Post CommentModel is Restricted: $e");
+    // debugPrint("Post CommentModel is Restricted: $e");
     FirebaseCrashlytics.instance
         .recordError(e, null, reason: 'Post CommentModel Error', fatal: true);
   });
@@ -51,9 +51,9 @@ void postFeedReply(String txt, PiUser writer, String feedId, String commentId) {
       .doc(const Uuid().v4())
       .set(rj)
       .then((value) {
-    debugPrint("Post Reply is Successed ");
+    // debugPrint("Post Reply is Successed ");
   }).catchError((e) {
-    debugPrint("Post Reply is Restricted: $e");
+    // debugPrint("Post Reply is Restricted: $e");
     FirebaseCrashlytics.instance
         .recordError(e, null, reason: 'Post Reply Error', fatal: true);
   });

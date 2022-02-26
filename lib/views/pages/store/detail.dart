@@ -42,7 +42,7 @@ BottomSheet _bottomSheet() {
   return BottomSheet(
       backgroundColor: Colors.white,
       onClosing: () {
-        debugPrint("Closing Prod Detail Bottom SHeet");
+        // debugPrint("Closing Prod Detail Bottom SHeet");
       },
       builder: (context) {
         final T = Theme.of(context).textTheme;

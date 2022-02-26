@@ -17,10 +17,9 @@ Future<PiFile?> uploadFilePathsToFirebase(
   var task = storeRef.putFile(File(f.file!.path), metadata);
 
   task.snapshotEvents.listen((TaskSnapshot snapshot) {
-    debugPrint(
-        'Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
+    // debugPrint('Progress: ${(snapshot.bytesTransferred / snapshot.totalBytes) * 100} %');
   }, onError: (e) {
-    debugPrint(task.snapshot.toString());
+    // debugPrint(task.snapshot.toString());
   });
 
   try {
@@ -35,7 +34,7 @@ Future<PiFile?> uploadFilePathsToFirebase(
     }
   } on FirebaseException catch (e) {
     if (e.code == 'permission-denied') {
-      debugPrint('User does not have permission to upload to this reference.');
+      // debugPrint('User does not have permission to upload to this reference.');
     }
     // ...
   }

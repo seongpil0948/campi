@@ -22,7 +22,7 @@ class PiRouteDelegator extends RouterDelegate<PiPageConfig>
 
   @override
   Future<void> setNewRoutePath(configuration) async {
-    debugPrint("setNewRoutePath: $configuration");
+    // debugPrint("setNewRoutePath: $configuration");
   }
 
   bool _onPopPage(Route<dynamic> route, result) {

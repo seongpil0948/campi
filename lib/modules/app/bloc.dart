@@ -106,8 +106,8 @@ class SearchValBloc extends Bloc<SearchEvent, SearchValState> {
   }
 
   void _onSearch(AppOnSearch event, Emitter<SearchValState> emit) {
-    debugPrint(
-        "on Search In AppBloc ${state.tags} \n ${state.appSearchController.text}");
+    // debugPrint(
+    //     "on Search In AppBloc ${state.tags} \n ${state.appSearchController.text}");
     emit(state.copyWith(sibal: !state.sibal));
   }
 }
