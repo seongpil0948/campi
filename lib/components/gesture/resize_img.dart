@@ -28,7 +28,7 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
   double _scaleFactor = 1.0;
   double _baseScaleFactor = 1.0;
   Offset coord = const Offset(0, 0);
-  List<int> trimRect = [];
+  List<int> photoRealRect = [];
   img.Image? image;
 
   @override
@@ -40,44 +40,29 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
     if (image == null) {
       debugPrint("decodeImage is Null: ${f.path}");
     }
-    trimRect =
+    photoRealRect =
         findTrim(image!, mode: TrimMode.transparent); // x, y, width, height
   }
 
   @override
-  void dispose() async {
-    Future.delayed(Duration.zero, () async {
-      debugPrint("On Dispose");
-      final trimed = copyCrop(
-          image!, trimRect[0], coord.dy.round(), trimRect[2], trimRect[3]);
-      Directory tempDir = await getTemporaryDirectory();
-      // get temporary path from temporary directory.
-      String tempPath = tempDir.path;
-      // create a new file in temporary path with random file name.
-      File file = File(tempDir.path + (Random().nextInt(100)).toString());
-      file.writeAsBytesSync(encodeNamedImage(trimed, widget.file.path)!);
-      widget.onCutted(file);
-    });
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final ratio = trimRect[2] / trimRect[3];
+    final aspect = photoRealRect[2] / photoRealRect[3];
     final mq = MediaQuery.of(context);
     //;
-    final photoWidth = mq.size.width * ratio;
-    final photoHeight = photoWidth / ratio;
-    final marginHorizon = (mq.size.width - photoWidth) / 2;
-    final boxWidth = photoWidth - marginHorizon; // 0.8 is picture ratio
+    final photoWidgetWidth = mq.size.width * aspect;
+    final photoWidgetHeight = photoWidgetWidth / aspect;
+    final multipleW = photoRealRect[2] / photoWidgetWidth.round(); // > 1
+    final multipleH = photoRealRect[3] / photoWidgetHeight.round(); // > 1
+    final marginHorizon = (mq.size.width - photoWidgetWidth) / 2;
+    final boxWidth = photoWidgetWidth - marginHorizon; // 0.8 is picture ratio
     final boxHeight = boxWidth;
     // final marginVertical = (mq.size.height - boxHeight) / 2;
-    final maxHeight = photoHeight;
+    final maxHeight = photoWidgetHeight;
     final positionRect = // Crop Target
         Rect.fromLTRB(0, coord.dy, mq.size.width, coord.dy + boxHeight);
 
     return SizedBox(
-      width: photoWidth,
+      width: photoWidgetWidth,
       child: Stack(clipBehavior: mat.Clip.none, children: [
         Transform.scale(
             scale: _scaleFactor,
@@ -115,11 +100,43 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
         mat.Positioned(
             bottom: 0,
             right: 0,
-            child: mat.ElevatedButton(
-                child: const Text("이미지 목록 제출"),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                }))
+            child: SizedBox(
+              height: 100,
+              width: 100,
+              child: mat.ElevatedButton(
+                  child: const Text("제출"),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  }),
+            )),
+        mat.Positioned(
+            bottom: 0,
+            right: 120,
+            child: SizedBox(
+              height: 100,
+              width: 100,
+              child: mat.ElevatedButton(
+                  child: const Text("확인"),
+                  onPressed: () async {
+                    debugPrint("On Dispose");
+                    final zoomedW = boxWidth - photoRealRect[2] / _scaleFactor;
+                    final zoomedH = boxHeight - photoRealRect[3] / _scaleFactor;
+                    final trimed = copyCrop(
+                        image!,
+                        ((photoRealRect[0] + (zoomedW / 2)) * multipleW)
+                            .round(),
+                        ((coord.dy + (zoomedH / 2)) * multipleH).round(),
+                        ((boxWidth - (zoomedW / 2)) * multipleW).round(),
+                        ((boxHeight - (zoomedH / 2)) * multipleH).round());
+                    Directory tempDir = await getTemporaryDirectory();
+                    // create a new file in temporary path with random file name.
+                    File file =
+                        File(tempDir.path + (Random().nextInt(100)).toString());
+                    file.writeAsBytesSync(
+                        encodeNamedImage(trimed, widget.file.path)!);
+                    widget.onCutted(file);
+                  }),
+            ))
       ]),
     );
   }
