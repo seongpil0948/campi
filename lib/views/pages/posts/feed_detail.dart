@@ -49,8 +49,8 @@ class FeedDetailW extends StatelessWidget {
 
     Map<String, Text> tagMap = {};
     // ignore: avoid_function_literals_in_foreach_calls
-    feed.hashTags.forEach(
-        (tag) => tagMap[tag] = Text(tag, style: tagTextSty(tag, context)));
+    feed.hashTags.forEach((tag) => tagMap[tag] =
+        Text(rmTagAllPrefix(tag), style: tagTextSty(tag, context)));
     return Stack(children: [
       SingleChildScrollView(
         child: GestureDetector(
@@ -91,7 +91,7 @@ class FeedDetailW extends StatelessWidget {
                             .split(
                                 ' ') /*find words that start with '@' and include a username that can also be found in the list of mentions*/
                             .map((word) => TextSpan(
-                                text: word + ' ',
+                                text: rmTagPrefix(word) + ' ',
                                 style: tagMap.containsKey(word)
                                     ? tagMap[word]!.style
                                     : Theme.of(context).textTheme.bodyText2))

@@ -3,6 +3,7 @@ import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/utils/io.dart';
+import 'package:campi/utils/parsers.dart';
 import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
@@ -137,7 +138,7 @@ class FeedThumnail extends StatelessWidget {
                       UserRow(userId: feedInfo.writerId),
                     const SizedBox(height: 10),
                     Text(
-                      feedInfo.content,
+                      rmTagAllPrefix(feedInfo.content),
                       overflow: TextOverflow.ellipsis,
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
@@ -152,7 +153,7 @@ class FeedThumnail extends StatelessWidget {
                                 .headline5
                                 ?.copyWith(color: Colors.white)),
                     Text(
-                      feedInfo.hashTags.join(" "),
+                      rmTagAllPrefix(feedInfo.hashTags.join(" ")),
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ],
