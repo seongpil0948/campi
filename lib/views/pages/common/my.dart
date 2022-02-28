@@ -157,7 +157,10 @@ class _UserDescState extends State<UserDesc> {
   Widget build(BuildContext context) {
     final isMe = context.read<AppBloc>().state.user == widget.user;
     final T = Theme.of(context);
-
+    final activeBorder = Theme.of(context)
+        .inputDecorationTheme
+        .focusedBorder!
+        .copyWith(borderSide: const BorderSide(color: Colors.black));
     return Column(
       children: [
         TextField(
@@ -169,14 +172,10 @@ class _UserDescState extends State<UserDesc> {
                 border: InputBorder.none,
                 fillColor: Colors.white,
                 filled: editMode,
-                focusedBorder: editMode == true
-                    ? Theme.of(context)
-                        .inputDecorationTheme
-                        .focusedBorder!
-                        .copyWith(
-                            borderSide: const BorderSide(color: Colors.black))
-                    : InputBorder.none,
-                enabledBorder: InputBorder.none,
+                focusedBorder:
+                    editMode == true ? activeBorder : InputBorder.none,
+                enabledBorder:
+                    editMode == true ? activeBorder : InputBorder.none,
                 errorBorder: InputBorder.none,
                 disabledBorder: InputBorder.none),
             readOnly: !editMode,
