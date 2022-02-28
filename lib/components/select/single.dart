@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class PiSingleSelect extends StatefulWidget {
   final List<String> items;
-  final String hint;
+  final String? hint;
   void Function(String?) onChange;
   String? defaultVal;
   String? dropdownValue;
+  Color? color;
 
   PiSingleSelect(
       {Key? key,
-      required this.hint,
+      this.hint,
       required this.items,
       required this.onChange,
-      this.defaultVal})
+      this.defaultVal,
+      this.color})
       : super(key: key);
 
   @override
@@ -21,12 +23,6 @@ class PiSingleSelect extends StatefulWidget {
 }
 
 class _PiSingleSelectState extends State<PiSingleSelect> {
-  @override
-  void initState() {
-    widget.dropdownValue = widget.defaultVal;
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
@@ -37,18 +33,19 @@ class _PiSingleSelectState extends State<PiSingleSelect> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(10.0),
       child: Container(
-        color: Theme.of(context).cardColor,
+        color: widget.color ?? Theme.of(context).cardColor,
         width: mq.size.width / 4,
         child: DropdownButton<String>(
-          style: const TextStyle(color: Colors.red),
           alignment: AlignmentDirectional.centerEnd,
-          value: widget.dropdownValue,
-          hint: Padding(
-              padding: EdgeInsets.only(left: mq.size.width / 14),
-              child: Text(widget.hint, style: sty)),
+          value: widget.defaultVal,
+          hint: widget.hint != null
+              ? Padding(
+                  padding: EdgeInsets.only(left: mq.size.width / 14),
+                  child: Text(widget.hint!, style: sty))
+              : null,
           underline: Container(),
           menuMaxHeight: mq.size.height / 2,
-          dropdownColor: Theme.of(context).cardColor,
+          dropdownColor: widget.color ?? Theme.of(context).cardColor,
           borderRadius: BorderRadius.circular(10),
           icon: const Icon(Icons.arrow_downward),
           iconSize: 24,
@@ -56,7 +53,7 @@ class _PiSingleSelectState extends State<PiSingleSelect> {
           onChanged: (String? newVal) {
             widget.onChange(newVal);
             setState(() {
-              widget.dropdownValue = newVal;
+              widget.defaultVal = newVal;
             });
           },
           items: widget.items.map<DropdownMenuItem<String>>((String value) {

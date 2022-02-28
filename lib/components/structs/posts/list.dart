@@ -120,29 +120,8 @@ class _PostListTabState extends State<PostListTab>
                         T: T)
                   ]),
             ),
-            PiSingleSelect(
-              defaultVal: defaultPostOrderStr,
-              hint: "정렬",
-              items: const [
-                "최신",
-                "인기",
-              ],
-              onChange: (String? v) {
-                switch (v) {
-                  case "최신":
-                    mgzBloc.add(MgzChangeOrder(order: PostOrder.latest));
-                    feedBloc.add(FeedChangeOrder(order: PostOrder.latest));
-                    break;
-                  case "인기":
-                    mgzBloc.add(MgzChangeOrder(order: PostOrder.popular));
-                    feedBloc.add(FeedChangeOrder(order: PostOrder.popular));
-                    break;
-                  default:
-                }
-
-                //
-              },
-            )
+            const Spacer(),
+            const PostOrderSelector()
           ],
         ),
         Expanded(
@@ -196,5 +175,42 @@ class _Tab extends StatelessWidget {
               ? T.textTheme.caption!.copyWith(color: Colors.white)
               : T.textTheme.caption!.copyWith(color: T.primaryColor)),
     ));
+  }
+}
+
+class PostOrderSelector extends StatelessWidget {
+  const PostOrderSelector({Key? key}) : super(key: key);
+//  BlocBuilder2<BlueBloc, BlueState, GreenBloc, GreenState>(
+//         builder: (context, blueState, greenState) { ... },
+  @override
+  Widget build(BuildContext context) {
+    final mgzBloc = context.watch<MgzBloc>();
+    final feedBloc = context.watch<FeedBloc>();
+    final feedTurn = feedBloc.state.myTurn;
+    return PiSingleSelect(
+      color: Colors.white,
+      defaultVal: feedTurn
+          ? orderToStr(orderBy: feedBloc.state.orderBy, ko: true)
+          : orderToStr(orderBy: mgzBloc.state.orderBy, ko: true),
+      items: postOpts,
+      onChange: (String? v) {
+        switch (v) {
+          case "최신순":
+            feedTurn
+                ? feedBloc.add(FeedChangeOrder(order: PostOrder.latest))
+                : mgzBloc.add(MgzChangeOrder(order: PostOrder.latest));
+
+            break;
+          case "인기순":
+            feedTurn
+                ? feedBloc.add(FeedChangeOrder(order: PostOrder.popular))
+                : mgzBloc.add(MgzChangeOrder(order: PostOrder.popular));
+            break;
+          default:
+        }
+
+        //
+      },
+    );
   }
 }
