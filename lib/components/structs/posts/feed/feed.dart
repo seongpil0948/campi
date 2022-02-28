@@ -82,8 +82,8 @@ class FeedW extends StatelessWidget {
         builder: (context, snapshot) {
           return snapshot.hasData
               ? Container(
-                  margin: const EdgeInsets.all(20),
-                  height: mq.size.height / 3,
+                  height: mq.size.height / 2.8,
+                  padding: const EdgeInsets.all(20),
                   child: FeedThumnail(
                       mq: mq,
                       img: f.files.firstWhere(
@@ -134,7 +134,7 @@ class FeedThumnail extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (tSize == ThumnailSize.medium)
+                    if (tSize == ThumnailSize.small)
                       UserRow(userId: feedInfo.writerId),
                     const SizedBox(height: 10),
                     Text(
