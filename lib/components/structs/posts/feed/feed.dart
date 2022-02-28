@@ -203,6 +203,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                     onPressed: () async {
                       U.favoriteFeeds.remove(F.feedId);
                       F.likeUserIds.remove(U.userId);
+                      F.likeCnt = F.likeUserIds.length;
                       _updates(U);
                       final w = await F.writer;
                       fcm.sendPushMessage(
@@ -217,6 +218,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                     onPressed: () {
                       U.favoriteFeeds.add(F.feedId);
                       F.likeUserIds.add(U.userId);
+                      F.likeCnt = F.likeUserIds.length;
                       _updates(U);
                     },
                     icon: const Icon(
@@ -224,7 +226,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                       color: Colors.black,
                     ),
                   ),
-            Text("  ${F.likeUserIds.length}  "),
+            Text("  ${F.likeCnt}  "),
           ],
         ),
         // Row(
@@ -252,7 +254,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                               leading: const Icon(Icons.account_box),
                               title: const Text('Twitter'),
                               onTap: () async {
-                                // FIXME:
+                                // FIXME: <after Prod>
                                 // snsShare(SocialShare.Twitter, F);
                                 // F.sharedUserIds.add(F.feedId);
                                 // widget.feed.update();
@@ -263,7 +265,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                               leading: const Icon(Icons.videocam),
                               title: const Text('Email'),
                               onTap: () {
-                                // FIXME:
+                                // FIXME: <after Prod>
                                 // snsShare(SocialShare.Email, F);
                                 // F.sharedUserIds.add(F.feedId);
                                 // widget.feed.update();

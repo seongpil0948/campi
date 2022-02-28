@@ -2,8 +2,6 @@
 
 import 'package:campi/modules/common/fcm/listeners.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 // import 'package:http/http.dart' as http;
 
@@ -48,7 +46,7 @@ class FcmRepo {
   Future<void> initFcm() async {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
-    // TODO: Android Icon Img Locate
+    // TODO: <Before Prod> Android Icon Img Locate
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final IOSInitializationSettings initializationSettingsIOS =
@@ -68,7 +66,8 @@ class FcmRepo {
             iOS: initializationSettingsIOS,
             macOS: initializationSettingsMacOS);
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-    NotificationSettings settings = await inst.requestPermission(
+    // NotificationSettings settings = await inst.requestPermission(
+    await inst.requestPermission(
       alert: true,
       announcement: false,
       badge: true,

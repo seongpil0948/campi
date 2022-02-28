@@ -24,15 +24,15 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 }
 
 class MgzBloc extends PostBloc {
-  MgzBloc(SearchValBloc sBloc, BuildContext context)
-      : super(searchBloc: sBloc, postType: PostType.mgz) {
+  MgzBloc(SearchValBloc sBloc, BuildContext context, PostOrder orderBy)
+      : super(searchBloc: sBloc, postType: PostType.mgz, orderBy: orderBy) {
     add(MgzFetched());
   }
 }
 
 class FeedBloc extends PostBloc {
-  FeedBloc(SearchValBloc sBloc, BuildContext context)
-      : super(searchBloc: sBloc, postType: PostType.feed) {
+  FeedBloc(SearchValBloc sBloc, BuildContext context, PostOrder orderBy)
+      : super(searchBloc: sBloc, postType: PostType.feed, orderBy: orderBy) {
     add(FeedFetched());
   }
 }
@@ -42,8 +42,11 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   UserRepo userRepo = const UserRepo();
   final SearchValBloc searchBloc;
 
-  PostBloc({required this.searchBloc, required PostType postType})
-      : super(PostState(postType: postType)) {
+  PostBloc(
+      {required this.searchBloc,
+      required PostType postType,
+      required PostOrder orderBy})
+      : super(PostState(postType: postType, orderBy: orderBy)) {
     on<FeedFetched>(
       _onFeedFetched,
       transformer: throttleDroppable(throttleDuration),
@@ -53,6 +56,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       transformer: throttleDroppable(throttleDuration),
     );
     on<PostTurnChange>(_postTurnChaged);
+    on<FeedChangeOrder>(_feedChangeOrder);
+    on<MgzChangeOrder>(_mgzChangeOrder);
     searchBloc.stream.listen((searchState) {
       if (state.myTurn) {
         // debugPrint("===> PostBloc App Search Val For ${state.postType}");
@@ -60,8 +65,43 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     });
   }
 
+  _feedChangeOrder(FeedChangeOrder event, Emitter<PostState> emit) async {
+    emit(state.copyWith(
+        status: PostStatus.initial,
+        posts: [],
+        hasReachedMax: false,
+        orderBy: event.order));
+    final feeds = await _fetchFeeds();
+    _updatePosts(feeds, emit);
+  }
+
+  _mgzChangeOrder(MgzChangeOrder event, Emitter<PostState> emit) async {
+    emit(state.copyWith(
+        status: PostStatus.initial,
+        posts: [],
+        hasReachedMax: false,
+        orderBy: event.order));
+    final mgzs = await _fetchMgzs();
+    _updatePosts(mgzs, emit);
+  }
+
   _postTurnChaged(PostTurnChange event, Emitter<PostState> emit) {
     emit(state.copyWith(myTurn: event.myTurn));
+  }
+
+  Future<void> _updatePosts(
+      List<dynamic> newPosts, Emitter<PostState> emit) async {
+    var posts = List.of(state.posts)..addAll(newPosts);
+    newPosts.isEmpty || newPosts.length < feedFetchPSize
+        ? emit(state.copyWith(
+            status: PostStatus.success, hasReachedMax: true, posts: posts))
+        : emit(
+            state.copyWith(
+              status: PostStatus.success,
+              posts: posts,
+              hasReachedMax: false,
+            ),
+          );
   }
 
   Future<void> _onFeedFetched(
@@ -71,17 +111,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     if (state.hasReachedMax) return;
     try {
       final feeds = await _fetchFeeds();
-      var posts = List.of(state.posts)..addAll(feeds);
-      feeds.isEmpty || feeds.length < feedFetchPSize
-          ? emit(state.copyWith(
-              status: PostStatus.success, hasReachedMax: true, posts: posts))
-          : emit(
-              state.copyWith(
-                status: PostStatus.success,
-                posts: posts,
-                hasReachedMax: false,
-              ),
-            );
+      _updatePosts(feeds, emit);
     } catch (_) {
       emit(state.copyWith(status: PostStatus.failure));
     }
@@ -94,17 +124,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     if (state.hasReachedMax) return;
     try {
       final mgzs = await _fetchMgzs();
-      var posts = List.of(state.posts)..addAll(mgzs);
-      mgzs.isEmpty || mgzs.length < mgzFetchPSize
-          ? emit(state.copyWith(
-              status: PostStatus.success, hasReachedMax: true, posts: posts))
-          : emit(
-              state.copyWith(
-                status: PostStatus.success,
-                posts: posts,
-                hasReachedMax: false,
-              ),
-            );
+      _updatePosts(mgzs, emit);
     } catch (_) {
       emit(state.copyWith(status: PostStatus.failure));
     }
@@ -113,9 +133,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   Future<List<FeedState>> _fetchFeeds() async {
     final len = state.posts.length;
     final lastMgz = len > 0 ? state.posts.last as FeedState : null;
-    final mgzs =
-        await postRepo.getFeeds(lastObj: lastMgz, pageSize: feedFetchPSize);
-    return mgzs.docs
+    final feeds = await postRepo.getFeeds(
+        lastObj: lastMgz, pageSize: feedFetchPSize, orderBy: state.orderBy);
+    return feeds.docs
         .map((m) => FeedState.fromJson(m.data() as Map<String, dynamic>))
         .toList();
   }
@@ -123,8 +143,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   Future<List<MgzState>> _fetchMgzs() async {
     final len = state.posts.length;
     final lastMgz = len > 0 ? state.posts.last as MgzState : null;
-    final mgzs =
-        await postRepo.getMgzs(lastObj: lastMgz, pageSize: mgzFetchPSize);
+    final mgzs = await postRepo.getMgzs(
+        lastObj: lastMgz, pageSize: mgzFetchPSize, orderBy: state.orderBy);
     return mgzs.docs
         .map((m) => MgzState.fromJson(m.data() as Map<String, dynamic>))
         .toList();

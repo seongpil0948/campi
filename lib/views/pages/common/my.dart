@@ -1,12 +1,12 @@
 import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/list.dart';
+import 'package:campi/config/constants.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/views/pages/common/user.dart';
-import 'package:campi/views/pages/layouts/drawer.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -54,11 +54,15 @@ class _MyPageW extends StatelessWidget {
               child: MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                        create: (context) =>
-                            FeedBloc(context.read<SearchValBloc>(), context)),
+                        create: (context) => FeedBloc(
+                            context.read<SearchValBloc>(),
+                            context,
+                            defaultPostOrder)),
                     BlocProvider(
-                        create: (context) =>
-                            MgzBloc(context.read<SearchValBloc>(), context))
+                        create: (context) => MgzBloc(
+                            context.read<SearchValBloc>(),
+                            context,
+                            defaultPostOrder))
                   ],
                   child: PostListTab(
                       thumbSize: ThumnailSize.small, targetUser: targetUser))))
@@ -169,7 +173,8 @@ class _UserDescState extends State<UserDesc> {
                     ? Theme.of(context)
                         .inputDecorationTheme
                         .focusedBorder!
-                        .copyWith(borderSide: BorderSide(color: Colors.black))
+                        .copyWith(
+                            borderSide: const BorderSide(color: Colors.black))
                     : InputBorder.none,
                 enabledBorder: InputBorder.none,
                 errorBorder: InputBorder.none,

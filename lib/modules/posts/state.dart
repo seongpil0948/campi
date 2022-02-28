@@ -1,3 +1,4 @@
+import 'package:campi/modules/posts/repo.dart';
 import 'package:equatable/equatable.dart';
 
 enum PostStatus { initial, success, failure }
@@ -9,6 +10,7 @@ class PostState extends Equatable {
       {this.status = PostStatus.initial,
       this.posts = const [],
       this.hasReachedMax = false,
+      required this.orderBy,
       required this.postType,
       this.myTurn = false});
 
@@ -17,26 +19,28 @@ class PostState extends Equatable {
   final bool hasReachedMax;
   final PostType postType;
   final bool myTurn;
+  final PostOrder orderBy;
 
-  PostState copyWith({
-    PostStatus? status,
-    List<dynamic>? posts,
-    bool? hasReachedMax,
-    bool? myTurn,
-  }) {
+  PostState copyWith(
+      {PostStatus? status,
+      List<dynamic>? posts,
+      bool? hasReachedMax,
+      bool? myTurn,
+      PostOrder? orderBy}) {
     return PostState(
         status: status ?? this.status,
         posts: posts ?? this.posts,
         hasReachedMax: hasReachedMax ?? this.hasReachedMax,
         myTurn: myTurn ?? this.myTurn,
-        postType: postType);
+        postType: postType,
+        orderBy: orderBy ?? this.orderBy);
   }
 
   @override
   String toString() {
-    return '''PostState { PostType: $postType, \n My Turn: $myTurn status: $status, hasReachedMax: $hasReachedMax, posts: ${posts.length} }''';
+    return '''PostState { orderBy: $orderBy PostType: $postType, \n My Turn: $myTurn status: $status, hasReachedMax: $hasReachedMax, posts: ${posts.length} } ''';
   }
 
   @override
-  List<Object> get props => [status, posts, hasReachedMax, myTurn];
+  List<Object> get props => [status, posts, hasReachedMax, myTurn, orderBy];
 }

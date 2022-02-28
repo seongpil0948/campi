@@ -22,6 +22,7 @@ class FeedState extends Equatable {
   double? lng; // lat lng
   List<String> hashTags = [];
   List<String> likeUserIds = [];
+  int likeCnt;
   List<String> sharedUserIds = [];
   List<String> bookmarkedUserIds = [];
   DateTime createdAt = DateTime.now();
@@ -42,6 +43,7 @@ class FeedState extends Equatable {
       this.likeUserIds = const [],
       this.sharedUserIds = const [],
       this.bookmarkedUserIds = const [],
+      this.likeCnt = 0,
       required this.writerId})
       : feedId = const Uuid().v4();
 
@@ -74,6 +76,7 @@ class FeedState extends Equatable {
     double? lng,
     List<String>? hashTags,
     List<String>? likeUserIds,
+    int? likeCnt,
     List<String>? sharedUserIds,
     List<String>? bookmarkedUserIds,
   }) {
@@ -90,6 +93,7 @@ class FeedState extends Equatable {
         lng: lng ?? this.lng,
         hashTags: hashTags ?? this.hashTags,
         likeUserIds: likeUserIds ?? this.likeUserIds,
+        likeCnt: likeCnt ?? this.likeCnt,
         sharedUserIds: sharedUserIds ?? this.sharedUserIds,
         bookmarkedUserIds: bookmarkedUserIds ?? this.bookmarkedUserIds);
     return feed;
@@ -106,6 +110,7 @@ class FeedState extends Equatable {
         campKind = j['campKind'],
         hashTags = j['hashTags'].cast<String>(),
         likeUserIds = j['likeUserIds'].cast<String>(),
+        likeCnt = j['likeCnt'],
         sharedUserIds = j['sharedUserIds'].cast<String>(),
         bookmarkedUserIds = j['bookmarkedUserIds'].cast<String>(),
         createdAt = timeStamp2DateTime(j['createdAt']),
@@ -125,6 +130,7 @@ class FeedState extends Equatable {
         'campKind': campKind,
         'hashTags': hashTags,
         'likeUserIds': likeUserIds,
+        'likeCnt': likeCnt,
         'sharedUserIds': sharedUserIds,
         'bookmarkedUserIds': bookmarkedUserIds,
         'updatedAt': updatedAt,
@@ -145,7 +151,8 @@ class FeedState extends Equatable {
         addr,
         lat,
         lng,
-        hashTags
+        hashTags,
+        likeCnt,
       ];
   @override
   String toString() {

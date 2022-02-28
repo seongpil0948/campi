@@ -1,3 +1,4 @@
+import 'package:campi/modules/posts/repo.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class PostEvent extends Equatable {
@@ -7,7 +8,17 @@ abstract class PostEvent extends Equatable {
 
 class MgzFetched extends PostEvent {}
 
+class MgzChangeOrder extends PostEvent {
+  final PostOrder order;
+  MgzChangeOrder({required this.order});
+}
+
 class FeedFetched extends PostEvent {}
+
+class FeedChangeOrder extends PostEvent {
+  final PostOrder order;
+  FeedChangeOrder({required this.order});
+}
 
 class PostTurnChange extends PostEvent {
   final bool myTurn;

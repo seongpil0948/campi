@@ -5,12 +5,15 @@ class PiSingleSelect extends StatefulWidget {
   final List<String> items;
   final String hint;
   void Function(String?) onChange;
+  String? defaultVal;
+  String? dropdownValue;
 
   PiSingleSelect(
       {Key? key,
       required this.hint,
       required this.items,
-      required this.onChange})
+      required this.onChange,
+      this.defaultVal})
       : super(key: key);
 
   @override
@@ -18,7 +21,12 @@ class PiSingleSelect extends StatefulWidget {
 }
 
 class _PiSingleSelectState extends State<PiSingleSelect> {
-  String? dropdownValue;
+  @override
+  void initState() {
+    widget.dropdownValue = widget.defaultVal;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
@@ -34,7 +42,7 @@ class _PiSingleSelectState extends State<PiSingleSelect> {
         child: DropdownButton<String>(
           style: const TextStyle(color: Colors.red),
           alignment: AlignmentDirectional.centerEnd,
-          value: dropdownValue,
+          value: widget.dropdownValue,
           hint: Padding(
               padding: EdgeInsets.only(left: mq.size.width / 14),
               child: Text(widget.hint, style: sty)),
@@ -48,7 +56,7 @@ class _PiSingleSelectState extends State<PiSingleSelect> {
           onChanged: (String? newVal) {
             widget.onChange(newVal);
             setState(() {
-              dropdownValue = newVal;
+              widget.dropdownValue = newVal;
             });
           },
           items: widget.items.map<DropdownMenuItem<String>>((String value) {

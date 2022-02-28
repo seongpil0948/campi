@@ -1,17 +1,20 @@
+import 'package:campi/components/select/single.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/feed/list.dart';
 import 'package:campi/components/structs/posts/mgz/list.dart';
+import 'package:campi/config/constants.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/modules/posts/events.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:campi/modules/posts/repo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: implementation_imports
 
 class PostListTab extends StatefulWidget {
   /// FIXME: 탭바뀔때마다 두번씩 로드되고 있습니다.
+  /// 뒤로가기 하거나 다른페이지 갔다가 오면 포스트목록, 정렬 유지되어야함
   final ThumnailSize thumbSize;
   final PostsUser? targetUser;
   final scrollController = ScrollController();
@@ -117,6 +120,29 @@ class _PostListTabState extends State<PostListTab>
                         T: T)
                   ]),
             ),
+            PiSingleSelect(
+              defaultVal: defaultPostOrderStr,
+              hint: "정렬",
+              items: const [
+                "최신",
+                "인기",
+              ],
+              onChange: (String? v) {
+                switch (v) {
+                  case "최신":
+                    mgzBloc.add(MgzChangeOrder(order: PostOrder.latest));
+                    feedBloc.add(FeedChangeOrder(order: PostOrder.latest));
+                    break;
+                  case "인기":
+                    mgzBloc.add(MgzChangeOrder(order: PostOrder.popular));
+                    feedBloc.add(FeedChangeOrder(order: PostOrder.popular));
+                    break;
+                  default:
+                }
+
+                //
+              },
+            )
           ],
         ),
         Expanded(

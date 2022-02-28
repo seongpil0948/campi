@@ -1,7 +1,6 @@
 import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/comment/repo.dart';
 import 'package:campi/modules/posts/feed/state.dart';

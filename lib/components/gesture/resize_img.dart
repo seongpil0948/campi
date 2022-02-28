@@ -10,10 +10,8 @@ import 'package:image/image.dart';
 typedef OnCuttCallback = void Function(File file);
 
 class AdjRatioImgW extends StatefulWidget {
-  /// TODO: https://api.flutter.dev/flutter/widgets/AnimatedSize-class.html
+  /// https://api.flutter.dev/flutter/widgets/AnimatedSize-class.html
   /// https://api.flutter.dev/flutter/widgets/AnimatedWidgetBaseState-class.html
-  /// FIXME: 박스크기가 맞지 않는다 (width).
-  /// FIXME: 확대시 박스 를 width height 비율을 _scaleFactor 해서 저장해야한다.
   final File file;
   final OnCuttCallback onCutted;
   const AdjRatioImgW({Key? key, required this.file, required this.onCutted})

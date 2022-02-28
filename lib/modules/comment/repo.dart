@@ -5,7 +5,6 @@ import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/modules/posts/models/common.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 Future<List<CommentModel>> loadComment(String userId, String feedId) async {

@@ -1,6 +1,7 @@
 import 'package:campi/components/btn/fabs.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/list.dart';
+import 'package:campi/config/constants.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
@@ -17,11 +18,11 @@ class PostListPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-            create: (context) =>
-                FeedBloc(context.read<SearchValBloc>(), context)),
+            create: (context) => FeedBloc(
+                context.read<SearchValBloc>(), context, defaultPostOrder)),
         BlocProvider(
-            create: (context) =>
-                MgzBloc(context.read<SearchValBloc>(), context))
+            create: (context) => MgzBloc(
+                context.read<SearchValBloc>(), context, defaultPostOrder))
       ],
       child: Piffold(
           body: PostListTab(thumbSize: ThumnailSize.medium),

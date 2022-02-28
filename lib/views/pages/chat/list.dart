@@ -1,7 +1,6 @@
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/views/pages/common/user.dart';

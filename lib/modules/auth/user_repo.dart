@@ -1,6 +1,5 @@
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/modules/posts/mgz/state.dart';

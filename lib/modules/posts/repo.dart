@@ -3,6 +3,20 @@ import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+enum PostOrder { latest, popular }
+String orderToStr(PostOrder orderBy) {
+  switch (orderBy) {
+    case PostOrder.latest:
+      return 'updatedAt';
+    case PostOrder.popular:
+      return 'likeCnt';
+  }
+}
+
+Query<Object?> addOrder(CollectionReference ref, PostOrder orderBy) {
+  return ref.orderBy(orderToStr(orderBy), descending: true);
+}
+
 class PostRepo {
   Future<List<FeedState>> getFeedByUser(String userId) async {
     final snapshot = await getCollection(c: Collections.feeds)
@@ -14,13 +28,14 @@ class PostRepo {
   }
 
   Future<QuerySnapshot> getFeeds(
-      {required FeedState? lastObj, required int pageSize}) async {
-    var startQuery = getCollection(c: Collections.feeds)
-        .orderBy('updatedAt', descending: true);
+      {required FeedState? lastObj,
+      required int pageSize,
+      required PostOrder orderBy}) async {
+    var query = addOrder(getCollection(c: Collections.feeds), orderBy);
     if (lastObj != null) {
-      startQuery = startQuery.startAfter([lastObj.toJson()['updatedAt']]);
+      query = query.startAfter([lastObj.toJson()[orderToStr(orderBy)]]);
     }
-    return startQuery.limit(pageSize).get();
+    return query.limit(pageSize).get();
   }
 
   Future<List<MgzState>> getMgzByUser(String userId) async {
@@ -33,12 +48,13 @@ class PostRepo {
   }
 
   Future<QuerySnapshot> getMgzs(
-      {required MgzState? lastObj, required int pageSize}) async {
-    var startQuery = getCollection(c: Collections.magazines)
-        .orderBy('updatedAt', descending: true);
+      {required MgzState? lastObj,
+      required int pageSize,
+      required PostOrder orderBy}) async {
+    var query = addOrder(getCollection(c: Collections.magazines), orderBy);
     if (lastObj != null) {
-      startQuery = startQuery.startAfter([lastObj.toJson()['updatedAt']]);
+      query = query.startAfter([lastObj.toJson()[orderToStr(orderBy)]]);
     }
-    return startQuery.limit(pageSize).get();
+    return query.limit(pageSize).get();
   }
 }

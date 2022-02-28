@@ -16,7 +16,7 @@ void onMessage(RemoteMessage message, FlutterLocalNotificationsPlugin plugin,
           channel.id,
           channel.name,
           // channel.description,
-          // TODO add a proper drawable resource to android, for now using
+          // TODO <Before Prod> add a proper drawable resource to android, for now using
           //      one that already exists in example app.
           icon: 'launch_background',
         ),
@@ -24,7 +24,6 @@ void onMessage(RemoteMessage message, FlutterLocalNotificationsPlugin plugin,
     );
   }
 }
-
 
 /// To verify things are working, check out the native platform logs.
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
