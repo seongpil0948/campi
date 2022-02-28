@@ -24,44 +24,45 @@ class MgzThumnail extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final mediaUrl = docCheckMedia(mgz.content, checkImg: true);
     return mediaUrl != null
-        ? InkWell(
-            onTap: () {
-              context
-                  .read<NavigationCubit>()
-                  .push(mgzDetailPath, {'magazine': mgz});
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(50),
-                child: Stack(
-                  children: [
-                    CachedNetworkImage(
-                        imageUrl: mediaUrl,
-                        fit: BoxFit.cover,
-                        width: size.width,
-                        height: size.height / 3),
-                    Positioned(
-                        bottom: size.height / 30,
-                        left: size.width / 15,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (tSize == ThumnailSize.medium)
-                                UserRow(userId: mgz.writerId),
-                              const SizedBox(height: 10),
-                              Text(
-                                mgz.title,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline4
-                                    ?.copyWith(color: Colors.white),
-                              )
-                            ]))
-                  ],
-                ),
-              ),
-            ))
+        ? Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+            child: InkWell(
+                onTap: () {
+                  context
+                      .read<NavigationCubit>()
+                      .push(mgzDetailPath, {'magazine': mgz});
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(30),
+                  child: Stack(
+                    children: [
+                      CachedNetworkImage(
+                          imageUrl: mediaUrl,
+                          fit: BoxFit.cover,
+                          width: size.width,
+                          height: size.height / 3),
+                      Positioned(
+                          bottom: size.height / 30,
+                          left: size.width / 15,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (tSize == ThumnailSize.medium)
+                                  UserRow(userId: mgz.writerId),
+                                const SizedBox(height: 10),
+                                Text(
+                                  mgz.title,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline4
+                                      ?.copyWith(color: Colors.white),
+                                )
+                              ]))
+                    ],
+                  ),
+                )),
+          )
         : Container();
   }
 }

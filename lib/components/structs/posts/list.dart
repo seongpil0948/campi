@@ -101,7 +101,7 @@ class _PostListTabState extends State<PostListTab>
             Container(
               margin: EdgeInsets.only(left: size.width / 23, bottom: 10),
               height: size.height / 30,
-              width: size.width / 2.2,
+              width: size.width / 2,
               child: TabBar(
                   controller: _controller,
                   indicator: BoxDecoration(
@@ -121,7 +121,10 @@ class _PostListTabState extends State<PostListTab>
                   ]),
             ),
             const Spacer(),
-            const PostOrderSelector()
+            const Padding(
+              padding: EdgeInsets.only(bottom: 8.0),
+              child: PostOrderSelector(),
+            )
           ],
         ),
         Expanded(
@@ -171,6 +174,8 @@ class _Tab extends StatelessWidget {
         child: Padding(
       padding: const EdgeInsets.only(top: 4.0),
       child: Text(txt,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: selectedIndex == targetIndex
               ? T.textTheme.caption!.copyWith(color: Colors.white)
               : T.textTheme.caption!.copyWith(color: T.primaryColor)),

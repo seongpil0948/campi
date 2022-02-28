@@ -177,7 +177,7 @@ class UserRow extends StatelessWidget {
                     children: [
                       GoMyAvatar(radius: 15, user: snapshot.data!),
                       const SizedBox(width: 10),
-                      Text(snapshot.data?.email ?? "",
+                      Text(snapshot.data?.name ?? "",
                           style: Theme.of(context).textTheme.bodyText1)
                     ],
                   ),

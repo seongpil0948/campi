@@ -61,7 +61,6 @@ class GridMgzs extends StatelessWidget {
         itemCount: mgzs.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          crossAxisSpacing: 10,
           mainAxisSpacing: 10,
         ),
         itemBuilder: (context, idx) =>

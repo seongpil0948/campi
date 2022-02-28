@@ -59,7 +59,7 @@ class FeedTopStatus extends StatelessWidget {
                                 img: post.files.firstWhere((element) =>
                                     element.ftype == PiFileType.image),
                                 feedInfo: post,
-                                tSize: ThumnailSize.medium,
+                                tSize: ThumnailSize.small,
                                 writer: writer)
                             : Container();
                       }))
@@ -129,12 +129,12 @@ class FeedThumnail extends StatelessWidget {
             else if (img!.file != null)
               loadFile(f: img!, context: context),
             Positioned(
-                bottom: tSize == ThumnailSize.medium ? mq.size.height / 30 : 0,
+                bottom: tSize == ThumnailSize.medium ? mq.size.height / 30 : 10,
                 left: mq.size.width / 15,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if (tSize == ThumnailSize.small)
+                    if (tSize == ThumnailSize.medium)
                       UserRow(userId: feedInfo.writerId),
                     const SizedBox(height: 10),
                     Text(
