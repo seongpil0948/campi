@@ -25,8 +25,11 @@ class PlaceInfo extends StatelessWidget {
             width: mq.size.width,
             padding: const EdgeInsets.fromLTRB(60, 0, 23, 0),
             child: Row(children: [
-              Expanded(child: CampKind(iconImgH: iconImgH, feed: feed)),
-              Expanded(child: CampAddr(feed: feed, iconImgH: iconImgH, mq: mq)),
+              Expanded(
+                  flex: 3, child: CampKind(iconImgH: iconImgH, feed: feed)),
+              Expanded(
+                  flex: 4,
+                  child: CampAddr(feed: feed, iconImgH: iconImgH, mq: mq)),
             ])),
         Container(
             width: mq.size.width,
