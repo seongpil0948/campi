@@ -64,24 +64,24 @@ class _MyPageW extends StatelessWidget {
               },
             ))
       ]),
-      Expanded(
-          child: Padding(
-              padding: const EdgeInsets.only(top: 8.0),
-              child: MultiBlocProvider(
-                  providers: [
-                    BlocProvider(
-                        create: (context) => FeedBloc(
-                            context.read<SearchValBloc>(),
-                            context,
-                            defaultPostOrder)),
-                    BlocProvider(
-                        create: (context) => MgzBloc(
-                            context.read<SearchValBloc>(),
-                            context,
-                            defaultPostOrder))
-                  ],
-                  child: PostListTab(
-                      thumbSize: ThumnailSize.small, targetUser: targetUser))))
+      // Expanded(
+      //     child: Padding(
+      //         padding: const EdgeInsets.only(top: 8.0),
+      //         child: MultiBlocProvider(
+      //             providers: [
+      //               BlocProvider(
+      //                   create: (context) => FeedBloc(
+      //                       context.read<SearchValBloc>(),
+      //                       context,
+      //                       defaultPostOrder)),
+      //               BlocProvider(
+      //                   create: (context) => MgzBloc(
+      //                       context.read<SearchValBloc>(),
+      //                       context,
+      //                       defaultPostOrder))
+      //             ],
+      //             child: PostListTab(
+      //                 thumbSize: ThumnailSize.small, targetUser: targetUser))))
     ]);
   }
 }
