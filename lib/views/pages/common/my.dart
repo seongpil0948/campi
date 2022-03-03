@@ -1,4 +1,5 @@
 import 'package:campi/components/btn/avatar.dart';
+import 'package:campi/components/btn/follow.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/list.dart';
 import 'package:campi/config/constants.dart';
@@ -120,7 +121,8 @@ class _MyProfileInfo extends StatelessWidget {
                           width: mSize.width / 1.3,
                           child: UserSnsInfo(user: user)),
                       SizedBox(
-                          width: mSize.width / 1.3, child: UserDesc(user: user))
+                          width: mSize.width / 1.3,
+                          child: _UserDesc(user: user))
                     ],
                   ),
                 )
@@ -132,18 +134,18 @@ class _MyProfileInfo extends StatelessWidget {
   }
 }
 
-class UserDesc extends StatefulWidget {
+class _UserDesc extends StatefulWidget {
   final PiUser user;
-  const UserDesc({
+  const _UserDesc({
     Key? key,
     required this.user,
   }) : super(key: key);
 
   @override
-  _UserDescState createState() => _UserDescState();
+  __UserDescState createState() => __UserDescState();
 }
 
-class _UserDescState extends State<UserDesc> {
+class __UserDescState extends State<_UserDesc> {
   bool editMode = false;
   late final TextEditingController _controller;
   FocusNode descFocusNode = FocusNode();

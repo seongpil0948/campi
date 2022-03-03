@@ -1,3 +1,4 @@
+import 'package:campi/components/list/follow.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/modules/auth/model.dart';
@@ -50,7 +51,7 @@ class ChatRoomList extends StatelessWidget {
                       context.read<NavigationCubit>().push(
                           chatRoomPath, {"roomId": roomId, "you": users[idx]});
                     },
-                    child: UserList(targetUser: users[idx]),
+                    child: FollowUserList(targetUser: users[idx]),
                   ),
                   endActionPane: ActionPane(
                     motion: const ScrollMotion(),
