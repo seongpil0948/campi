@@ -5,10 +5,13 @@ import 'package:campi/components/structs/posts/list.dart';
 import 'package:campi/config/constants.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/router/config.dart';
+import 'package:campi/views/router/page.dart';
+import 'package:campi/views/router/state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,7 +51,19 @@ class _MyPageW extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      _MyProfileInfo(targetUser: targetUser),
+      Stack(children: [
+        _MyProfileInfo(targetUser: targetUser),
+        Positioned(
+            top: 50,
+            right: 25,
+            child: TextButton(
+              child: Text("로그아웃", style: Theme.of(context).textTheme.bodyText1),
+              onPressed: () async {
+                await context.read<AuthRepo>().logOut();
+                context.read<NavigationCubit>().push(loginPath);
+              },
+            ))
+      ]),
       Expanded(
           child: Padding(
               padding: const EdgeInsets.only(top: 8.0),
