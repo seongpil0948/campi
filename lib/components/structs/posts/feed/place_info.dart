@@ -128,19 +128,11 @@ class CampAddr extends StatelessWidget {
   Widget build(BuildContext context) {
     if (feed.addr != null) {
       return Row(children: [
-        Image.asset(
-          "assets/images/map_marker.png",
-          height: iconImgH - 3,
-        ),
+        Image.asset("assets/images/map_marker.png", height: iconImgH - 3),
         Expanded(
           child: TextButton(
-            onPressed: () {
-              Clipboard.setData(ClipboardData(text: feed.addr));
-            },
-            child: Text(
-              "${feed.addr}",
-              overflow: TextOverflow.ellipsis,
-            ),
+            onPressed: () => Clipboard.setData(ClipboardData(text: feed.addr)),
+            child: Text("${feed.addr}", overflow: TextOverflow.ellipsis),
           ),
         )
       ]);
