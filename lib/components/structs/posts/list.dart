@@ -108,12 +108,12 @@ class _PostListTabState extends State<PostListTab>
                       borderRadius: BorderRadius.circular(50),
                       color: T.primaryColor),
                   tabs: [
-                    _Tab(
+                    PiTab(
                         targetIndex: 0,
                         txt: "캠핑 포스팅",
                         selectedIndex: selectedIndex,
                         T: T),
-                    _Tab(
+                    PiTab(
                         targetIndex: 1,
                         txt: "캠핑 SNS",
                         selectedIndex: selectedIndex,
@@ -155,8 +155,8 @@ class _PostListTabState extends State<PostListTab>
   }
 }
 
-class _Tab extends StatelessWidget {
-  const _Tab({
+class PiTab extends StatelessWidget {
+  const PiTab({
     Key? key,
     required this.txt,
     required this.targetIndex,

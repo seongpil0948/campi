@@ -30,12 +30,7 @@ void showFollow(
                               TextSpan(text: "  ${currUser.follows.length}명"),
                             ])),
                       )),
-                  Expanded(
-                    child: ListView.builder(
-                        itemBuilder: (context, idx) =>
-                            FollowUserList(targetUser: users[idx]),
-                        itemCount: users.length),
-                  ),
+                  Expanded(child: FollowTabList(users: users)),
                 ],
               ),
               Positioned(
@@ -49,4 +44,84 @@ void showFollow(
               ),
             ],
           )));
+}
+
+class FollowTabList extends StatefulWidget {
+  final List<PiUser> users;
+  const FollowTabList({Key? key, required this.users}) : super(key: key);
+
+  @override
+  State<FollowTabList> createState() => _FollowTabListState();
+}
+
+class _FollowTabListState extends State<FollowTabList>
+    with
+        AutomaticKeepAliveClientMixin<FollowTabList>,
+        TickerProviderStateMixin {
+  late final TabController _controller;
+
+  @override
+  void initState() {
+    _controller = TabController(length: 2, vsync: this);
+    _controller.addListener(() {
+      setState(() {});
+      // debugPrint("Selected Index: ${_controller.index}");
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final T = Theme.of(context);
+    final tStyle = T.textTheme.subtitle1!;
+    return Column(
+      children: [
+        Container(
+          margin: EdgeInsets.only(left: size.width / 23),
+          height: size.height / 30,
+          width: size.width / 2,
+          child: TabBar(
+              controller: _controller,
+              indicator: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: T.primaryColor),
+              tabs: [
+                Tab(
+                    child: Text("팔로워",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: _controller.index == 0
+                            ? tStyle.copyWith(color: Colors.white)
+                            : tStyle.copyWith(color: T.primaryColor))),
+                Tab(
+                    child: Text("팔로잉",
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: _controller.index == 1
+                            ? tStyle.copyWith(color: Colors.white)
+                            : tStyle.copyWith(color: T.primaryColor))),
+              ]),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 16.0),
+          child: const Divider(),
+        ),
+        Expanded(
+            child: TabBarView(controller: _controller, children: [
+          ListView.builder(
+              itemBuilder: (context, idx) =>
+                  FollowUserList(targetUser: widget.users[idx]),
+              itemCount: widget.users.length),
+          ListView.builder(
+              itemBuilder: (context, idx) =>
+                  FollowUserList(targetUser: widget.users[idx]),
+              itemCount: widget.users.length)
+        ]))
+      ],
+    );
+  }
+
+  @override
+  bool get wantKeepAlive => true;
 }
