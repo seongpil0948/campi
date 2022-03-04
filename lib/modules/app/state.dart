@@ -9,10 +9,8 @@ enum AppStatus {
 class AppState extends Equatable {
   final AppStatus status;
   late final PiUser user;
-  bool isLoading = false;
 
-  AppState({required this.status, bool? loading, PiUser? usr}) {
-    isLoading = loading ?? false;
+  AppState({required this.status, PiUser? usr}) {
     if (usr != null) user = usr;
   }
 
@@ -24,11 +22,8 @@ class AppState extends Equatable {
 
   AppState.unauthenticated() : this._(status: AppStatus.unauthenticated);
 
-  AppState copyWith(AppStatus? status, PiUser? user, bool? isLoading) =>
-      AppState(
-          status: status ?? this.status,
-          usr: user,
-          loading: isLoading ?? this.isLoading);
+  AppState copyWith(AppStatus? status, PiUser? user) =>
+      AppState(status: status ?? this.status, usr: user);
 
   @override
   List<Object> get props => [status, user];

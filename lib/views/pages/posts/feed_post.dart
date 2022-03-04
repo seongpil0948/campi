@@ -89,7 +89,6 @@ class _FeedPostWState extends State<FeedPostW> {
                     });
                     List<PiFile> paths = [];
                     try {
-                      context.read<AppBloc>().add(AppLoadingChange());
                       final feed = context.read<FeedCubit>().state;
                       final userId = feed.writerId;
 
@@ -116,13 +115,10 @@ class _FeedPostWState extends State<FeedPostW> {
                           .doc(newFeed.feedId)
                           .set(newFeed.toJson())
                           .then((value) async {
-                        final appBloc = context.read<AppBloc>();
-                        appBloc.add(AppLoadingChange());
-
                         final writer = await feed.writer;
                         writer.feedIds.add(feed.feedId);
                         writer.update();
-                        appBloc.fcm.sendPushMessage(
+                        context.read<AppBloc>().fcm.sendPushMessage(
                             tokens: writer.followers,
                             data: {"tokenIsUid": true, "type": "postFeed"});
                         context.read<NavigationCubit>().pop();

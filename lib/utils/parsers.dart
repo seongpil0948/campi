@@ -14,3 +14,13 @@ TextStyle? tagTextSty(String tag, BuildContext context) {
     return TextStyle(color: Theme.of(context).errorColor);
   }
 }
+
+List<String> strToTag(List<String> l) {
+  List<String> tags = [];
+  for (var str in l) {
+    for (var pre in ["#", "@", "!"]) {
+      tags.add(pre + str);
+    }
+  }
+  return tags;
+}

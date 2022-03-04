@@ -46,11 +46,17 @@ class PiEditAvatar extends StatefulWidget {
 }
 
 class _PiEditAvatarState extends State<PiEditAvatar> {
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
+    if (loading) return const Center(child: CircularProgressIndicator());
     return InkWell(
         onTap: () async {
-          if (context.read<AppBloc>().state.user != widget.user) return;
+          setState(() {
+            loading = true;
+          });
+          final appBloc = context.read<AppBloc>();
+          if (appBloc.state.user != widget.user) return;
           final _picker = ImagePicker();
           final f = await _picker.pickImage(source: ImageSource.gallery);
           if (f == null) return;
@@ -64,6 +70,9 @@ class _PiEditAvatarState extends State<PiEditAvatar> {
             });
             await widget.user.update();
           }
+          setState(() {
+            loading = false;
+          });
         },
         child: getAvatar(widget.radius, widget.user.profileImage));
   }

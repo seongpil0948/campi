@@ -29,9 +29,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
-    on<AppLoadingChange>((evt, emit) {
-      emit(state.copyWith(state.status, state.user, !state.isLoading));
-    });
+
     _userSubscription = _authRepo.user.listen(
       (user) async {
         final u = await user;
@@ -106,8 +104,8 @@ class SearchValBloc extends Bloc<SearchEvent, SearchValState> {
   }
 
   void _onSearch(AppOnSearch event, Emitter<SearchValState> emit) {
-    // debugPrint(
-    //     "on Search In AppBloc ${state.tags} \n ${state.appSearchController.text}");
+    debugPrint(
+        "on Search In AppBloc ${state.tags} \n ${state.appSearchController.text}");
     emit(state.copyWith(sibal: !state.sibal));
   }
 }

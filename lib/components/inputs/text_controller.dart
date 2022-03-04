@@ -4,8 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
 
 Map<RegExp, TextStyle> tagPatternMap(BuildContext c) => {
-      RegExp("#[|ㄱ-ㅎ가-힣a-zA-Z0-9]+"): Theme.of(c).primaryTextTheme.bodyText2!,
-      RegExp(r"@[|ㄱ-ㅎ가-힣a-zA-Z0-9]+"): Theme.of(c).primaryTextTheme.bodyText1!,
+      RegExp("#[|ㄱ-ㅎ가-힣a-zA-Z0-9]+"):
+          const TextStyle(color: Colors.purpleAccent),
+      RegExp(r"@[|ㄱ-ㅎ가-힣a-zA-Z0-9]+"):
+          TextStyle(color: Theme.of(c).colorScheme.primary),
       RegExp(r"![|ㄱ-ㅎ가-힣a-zA-Z0-9]+"):
           TextStyle(color: Theme.of(c).colorScheme.error),
     };

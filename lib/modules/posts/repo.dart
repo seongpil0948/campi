@@ -32,7 +32,7 @@ String orderToStr({required PostOrder orderBy, bool ko = false}) {
   }
 }
 
-Query<Object?> addOrder(CollectionReference ref, PostOrder orderBy) {
+Query<Object?> addOrder(Query ref, PostOrder orderBy) {
   return ref.orderBy(orderToStr(orderBy: orderBy, ko: false), descending: true);
 }
 
@@ -49,8 +49,14 @@ class PostRepo {
   Future<QuerySnapshot> getFeeds(
       {required FeedState? lastObj,
       required int pageSize,
-      required PostOrder orderBy}) async {
-    var query = addOrder(getCollection(c: Collections.feeds), orderBy);
+      required PostOrder orderBy,
+      List<String>? tags}) async {
+    Query collect = getCollection(c: Collections.feeds);
+    if (tags != null) {
+      collect = collect.where('hashTags', arrayContainsAny: tags);
+    }
+    var query = addOrder(collect, orderBy);
+
     if (lastObj != null) {
       query =
           query.startAfter([lastObj.toJson()[orderToStr(orderBy: orderBy)]]);
@@ -70,8 +76,13 @@ class PostRepo {
   Future<QuerySnapshot> getMgzs(
       {required MgzState? lastObj,
       required int pageSize,
-      required PostOrder orderBy}) async {
-    var query = addOrder(getCollection(c: Collections.magazines), orderBy);
+      required PostOrder orderBy,
+      List<String>? tags}) async {
+    Query collect = getCollection(c: Collections.magazines);
+    if (tags != null) {
+      collect = collect.where('hashTags', arrayContainsAny: tags);
+    }
+    var query = addOrder(collect, orderBy);
     if (lastObj != null) {
       query =
           query.startAfter([lastObj.toJson()[orderToStr(orderBy: orderBy)]]);

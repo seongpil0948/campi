@@ -25,8 +25,7 @@ class MgzThumnail extends StatelessWidget {
     final mediaUrl = docCheckMedia(mgz.content, checkImg: true);
     return mediaUrl != null
         ? Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 24.0, vertical: 24.0),
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 6),
             child: InkWell(
                 onTap: () {
                   context

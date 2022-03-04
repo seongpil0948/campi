@@ -15,6 +15,8 @@ class MgzChangeOrder extends PostEvent {
 
 class FeedFetched extends PostEvent {}
 
+class InitPosts extends PostEvent {}
+
 class FeedChangeOrder extends PostEvent {
   final PostOrder order;
   FeedChangeOrder({required this.order});

@@ -10,6 +10,7 @@ import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/modules/posts/state.dart';
+import 'package:campi/utils/parsers.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stream_transform/stream_transform.dart';
@@ -60,11 +61,25 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<PostTurnChange>(_postTurnChaged);
     on<FeedChangeOrder>(_feedChangeOrder);
     on<MgzChangeOrder>(_mgzChangeOrder);
+    on<InitPosts>(_initPosts);
+
     searchBloc.stream.listen((searchState) {
-      if (state.myTurn) {
-        // debugPrint("===> PostBloc App Search Val For ${state.postType}");
-      }
+      // debugPrint("===> PostBloc App Search Val For ${state.postType}");
+      add(InitPosts());
+      final txts =
+          rmTagAllPrefix(searchState.appSearchController.text).split(" ");
+      final tags = strToTag(txts);
+      _fetchFeeds(tags: tags);
+      _fetchMgzs(tags: tags);
     });
+  }
+
+  _initPosts(InitPosts event, Emitter<PostState> emit) {
+    emit(state.copyWith(
+        status: PostStatus.initial,
+        posts: [],
+        hasReachedMax: false,
+        orderBy: state.orderBy));
   }
 
   _feedChangeOrder(FeedChangeOrder event, Emitter<PostState> emit) async {
@@ -136,21 +151,27 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     }
   }
 
-  Future<List<FeedState>> _fetchFeeds() async {
+  Future<List<FeedState>> _fetchFeeds({List<String>? tags}) async {
     final len = state.posts.length;
     final lastMgz = len > 0 ? state.posts.last as FeedState : null;
     final feeds = await postRepo.getFeeds(
-        lastObj: lastMgz, pageSize: feedFetchPSize, orderBy: state.orderBy);
+        lastObj: lastMgz,
+        pageSize: feedFetchPSize,
+        orderBy: state.orderBy,
+        tags: tags);
     return feeds.docs
         .map((m) => FeedState.fromJson(m.data() as Map<String, dynamic>))
         .toList();
   }
 
-  Future<List<MgzState>> _fetchMgzs() async {
+  Future<List<MgzState>> _fetchMgzs({List<String>? tags}) async {
     final len = state.posts.length;
     final lastMgz = len > 0 ? state.posts.last as MgzState : null;
     final mgzs = await postRepo.getMgzs(
-        lastObj: lastMgz, pageSize: mgzFetchPSize, orderBy: state.orderBy);
+        lastObj: lastMgz,
+        pageSize: mgzFetchPSize,
+        orderBy: state.orderBy,
+        tags: tags);
     return mgzs.docs
         .map((m) => MgzState.fromJson(m.data() as Map<String, dynamic>))
         .toList();
