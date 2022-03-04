@@ -4,7 +4,6 @@ import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/common/collections.dart';
-import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';

@@ -2,7 +2,6 @@ import 'package:campi/components/select/single.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/feed/list.dart';
 import 'package:campi/components/structs/posts/mgz/list.dart';
-import 'package:campi/config/constants.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/bloc.dart';

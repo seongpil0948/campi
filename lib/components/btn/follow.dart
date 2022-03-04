@@ -33,8 +33,15 @@ class _FollowBtnState extends State<FollowBtn> {
     final currUser = context.watch<AppBloc>().state.user;
     if (widget.targetUser == currUser) return Container();
     final aleady = widget.targetUser.followers.contains(currUser.userId);
-    final txt = aleady ? "팔로우 취소" : "팔로우";
+    final txt = aleady ? "팔로우 취소" : "팔로우 +";
     return ElevatedButton(
+        style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                    side: BorderSide(
+                        color: Theme.of(context).primaryColor, width: 2),
+                    borderRadius: BorderRadius.circular(18.0))),
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.white)),
         onPressed: () {
           final fcm = context.read<AppBloc>().fcm;
           followUser(currUser, widget.targetUser, aleady);
@@ -44,6 +51,7 @@ class _FollowBtnState extends State<FollowBtn> {
                 data: {"type": "followUser"});
           }
         },
-        child: Text(txt));
+        child:
+            Text(txt, style: TextStyle(color: Theme.of(context).primaryColor)));
   }
 }

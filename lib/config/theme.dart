@@ -57,6 +57,7 @@ class PiTheme extends PiThemeInterface {
         style: ElevatedButton.styleFrom(
           primary: primaryColor,
           shape: RoundedRectangleBorder(
+              side: BorderSide(color: primaryColor, width: 1),
               borderRadius: BorderRadius.circular(buttonRadius)),
         ),
       ),
