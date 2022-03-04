@@ -17,6 +17,11 @@ class FeedFetched extends PostEvent {}
 
 class InitPosts extends PostEvent {}
 
+class UpdatePosts extends PostEvent {
+  final List<dynamic> posts;
+  UpdatePosts({required this.posts});
+}
+
 class FeedChangeOrder extends PostEvent {
   final PostOrder order;
   FeedChangeOrder({required this.order});

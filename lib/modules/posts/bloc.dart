@@ -62,15 +62,26 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     on<FeedChangeOrder>(_feedChangeOrder);
     on<MgzChangeOrder>(_mgzChangeOrder);
     on<InitPosts>(_initPosts);
+    on<UpdatePosts>(_updatePosts);
 
-    searchBloc.stream.listen((searchState) {
+    searchBloc.stream.listen((searchState) async {
       // debugPrint("===> PostBloc App Search Val For ${state.postType}");
+      if (isClosed) return;
       add(InitPosts());
-      final txts =
-          rmTagAllPrefix(searchState.appSearchController.text).split(" ");
-      final tags = strToTag(txts);
-      _fetchFeeds(tags: tags);
-      _fetchMgzs(tags: tags);
+      List<String>? tags;
+      if (searchState.appSearchController.text.isNotEmpty) {
+        final txts =
+            rmTagAllPrefix(searchState.appSearchController.text).split(" ");
+        tags = strToTag(txts);
+      }
+
+      if (postType == PostType.feed) {
+        final feeds = await _fetchFeeds(tags: tags);
+        add(UpdatePosts(posts: feeds));
+      } else if (postType == PostType.mgz) {
+        final mgzs = await _fetchMgzs(tags: tags);
+        add(UpdatePosts(posts: mgzs));
+      }
     });
   }
 
@@ -91,7 +102,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         hasReachedMax: false,
         orderBy: event.order));
     final feeds = await _fetchFeeds();
-    _updatePosts(feeds, emit);
+    add(UpdatePosts(posts: feeds));
   }
 
   _mgzChangeOrder(MgzChangeOrder event, Emitter<PostState> emit) async {
@@ -103,15 +114,15 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         hasReachedMax: false,
         orderBy: event.order));
     final mgzs = await _fetchMgzs();
-    _updatePosts(mgzs, emit);
+    add(UpdatePosts(posts: mgzs));
   }
 
   _postTurnChaged(PostTurnChange event, Emitter<PostState> emit) {
     emit(state.copyWith(myTurn: event.myTurn));
   }
 
-  Future<void> _updatePosts(
-      List<dynamic> newPosts, Emitter<PostState> emit) async {
+  Future<void> _updatePosts(UpdatePosts event, Emitter<PostState> emit) async {
+    final newPosts = event.posts;
     var posts = List.of(state.posts)..addAll(newPosts);
     newPosts.isEmpty || newPosts.length < feedFetchPSize
         ? emit(state.copyWith(
@@ -132,7 +143,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     if (state.hasReachedMax) return;
     try {
       final feeds = await _fetchFeeds();
-      _updatePosts(feeds, emit);
+      add(UpdatePosts(posts: feeds));
     } catch (_) {
       emit(state.copyWith(status: PostStatus.failure));
     }
@@ -145,7 +156,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     if (state.hasReachedMax) return;
     try {
       final mgzs = await _fetchMgzs();
-      _updatePosts(mgzs, emit);
+      add(UpdatePosts(posts: mgzs));
     } catch (_) {
       emit(state.copyWith(status: PostStatus.failure));
     }
