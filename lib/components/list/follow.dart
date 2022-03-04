@@ -14,7 +14,7 @@ class FollowUserList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
         leading: GoMyAvatar(user: targetUser),
-        title: Text(targetUser.name),
+        title: Text(targetUser.uId),
         subtitle: Text(targetUser.email ?? ""),
         trailing: FollowBtn(
           targetUser: targetUser,

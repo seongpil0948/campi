@@ -124,7 +124,7 @@ class _MyProfileInfo extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("@${user.name}",
+                            Text("@${user.uId}",
                                 style: Theme.of(context).textTheme.bodyText1),
                             const SizedBox(width: 5),
                             FollowBtn(targetUser: user)

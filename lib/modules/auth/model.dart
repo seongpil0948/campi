@@ -30,6 +30,7 @@ class PiUser {
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
 
+  String get uId => email?.split("@")[0] ?? name;
   String get name => displayName ?? email!.split("@")[0];
 
   bool get isEmpty => this == PiUser.empty();
