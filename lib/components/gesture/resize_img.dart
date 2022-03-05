@@ -51,8 +51,8 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
 
     final imgWidgetWidth = mq.size.width * aspect;
     final imgWidgetHeight = imgWidgetWidth / aspect;
-    final multipleW = photoRealRect[2] / imgWidgetWidth.round(); // > 1
-    final multipleH = photoRealRect[3] / imgWidgetHeight.round(); // > 1
+    final multipleW = imgWidth / imgWidgetWidth.round(); // > 1
+    final multipleH = imgHeight / imgWidgetHeight.round(); // > 1
     // final marginHorizon = (mq.size.width - imgWidgetWidth) / 2;
     final boxWidth = imgWidgetWidth; // 0.8 is picture ratio
     final boxHeight = boxWidth;
@@ -65,25 +65,30 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Stack(alignment: Alignment.center, children: [
+          // Transform.scale(
+          //     scale: _scaleFactor,
+          //     child: mat.Image.file(
+          //       widget.file,
+          //       fit: BoxFit.contain,
+          //       width: imgWidgetWidth,
+          //       height: imgWidgetHeight,
+          //     )),
           mat.Image.file(
             widget.file,
             fit: BoxFit.contain,
             width: imgWidgetWidth,
             height: imgWidgetHeight,
           ),
-          // Transform.scale(
-          //     scale: _scaleFactor,
-          //     child: mat.Image.file(widget.file, fit: BoxFit.contain)),
           Positioned.fromRect(
               rect: positionRect,
               child: GestureDetector(
                   behavior: HitTestBehavior.translucent,
-                  onScaleStart: (details) {
-                    _baseScaleFactor = _scaleFactor;
-                  },
+                  // onScaleStart: (details) {
+                  //   _baseScaleFactor = _scaleFactor;
+                  // },
                   onScaleUpdate: (details) {
                     setState(() {
-                      _scaleFactor = _baseScaleFactor * details.scale;
+                      // _scaleFactor = _baseScaleFactor * details.scale;
                       debugPrint(
                           "before dy: ${coord.dy} delta y: ${details.focalPointDelta.dy}");
                       var newDy = coord.dy + details.focalPointDelta.dy;
@@ -116,9 +121,9 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
               mat.ElevatedButton(
                   child: const Text("확인"),
                   onPressed: () async {
-                    debugPrint("On Dispose");
-                    final zoomedW = boxWidth - photoRealRect[2] / _scaleFactor;
-                    final zoomedH = boxHeight - photoRealRect[3] / _scaleFactor;
+                    // debugPrint("On Dispose, _scaleFactor: $_scaleFactor");
+                    final zoomedW = (boxWidth - imgWidth);
+                    final zoomedH = (boxHeight - imgWidgetHeight);
                     final trimed = copyCrop(
                         image!,
                         ((photoRealRect[0] + (zoomedW / 2)) * multipleW)
@@ -130,13 +135,10 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
                     // create a new file in temporary path with random file name.
                     File file =
                         File(tempDir.path + (Random().nextInt(100)).toString());
-                    final encoded = encodeNamedImage(trimed, widget.file.path);
-                    if (encoded != null) {
-                      file.writeAsBytesSync(encoded);
-                      widget.onCutted(file);
-                    } else {
-                      debugPrint("Result of encodeNamedImage is Null");
-                    }
+                    final encoded = encodeNamedImage(trimed, file.path) ??
+                        encodePng(trimed);
+                    file.writeAsBytesSync(encoded);
+                    widget.onCutted(file);
                   }),
               mat.ElevatedButton(
                   child: const Text("제출"),
