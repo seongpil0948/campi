@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class PiRouteDelegator extends RouterDelegate<PiPageConfig>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   final NavigationCubit navi;
+  final _navigatorKey = GlobalKey<NavigatorState>();
   PiRouteDelegator({required this.navi});
 
   @override
@@ -41,5 +42,5 @@ class PiRouteDelegator extends RouterDelegate<PiPageConfig>
   }
 
   @override
-  GlobalKey<NavigatorState>? get navigatorKey => GlobalKey();
+  GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
 }
