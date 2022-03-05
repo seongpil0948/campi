@@ -49,95 +49,97 @@ class _FeedPostWState extends State<FeedPostW> {
           height: mq.size.height,
           child: const Center(child: CircularProgressIndicator()));
     }
-    return Column(
-      children: [
-        SizedBox(
-          height: mq.size.height / 2.5,
-          width: mq.size.width - 20,
-          child: PiAssetCarousel(),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              _EditKind(),
-              _EditPrice(),
-              _EditAround(),
-            ],
+    return SafeArea(
+      child: Column(
+        children: [
+          SizedBox(
+            height: mq.size.height / 2,
+            width: mq.size.width,
+            child: PiAssetCarousel(),
           ),
-        ),
-        SelectMapW(onPick: (PickResult r) {
-          final l = r.geometry?.location;
-          if (l != null) {
-            context
-                .read<FeedCubit>()
-                .changeAddr(l.lat, l.lng, r.formattedAddress);
-          }
-        }),
-        const PiFeedEditors(),
-        const _HashList(),
-        Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(60, 0, 60, 30),
-                child: ElevatedButton(
-                  onPressed: () async {
-                    setState(() {
-                      loading = true;
-                    });
-                    List<PiFile> paths = [];
-                    try {
-                      final feed = context.read<FeedCubit>().state;
-                      final userId = feed.writerId;
-
-                      if (feed.files.isEmpty ||
-                          feed.files
-                              .where((element) =>
-                                  element.ftype == PiFileType.image)
-                              .isEmpty) {
-                        oneMoreImg(context);
-                        setState(() {
-                          loading = false;
-                        });
-                        return;
-                      }
-
-                      for (var f in feed.files) {
-                        var file = await uploadFilePathsToFirebase(
-                            f: f, path: 'clientUploads/$userId/${f.fName}');
-                        if (file != null) paths.add(file);
-                      }
-
-                      final newFeed = feed.copyWith(fs: paths);
-                      getCollection(c: Collections.feeds)
-                          .doc(newFeed.feedId)
-                          .set(newFeed.toJson())
-                          .then((value) async {
-                        final writer = await feed.writer;
-                        writer.feedIds.add(feed.feedId);
-                        writer.update();
-                        context.read<AppBloc>().fcm.sendPushMessage(
-                            tokens: writer.followers,
-                            data: {"tokenIsUid": true, "type": "postFeed"});
-                        context.read<NavigationCubit>().pop();
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: const [
+                _EditKind(),
+                _EditPrice(),
+                _EditAround(),
+              ],
+            ),
+          ),
+          SelectMapW(onPick: (PickResult r) {
+            final l = r.geometry?.location;
+            if (l != null) {
+              context
+                  .read<FeedCubit>()
+                  .changeAddr(l.lat, l.lng, r.formattedAddress);
+            }
+          }),
+          const PiFeedEditors(),
+          const _HashList(),
+          Row(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(60, 0, 60, 30),
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      setState(() {
+                        loading = true;
                       });
-                    } catch (e, s) {
-                      // debugPrint('!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
-                      FirebaseCrashlytics.instance.recordError(e, s,
-                          reason: 'Post Feed Error', fatal: true);
-                    }
-                  },
-                  child: const Center(
-                    child: Text("올리기"),
+                      List<PiFile> paths = [];
+                      try {
+                        final feed = context.read<FeedCubit>().state;
+                        final userId = feed.writerId;
+
+                        if (feed.files.isEmpty ||
+                            feed.files
+                                .where((element) =>
+                                    element.ftype == PiFileType.image)
+                                .isEmpty) {
+                          oneMoreImg(context);
+                          setState(() {
+                            loading = false;
+                          });
+                          return;
+                        }
+
+                        for (var f in feed.files) {
+                          var file = await uploadFilePathsToFirebase(
+                              f: f, path: 'clientUploads/$userId/${f.fName}');
+                          if (file != null) paths.add(file);
+                        }
+
+                        final newFeed = feed.copyWith(fs: paths);
+                        getCollection(c: Collections.feeds)
+                            .doc(newFeed.feedId)
+                            .set(newFeed.toJson())
+                            .then((value) async {
+                          final writer = await feed.writer;
+                          writer.feedIds.add(feed.feedId);
+                          writer.update();
+                          context.read<AppBloc>().fcm.sendPushMessage(
+                              tokens: writer.followers,
+                              data: {"tokenIsUid": true, "type": "postFeed"});
+                          context.read<NavigationCubit>().pop();
+                        });
+                      } catch (e, s) {
+                        // debugPrint('!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
+                        FirebaseCrashlytics.instance.recordError(e, s,
+                            reason: 'Post Feed Error', fatal: true);
+                      }
+                    },
+                    child: const Center(
+                      child: Text("올리기"),
+                    ),
                   ),
                 ),
-              ),
-            )
-          ],
-        )
-      ],
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 }

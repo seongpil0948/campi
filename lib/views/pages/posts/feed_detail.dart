@@ -51,81 +51,85 @@ class FeedDetailW extends StatelessWidget {
     // ignore: avoid_function_literals_in_foreach_calls
     feed.hashTags.forEach((tag) => tagMap[tag] =
         Text(rmTagAllPrefix(tag), style: tagTextSty(tag, context)));
-    return Stack(children: [
-      SingleChildScrollView(
-        child: GestureDetector(
-          onTap: () {
-            context.read<CommentBloc>().add(
-                ShowPostCmtW(targetComment: null, showPostCmtWiget: false));
-          },
-          child: Column(
-            children: [
-              SizedBox(
-                  width: mq.size.width,
-                  height: mq.size.height / 2,
-                  child: PiCarousel(fs: feed.files)),
-              Container(
-                  width: mq.size.width,
-                  padding: const EdgeInsets.only(left: leftPadding),
-                  margin: EdgeInsets.symmetric(vertical: mq.size.height / 100),
-                  child: FeedStatusRow(
-                    feed: feed,
-                    U: U,
-                  )),
-              if (feed.hashTags.isNotEmpty) ...[
+    return SafeArea(
+      child: Stack(children: [
+        SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () {
+              context.read<CommentBloc>().add(
+                  ShowPostCmtW(targetComment: null, showPostCmtWiget: false));
+            },
+            child: Column(
+              children: [
+                SizedBox(
+                    width: mq.size.width,
+                    height: mq.size.height / 2,
+                    child: PiCarousel(fs: feed.files)),
+                Container(
+                    width: mq.size.width,
+                    padding: const EdgeInsets.only(left: leftPadding),
+                    margin:
+                        EdgeInsets.symmetric(vertical: mq.size.height / 100),
+                    child: FeedStatusRow(
+                      feed: feed,
+                      U: U,
+                    )),
+                if (feed.hashTags.isNotEmpty) ...[
+                  const _Divider(),
+                  Wrap(
+                    runSpacing: 10.0,
+                    spacing: 10.0,
+                    children: feed.hashTags
+                        .map<Widget>((tag) => tagMap[tag]!)
+                        .toList(),
+                  )
+                ],
                 const _Divider(),
-                Wrap(
-                  runSpacing: 10.0,
-                  spacing: 10.0,
-                  children:
-                      feed.hashTags.map<Widget>((tag) => tagMap[tag]!).toList(),
+                PlaceInfo(iconImgH: iconImgH, feed: feed),
+                Container(
+                  margin: const EdgeInsets.symmetric(vertical: 20),
+                  child: RichText(
+                      text: TextSpan(
+                          children: feed.content
+                              .split(
+                                  ' ') /*find words that start with '@' and include a username that can also be found in the list of mentions*/
+                              .map((word) => TextSpan(
+                                  text: rmTagPrefix(word) + ' ',
+                                  style: tagMap.containsKey(word)
+                                      ? tagMap[word]!.style
+                                      : Theme.of(context).textTheme.bodyText2))
+                              .toList())),
+                ),
+                if (feed.lat != null && feed.lng != null)
+                  SizedBox(
+                      height: mq.size.height / 3,
+                      child: CampyMap(initLat: feed.lat, initLng: feed.lng)),
+                const _Divider(),
+                TextButton(
+                    onPressed: () {
+                      context.read<CommentBloc>().add(ShowPostCmtW(
+                          targetComment: null, showPostCmtWiget: true));
+                    },
+                    child: const Text("댓글 달기")),
+                Container(
+                  padding: const EdgeInsets.only(left: leftPadding),
+                  margin: const EdgeInsets.only(bottom: 40),
+                  child: CommentList(feedId: feed.feedId, userId: U.userId),
                 )
               ],
-              const _Divider(),
-              PlaceInfo(iconImgH: iconImgH, feed: feed),
-              Container(
-                margin: const EdgeInsets.symmetric(vertical: 20),
-                child: RichText(
-                    text: TextSpan(
-                        children: feed.content
-                            .split(
-                                ' ') /*find words that start with '@' and include a username that can also be found in the list of mentions*/
-                            .map((word) => TextSpan(
-                                text: rmTagPrefix(word) + ' ',
-                                style: tagMap.containsKey(word)
-                                    ? tagMap[word]!.style
-                                    : Theme.of(context).textTheme.bodyText2))
-                            .toList())),
-              ),
-              if (feed.lat != null && feed.lng != null)
-                SizedBox(
-                    height: mq.size.height / 3,
-                    child: CampyMap(initLat: feed.lat, initLng: feed.lng)),
-              const _Divider(),
-              TextButton(
-                  onPressed: () {
-                    context.read<CommentBloc>().add(ShowPostCmtW(
-                        targetComment: null, showPostCmtWiget: true));
-                  },
-                  child: const Text("댓글 달기")),
-              Container(
-                padding: const EdgeInsets.only(left: leftPadding),
-                margin: const EdgeInsets.only(bottom: 40),
-                child: CommentList(feedId: feed.feedId, userId: U.userId),
-              )
-            ],
+            ),
           ),
         ),
-      ),
-      BlocBuilder<CommentBloc, CommentState>(
-          builder: (context, state) => state.showPostCmtW
-              ? Positioned(
-                  bottom: 30,
-                  child: CommentPostW(
-                      commentController: _commentController, feed: feed),
-                )
-              : Container())
-    ]);
+        BlocBuilder<CommentBloc, CommentState>(
+            builder: (context, state) => state.showPostCmtW
+                ? Positioned(
+                    bottom: 30,
+                    child: CommentPostW(
+                        commentController: _commentController, feed: feed),
+                  )
+                : Container())
+      ]),
+    );
   }
 }
 
