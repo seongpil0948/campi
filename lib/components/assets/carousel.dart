@@ -71,9 +71,9 @@ class PiAssetCarousel extends StatelessWidget {
     final imgs = await _picker.pickMultiImage();
     final feedCubit = context.read<FeedCubit>();
     if (imgs != null) {
-      await showDialog(
+      await showGeneralDialog(
           context: context,
-          builder: (BuildContext nestedcontext) {
+          pageBuilder: (context, animation, secondaryAnimation) {
             return CarouselSlider.builder(
                 itemCount: imgs.length,
                 itemBuilder: (BuildContext context, int idx, int _) {
@@ -89,9 +89,15 @@ class PiAssetCarousel extends StatelessWidget {
                         feedCubit.changeFs(files);
                       });
                 },
-                options: pyCarouselOption);
+                options: CarouselOptions(
+                  enlargeCenterPage: true,
+                  viewportFraction: 1.0,
+                  aspectRatio: 1.0,
+                  enableInfiniteScroll: false,
+                  height: MediaQuery.of(context).size.height,
+                ));
           });
-      // feedCubit.changeFs(files);
+      feedCubit.changeFs(files);
     }
   }
 }

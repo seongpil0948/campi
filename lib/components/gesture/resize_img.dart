@@ -44,101 +44,107 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
 
   @override
   Widget build(BuildContext context) {
-    final aspect = photoRealRect[2] / photoRealRect[3];
+    final imgWidth = photoRealRect[2] - photoRealRect[0]; // 3024
+    final imgHeight = photoRealRect[3] - photoRealRect[1]; // 4032
+    final aspect = imgWidth / imgHeight; // 0.75
     final mq = MediaQuery.of(context);
-    //;
-    final photoWidgetWidth = mq.size.width * aspect;
-    final photoWidgetHeight = photoWidgetWidth / aspect;
-    final multipleW = photoRealRect[2] / photoWidgetWidth.round(); // > 1
-    final multipleH = photoRealRect[3] / photoWidgetHeight.round(); // > 1
-    // final marginHorizon = (mq.size.width - photoWidgetWidth) / 2;
-    final boxWidth = photoWidgetWidth; // 0.8 is picture ratio
+
+    final imgWidgetWidth = mq.size.width * aspect;
+    final imgWidgetHeight = imgWidgetWidth / aspect;
+    final multipleW = photoRealRect[2] / imgWidgetWidth.round(); // > 1
+    final multipleH = photoRealRect[3] / imgWidgetHeight.round(); // > 1
+    // final marginHorizon = (mq.size.width - imgWidgetWidth) / 2;
+    final boxWidth = imgWidgetWidth; // 0.8 is picture ratio
     final boxHeight = boxWidth;
     // final marginVertical = (mq.size.height - boxHeight) / 2;
-    final maxHeight = photoWidgetHeight;
+    final maxHeight = imgWidgetHeight;
     final positionRect = // Crop Target
         Rect.fromLTRB(0, coord.dy, mq.size.width, coord.dy + boxHeight);
-    final btnAreaHeight = mq.size.height / 15;
 
-    return SizedBox(
-      width: photoWidgetWidth,
-      height: photoWidgetHeight + btnAreaHeight,
-      child: Stack(clipBehavior: mat.Clip.none, children: [
-        mat.Image.file(widget.file, fit: BoxFit.contain),
-        // Transform.scale(
-        //     scale: _scaleFactor,
-        //     child: mat.Image.file(widget.file, fit: BoxFit.contain)),
-        Positioned.fromRect(
-            rect: positionRect,
-            child: GestureDetector(
-                behavior: HitTestBehavior.translucent,
-                onScaleStart: (details) {
-                  _baseScaleFactor = _scaleFactor;
-                },
-                onScaleUpdate: (details) {
-                  setState(() {
-                    _scaleFactor = _baseScaleFactor * details.scale;
-                    debugPrint(
-                        "before dy: ${coord.dy} delta y: ${details.focalPointDelta.dy}");
-                    var newDy = coord.dy + details.focalPointDelta.dy;
-                    if (newDy < 0) {
-                      newDy = 0;
-                    } else if (positionRect.bottom > maxHeight) {
-                      newDy = maxHeight - positionRect.height;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Stack(alignment: Alignment.center, children: [
+          mat.Image.file(
+            widget.file,
+            fit: BoxFit.contain,
+            width: imgWidgetWidth,
+            height: imgWidgetHeight,
+          ),
+          // Transform.scale(
+          //     scale: _scaleFactor,
+          //     child: mat.Image.file(widget.file, fit: BoxFit.contain)),
+          Positioned.fromRect(
+              rect: positionRect,
+              child: GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onScaleStart: (details) {
+                    _baseScaleFactor = _scaleFactor;
+                  },
+                  onScaleUpdate: (details) {
+                    setState(() {
+                      _scaleFactor = _baseScaleFactor * details.scale;
+                      debugPrint(
+                          "before dy: ${coord.dy} delta y: ${details.focalPointDelta.dy}");
+                      var newDy = coord.dy + details.focalPointDelta.dy;
+                      if (newDy < 0) {
+                        newDy = 0;
+                      } else if (positionRect.bottom > maxHeight) {
+                        newDy = maxHeight - positionRect.height;
+                      }
+                      coord = Offset(0, newDy);
+                      debugPrint(
+                          "after setState coord: $coord maxHeight: $maxHeight, rect bottom: ${positionRect.bottom}");
+                    });
+                  },
+                  child: Align(
+                    alignment: AlignmentDirectional.topStart,
+                    child: Container(
+                        width: boxWidth,
+                        height: boxHeight,
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          border: Border.all(color: Colors.blueGrey, width: 5),
+                        )),
+                  ))),
+        ]),
+        SizedBox(
+          width: mq.size.width / 2.5,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              mat.ElevatedButton(
+                  child: const Text("확인"),
+                  onPressed: () async {
+                    debugPrint("On Dispose");
+                    final zoomedW = boxWidth - photoRealRect[2] / _scaleFactor;
+                    final zoomedH = boxHeight - photoRealRect[3] / _scaleFactor;
+                    final trimed = copyCrop(
+                        image!,
+                        ((photoRealRect[0] + (zoomedW / 2)) * multipleW)
+                            .round(),
+                        ((coord.dy + (zoomedH / 2)) * multipleH).round(),
+                        ((boxWidth - (zoomedW / 2)) * multipleW).round(),
+                        ((boxHeight - (zoomedH / 2)) * multipleH).round());
+                    Directory tempDir = await getTemporaryDirectory();
+                    // create a new file in temporary path with random file name.
+                    File file =
+                        File(tempDir.path + (Random().nextInt(100)).toString());
+                    final encoded = encodeNamedImage(trimed, widget.file.path);
+                    if (encoded != null) {
+                      file.writeAsBytesSync(encoded);
+                      widget.onCutted(file);
+                    } else {
+                      debugPrint("Result of encodeNamedImage is Null");
                     }
-                    coord = Offset(0, newDy);
-                    debugPrint(
-                        "after setState coord: $coord maxHeight: $maxHeight, rect bottom: ${positionRect.bottom}");
-                  });
-                },
-                child: Align(
-                  alignment: AlignmentDirectional.topStart,
-                  child: Container(
-                      width: boxWidth,
-                      height: boxHeight,
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        border: Border.all(color: Colors.blueGrey, width: 5),
-                      )),
-                ))),
-        mat.Positioned(
-            bottom: -btnAreaHeight,
-            right: 0,
-            child: SizedBox(
-              width: mq.size.width / 2.5,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  mat.ElevatedButton(
-                      child: const Text("확인"),
-                      onPressed: () async {
-                        debugPrint("On Dispose");
-                        final zoomedW =
-                            boxWidth - photoRealRect[2] / _scaleFactor;
-                        final zoomedH =
-                            boxHeight - photoRealRect[3] / _scaleFactor;
-                        final trimed = copyCrop(
-                            image!,
-                            ((photoRealRect[0] + (zoomedW / 2)) * multipleW)
-                                .round(),
-                            ((coord.dy + (zoomedH / 2)) * multipleH).round(),
-                            ((boxWidth - (zoomedW / 2)) * multipleW).round(),
-                            ((boxHeight - (zoomedH / 2)) * multipleH).round());
-                        Directory tempDir = await getTemporaryDirectory();
-                        // create a new file in temporary path with random file name.
-                        File file = File(
-                            tempDir.path + (Random().nextInt(100)).toString());
-                        file.writeAsBytesSync(
-                            encodeNamedImage(trimed, widget.file.path)!);
-                        widget.onCutted(file);
-                      }),
-                  mat.ElevatedButton(
-                      child: const Text("제출"),
-                      onPressed: () => Navigator.of(context).pop())
-                ],
-              ),
-            ))
-      ]),
+                  }),
+              mat.ElevatedButton(
+                  child: const Text("제출"),
+                  onPressed: () => Navigator.of(context).pop())
+            ],
+          ),
+        )
+      ],
     );
   }
 }
