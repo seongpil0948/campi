@@ -52,10 +52,10 @@ class PiUser {
 
   PiUser({required User user})
       : displayName = user.displayName,
-        email = user.email,
+        email = user.email ?? user.providerData.first.email,
         userId = user.uid,
         emailVerified = user.emailVerified,
-        phoneNumber = user.phoneNumber,
+        phoneNumber = user.phoneNumber ?? user.providerData.first.phoneNumber,
         metadata = user.metadata,
         photoURL = user.photoURL!,
         providerData = user.providerData,
