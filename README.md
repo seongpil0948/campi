@@ -5,10 +5,10 @@
 * [FontAwesome](https://fontawesome.com/v5.15/icons?d=gallery&p=2)
 
 # TODO
-* 검색 
-* 이미지 받기
-* 썸네일 목록의 썸네일이 정사각형으로 보여야 한다.
-* 마이페이지 좁은 화면에서 
+* 검색 두번 눌러야 태그 검색 됌
+* 마이페이지 좁은 화면에서 깨짐 현상
+* Camping SNS 사진 안올라감
+* 확대 안됌.
 
 
 
