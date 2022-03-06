@@ -23,8 +23,8 @@ class AdjRatioImgW extends StatefulWidget {
 
 class _AdjRatioImgWState extends State<AdjRatioImgW> {
   // double scale = 0.0;
-  double _scaleFactor = 1.0;
-  double _baseScaleFactor = 1.0;
+  // double _scaleFactor = 1.0;
+  // double _baseScaleFactor = 1.0;
   Offset coord = const Offset(0, 0);
   List<int> photoRealRect = [];
   img.Image? image;
@@ -46,20 +46,35 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
   Widget build(BuildContext context) {
     final imgWidth = photoRealRect[2] - photoRealRect[0]; // 3024
     final imgHeight = photoRealRect[3] - photoRealRect[1]; // 4032
-    final aspect = imgWidth / imgHeight; // 0.75
+    final isLandScape = imgWidth > imgHeight;
+    final aspect =
+        isLandScape ? imgHeight / imgWidth : imgWidth / imgHeight; // 0.75
     final mq = MediaQuery.of(context);
 
-    final imgWidgetWidth = mq.size.width * aspect;
-    final imgWidgetHeight = imgWidgetWidth / aspect;
+    double imgWidgetWidth, imgWidgetHeight, boxWidth, boxHeight;
+    if (isLandScape) {
+      imgWidgetWidth = mq.size.width;
+      imgWidgetHeight = imgWidgetWidth * aspect;
+    } else {
+      imgWidgetWidth = mq.size.width * aspect;
+      imgWidgetHeight = imgWidgetWidth / aspect;
+    }
+
     final multipleW = imgWidth / imgWidgetWidth.round(); // > 1
     final multipleH = imgHeight / imgWidgetHeight.round(); // > 1
     // final marginHorizon = (mq.size.width - imgWidgetWidth) / 2;
-    final boxWidth = imgWidgetWidth; // 0.8 is picture ratio
-    final boxHeight = boxWidth;
+    if (isLandScape) {
+      boxWidth = imgWidgetHeight; // 0.8 is picture ratio
+      boxHeight = imgWidgetHeight;
+    } else {
+      boxWidth = imgWidgetWidth; // 0.8 is picture ratio
+      boxHeight = imgWidgetWidth;
+    }
+
     // final marginVertical = (mq.size.height - boxHeight) / 2;
-    final maxHeight = imgWidgetHeight;
     final positionRect = // Crop Target
-        Rect.fromLTRB(0, coord.dy, mq.size.width, coord.dy + boxHeight);
+        Rect.fromLTRB(
+            coord.dx, coord.dy, coord.dx + boxWidth, coord.dy + boxHeight);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -90,16 +105,21 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
                     setState(() {
                       // _scaleFactor = _baseScaleFactor * details.scale;
                       debugPrint(
-                          "before dy: ${coord.dy} delta y: ${details.focalPointDelta.dy}");
+                          "\n before dx: ${coord.dx}, dy: ${coord.dy} delta x: ${details.focalPointDelta.dx} y: ${details.focalPointDelta.dy} ");
                       var newDy = coord.dy + details.focalPointDelta.dy;
+                      var newDx = coord.dx + details.focalPointDelta.dx;
                       if (newDy < 0) {
                         newDy = 0;
-                      } else if (positionRect.bottom > maxHeight) {
-                        newDy = maxHeight - positionRect.height;
+                      } else if (newDx < 0) {
+                        newDx = 0;
+                      } else if (positionRect.bottom > imgWidgetHeight) {
+                        newDy = imgWidgetHeight - positionRect.height;
+                      } else if (positionRect.right > imgWidgetWidth) {
+                        newDx = imgWidgetWidth - positionRect.width;
                       }
-                      coord = Offset(0, newDy);
+                      coord = Offset(newDx, newDy);
                       debugPrint(
-                          "after setState coord: $coord maxHeight: $maxHeight, rect bottom: ${positionRect.bottom}");
+                          "after setState coord: $coord  rect  $positionRect");
                     });
                   },
                   child: Align(
@@ -122,15 +142,12 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
                   child: const Text("확인"),
                   onPressed: () async {
                     // debugPrint("On Dispose, _scaleFactor: $_scaleFactor");
-                    final zoomedW = (boxWidth - imgWidth);
-                    final zoomedH = (boxHeight - imgWidgetHeight);
                     final trimed = copyCrop(
                         image!,
-                        ((photoRealRect[0] + (zoomedW / 2)) * multipleW)
-                            .round(),
-                        ((coord.dy + (zoomedH / 2)) * multipleH).round(),
-                        ((boxWidth - (zoomedW / 2)) * multipleW).round(),
-                        ((boxHeight - (zoomedH / 2)) * multipleH).round());
+                        (positionRect.left * multipleW).round(),
+                        (positionRect.top * multipleH).round(),
+                        (positionRect.right * multipleW).round(),
+                        (positionRect.bottom * multipleH).round());
                     Directory tempDir = await getTemporaryDirectory();
                     // create a new file in temporary path with random file name.
                     File file =
