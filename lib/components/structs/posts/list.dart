@@ -2,14 +2,19 @@ import 'package:campi/components/select/single.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/feed/list.dart';
 import 'package:campi/components/structs/posts/mgz/list.dart';
+import 'package:campi/config/constants.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/modules/posts/events.dart';
 import 'package:campi/modules/posts/repo.dart';
+import 'package:campi/modules/posts/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: implementation_imports
+
+const mgzTabIdx = 0;
+const feedTabIdx = 1;
 
 class PostListTab extends StatefulWidget {
   /// FIXME: 탭바뀔때마다 두번씩 로드되고 있습니다.
@@ -31,11 +36,11 @@ class _PostListTabState extends State<PostListTab>
   late final TabController _controller;
   late final FeedBloc feedBloc;
   late final MgzBloc mgzBloc;
-  int selectedIndex = 0;
+  int selectedIndex = entryPostType == PostType.mgz ? mgzTabIdx : feedTabIdx;
 
   @override
   bool get wantKeepAlive => true;
-  bool get isMgzIdx => selectedIndex == 0 ? true : false;
+  bool get isMgzIdx => selectedIndex == mgzTabIdx ? true : false;
 
   @override
   void initState() {
@@ -108,12 +113,12 @@ class _PostListTabState extends State<PostListTab>
                       color: T.primaryColor),
                   tabs: [
                     PiTab(
-                        targetIndex: 0,
+                        targetIndex: mgzTabIdx,
                         txt: "캠핑 포스팅",
                         selectedIndex: selectedIndex,
                         T: T),
                     PiTab(
-                        targetIndex: 1,
+                        targetIndex: feedTabIdx,
                         txt: "캠핑 SNS",
                         selectedIndex: selectedIndex,
                         T: T)

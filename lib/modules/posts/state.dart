@@ -12,7 +12,7 @@ class PostState extends Equatable {
       this.hasReachedMax = false,
       required this.orderBy,
       required this.postType,
-      this.myTurn = false});
+      required this.myTurn});
 
   final PostStatus status;
   final List<dynamic> posts;

@@ -28,14 +28,22 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 
 class MgzBloc extends PostBloc {
   MgzBloc(SearchValBloc sBloc, BuildContext context, PostOrder orderBy)
-      : super(searchBloc: sBloc, postType: PostType.mgz, orderBy: orderBy) {
+      : super(
+            searchBloc: sBloc,
+            postType: PostType.mgz,
+            orderBy: orderBy,
+            myTurn: entryPostType == PostType.mgz) {
     add(MgzFetched());
   }
 }
 
 class FeedBloc extends PostBloc {
   FeedBloc(SearchValBloc sBloc, BuildContext context, PostOrder orderBy)
-      : super(searchBloc: sBloc, postType: PostType.feed, orderBy: orderBy) {
+      : super(
+            searchBloc: sBloc,
+            postType: PostType.feed,
+            orderBy: orderBy,
+            myTurn: entryPostType == PostType.feed) {
     add(FeedFetched());
   }
 }
@@ -48,8 +56,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   PostBloc(
       {required this.searchBloc,
       required PostType postType,
-      required PostOrder orderBy})
-      : super(PostState(postType: postType, orderBy: orderBy)) {
+      required PostOrder orderBy,
+      required bool myTurn})
+      : super(PostState(postType: postType, orderBy: orderBy, myTurn: myTurn)) {
     on<FeedFetched>(
       _onFeedFetched,
       transformer: throttleDroppable(throttleDuration),
@@ -164,9 +173,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   Future<List<FeedState>> _fetchFeeds({List<String>? tags}) async {
     final len = state.posts.length;
-    final lastMgz = len > 0 ? state.posts.last as FeedState : null;
+    final lastFeed = len > 0 ? state.posts.last as FeedState : null;
     final feeds = await postRepo.getFeeds(
-        lastObj: lastMgz,
+        lastObj: tags == null || tags.isEmpty ? lastFeed : null,
         pageSize: feedFetchPSize,
         orderBy: state.orderBy,
         tags: tags);
@@ -179,7 +188,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     final len = state.posts.length;
     final lastMgz = len > 0 ? state.posts.last as MgzState : null;
     final mgzs = await postRepo.getMgzs(
-        lastObj: lastMgz,
+        lastObj: tags == null || tags.isEmpty ? lastMgz : null,
         pageSize: mgzFetchPSize,
         orderBy: state.orderBy,
         tags: tags);
