@@ -71,7 +71,6 @@ class _PostListTabState extends State<PostListTab>
   }
 
   bool get _isBottom {
-    if (!widget.scrollController.hasClients) return false;
     final maxScroll = widget.scrollController.position.maxScrollExtent;
     final currentScroll = widget.scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);

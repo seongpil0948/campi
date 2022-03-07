@@ -149,7 +149,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     FeedFetched event,
     Emitter<PostState> emit,
   ) async {
-    if (state.hasReachedMax) return;
     try {
       final feeds = await _fetchFeeds();
       add(UpdatePosts(posts: feeds));
@@ -162,7 +161,6 @@ class PostBloc extends Bloc<PostEvent, PostState> {
     MgzFetched event,
     Emitter<PostState> emit,
   ) async {
-    if (state.hasReachedMax) return;
     try {
       final mgzs = await _fetchMgzs();
       add(UpdatePosts(posts: mgzs));

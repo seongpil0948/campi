@@ -4,7 +4,10 @@ import 'package:campi/components/signs/files.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/common/upload_file.dart';
+import 'package:campi/modules/posts/bloc.dart';
+import 'package:campi/modules/posts/events.dart';
 import 'package:campi/modules/posts/mgz/cubit.dart';
+import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/utils/io.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -141,6 +144,9 @@ class _MgzPostWState extends State<MgzPostW> {
             c.posting(context);
             widget.user.mgzIds.add(c.state.mgzId);
             widget.user.update();
+            context
+                .read<MgzBloc>()
+                .add(MgzChangeOrder(order: PostOrder.latest));
           },
           child: const Text("제출하기"),
         ),

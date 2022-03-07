@@ -1,6 +1,9 @@
 import 'package:campi/components/assets/carousel.dart';
 import 'package:campi/components/geo/pymap.dart';
 import 'package:campi/components/inputs/text_controller.dart';
+import 'package:campi/modules/posts/bloc.dart';
+import 'package:campi/modules/posts/events.dart';
+import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/components/select/single.dart';
 import 'package:campi/components/signs/files.dart';
@@ -118,7 +121,10 @@ class _FeedPostWState extends State<FeedPostW> {
                             .then((value) async {
                           final writer = await feed.writer;
                           writer.feedIds.add(feed.feedId);
-                          writer.update();
+                          await writer.update();
+                          context
+                              .read<FeedBloc>()
+                              .add(FeedChangeOrder(order: PostOrder.latest));
                           context.read<AppBloc>().fcm.sendPushMessage(
                               tokens: writer.followers,
                               data: {"tokenIsUid": true, "type": "postFeed"});
