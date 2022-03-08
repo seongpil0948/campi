@@ -123,5 +123,5 @@ class _FollowTabListState extends State<FollowTabList>
   }
 
   @override
-  bool get wantKeepAlive => true;
+  bool get wantKeepAlive => false;
 }

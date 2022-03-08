@@ -4,10 +4,11 @@ import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:campi/utils/moment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class PiUser {
+class PiUser extends Equatable {
   String userId;
   String? displayName;
   String? email;
@@ -39,7 +40,7 @@ class PiUser {
   bool get isNotEmpty => this != PiUser.empty();
   @override
   // ignore: hash_and_equals
-  bool operator ==(other) => userId == (other as PiUser).userId;
+  // bool operator ==(other) => userId == (other as PiUser).userId;
 
   Future<bool> update() async {
     final prefs = await SharedPreferences.getInstance();
@@ -136,4 +137,7 @@ class PiUser {
     j['updatedAt'] = updatedAt.toIso8601String();
     return j;
   }
+
+  @override
+  List<Object?> get props => [userId, followers, follows, feedIds, mgzIds];
 }

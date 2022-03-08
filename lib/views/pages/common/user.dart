@@ -27,6 +27,9 @@ class UserSnsInfo extends StatelessWidget {
         fontSize: 12);
 
     return BlocBuilder<AppBloc, AppState>(
+        buildWhen: (prev, curr) {
+          return prev.user != curr.user;
+        },
         builder: (context, state) => PiWhiteButton(
                 widget: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
