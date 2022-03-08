@@ -1,7 +1,10 @@
+import 'package:campi/config/constants.dart';
 import 'package:campi/config/theme.dart';
 import 'package:campi/firebase_options.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/repo.dart';
+import 'package:campi/modules/posts/bloc.dart';
+import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:campi/views/router/delegate.dart';
 import 'package:campi/views/router/page.dart';
@@ -49,25 +52,46 @@ class CampingApp extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final searchBloc = SearchValBloc(context: context);
     return RepositoryProvider.value(
       value: auth,
-      child: MultiBlocProvider(
-          providers: [
-            BlocProvider.value(value: navi),
-            BlocProvider(create: (_) => AppBloc(authRepo: auth)),
-            BlocProvider(create: (ctx) {
-              final searchBloc = SearchValBloc(context: ctx);
-              return searchBloc;
-            })
-          ],
-          child: MaterialApp.router(
-            title: 'Camping & Picknic',
-            theme: appTheme.lightTheme,
-            darkTheme: appTheme.darkTheme,
-            themeMode: appTheme.currentTheme,
-            routeInformationParser: PiRouteParser(),
-            routerDelegate: PiRouteDelegator(navi: navi),
-          )),
+      child: FutureBuilder<List>(
+          future: Future.wait([SharedPreferences.getInstance()]),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data!.isNotEmpty) {
+              final pref = snapshot.data![0] as SharedPreferences;
+              return MultiBlocProvider(
+                  providers: [
+                    BlocProvider(
+                        create: (context) => FeedBloc(
+                            searchBloc,
+                            context,
+                            orderFromStr(
+                                orderBy: pref.getString(prefFeedOrderKey) ??
+                                    defaultPostOrderStr))),
+                    BlocProvider(
+                        create: (context) => MgzBloc(
+                            searchBloc,
+                            context,
+                            orderFromStr(
+                                orderBy: pref.getString(prefMgzOrderKey) ??
+                                    defaultPostOrderStr))),
+                    BlocProvider.value(value: navi),
+                    BlocProvider(create: (_) => AppBloc(authRepo: auth)),
+                    BlocProvider(create: (context) => searchBloc)
+                  ],
+                  child: MaterialApp.router(
+                    title: 'Camping & Picknic',
+                    theme: appTheme.lightTheme,
+                    darkTheme: appTheme.darkTheme,
+                    themeMode: appTheme.currentTheme,
+                    routeInformationParser: PiRouteParser(),
+                    routerDelegate: PiRouteDelegator(navi: navi),
+                  ));
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
     );
   }
 }

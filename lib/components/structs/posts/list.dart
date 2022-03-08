@@ -78,7 +78,7 @@ class _PostListTabState extends State<PostListTab>
 
   void _onScroll() {
     if (_isBottom) {
-      mgzBloc.add(isMgzIdx ? MgzFetched() : FeedFetched());
+      isMgzIdx ? mgzBloc.add(MgzFetched()) : feedBloc.add(FeedFetched());
     }
   }
 
