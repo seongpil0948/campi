@@ -22,8 +22,8 @@ class AppState extends Equatable {
 
   AppState.unauthenticated() : this._(status: AppStatus.unauthenticated);
 
-  AppState copyWith(AppStatus? status, PiUser? user) =>
-      AppState(status: status ?? this.status, usr: user);
+  AppState copyWith({AppStatus? status, PiUser? user}) =>
+      AppState(status: status ?? this.status, usr: user ?? this.user);
 
   @override
   List<Object> get props => [status, user];

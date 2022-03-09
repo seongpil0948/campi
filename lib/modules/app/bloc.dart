@@ -29,6 +29,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         ) {
     on<AppUserChanged>(_onUserChanged);
     on<AppLogoutRequested>(_onLogoutRequested);
+    on<FollowToUser>(_followUser);
 
     _userSubscription = _authRepo.user.listen(
       (user) async {
@@ -41,6 +42,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
         }
       },
     );
+  }
+
+  void _followUser(FollowToUser event, Emitter<AppState> emit) {
+    if (event.me == event.you) return;
+    if (event.unfollow) {
+      event.me.follows.remove(event.you.userId);
+      event.you.followers.remove(event.me.userId);
+    } else {
+      event.me.follows.add(event.you.userId);
+      event.you.followers.add(event.me.userId);
+    }
+    event.me.update();
+    event.you.update();
+    emit(state.copyWith(user: event.me));
   }
 
   void _onUserChanged(AppUserChanged event, Emitter<AppState> emit) {

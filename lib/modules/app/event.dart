@@ -13,9 +13,14 @@ class AppUserChanged extends AppEvent {
   const AppUserChanged(this.user);
 
   final PiUser user;
+}
 
-  @override
-  List<Object> get props => [user];
+class FollowToUser extends AppEvent {
+  const FollowToUser(
+      {required this.me, required this.you, required this.unfollow});
+  final PiUser me;
+  final PiUser you;
+  final bool unfollow;
 }
 
 abstract class SearchEvent extends Equatable {
