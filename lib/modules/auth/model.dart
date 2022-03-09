@@ -8,6 +8,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// ignore: must_be_immutable
 class PiUser extends Equatable {
   String userId;
   String? displayName;
@@ -38,7 +39,6 @@ class PiUser extends Equatable {
 
   /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != PiUser.empty();
-  @override
   // ignore: hash_and_equals
   // bool operator ==(other) => userId == (other as PiUser).userId;
 

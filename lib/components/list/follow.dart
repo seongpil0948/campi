@@ -3,9 +3,9 @@ import 'package:campi/components/btn/follow.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:flutter/material.dart';
 
-class FollowUserList extends StatelessWidget {
+class FollowUserTile extends StatelessWidget {
   final PiUser targetUser;
-  const FollowUserList({
+  const FollowUserTile({
     required this.targetUser,
     Key? key,
   }) : super(key: key);

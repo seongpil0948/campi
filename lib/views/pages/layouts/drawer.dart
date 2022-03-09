@@ -121,11 +121,12 @@ class _DrawerHeader extends StatelessWidget {
                         margin: const EdgeInsets.only(top: 7),
                         height: 23,
                         child: PiWhiteButton(
+                            onPressed: () {},
                             widget: Text(
-                          "My Places",
-                          style:
-                              TextStyle(color: Theme.of(context).primaryColor),
-                        ))),
+                              "My Places",
+                              style: TextStyle(
+                                  color: Theme.of(context).primaryColor),
+                            ))),
                   ],
                 )
               ],

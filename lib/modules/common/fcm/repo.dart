@@ -46,7 +46,7 @@ class FcmRepo {
   Future<void> initFcm() async {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
-    // TODO: <Before Prod> Android Icon Img Locate
+    // FIXME: <after Prod> 푸시알림 이미지
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final IOSInitializationSettings initializationSettingsIOS =

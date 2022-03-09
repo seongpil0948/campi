@@ -1,15 +1,15 @@
 import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/components/btn/white.dart';
 import 'package:campi/components/structs/dialog/follow.dart';
-import 'package:campi/modules/app/bloc.dart';
+import 'package:campi/config/constants.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/user_repo.dart';
+import 'package:campi/modules/common/collections.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-const userRepo = UserRepo();
 
 class UserSnsInfo extends StatelessWidget {
   const UserSnsInfo({
@@ -25,39 +25,37 @@ class UserSnsInfo extends StatelessWidget {
         color: Theme.of(context).primaryColor,
         fontWeight: FontWeight.bold,
         fontSize: 12);
-
-    return BlocBuilder<AppBloc, AppState>(
-        buildWhen: (prev, curr) {
-          return prev.user != curr.user;
-        },
-        builder: (context, state) => PiWhiteButton(
+    final _userStream =
+        getCollection(c: Collections.users).doc(user.userId).snapshots();
+    return StreamBuilder<DocumentSnapshot>(
+        stream: _userStream,
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasError) {
+            return errorIndicator;
+          } else if (snapshot.hasData) {
+            final u =
+                PiUser.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+            return PiWhiteButton(
+                onPressed: () {
+                  debugPrint("HIHI");
+                  showFollow(context: context, targetUser: user);
+                },
                 widget: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("포스팅 ${user.feedIds.length + user.mgzIds.length}",
-                    style: sty),
-                TextButton(
-                  onPressed: () async => showFollow(
-                      context: context,
-                      currUser: state.user,
-                      users: await userRepo.usersByIds(state.user.followers)),
-                  child: Text(
-                    "팔로워 ${state.user.followers.length}",
-                    style: sty,
-                  ),
-                ),
-                TextButton(
-                  onPressed: () async => showFollow(
-                      context: context,
-                      currUser: state.user,
-                      users: await userRepo.usersByIds(state.user.follows)),
-                  child: Text(
-                    "팔로우 ${state.user.follows.length}",
-                    style: sty,
-                  ),
-                )
-              ],
-            )));
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text("포스팅 ${u.feedIds.length + u.mgzIds.length}",
+                        style: sty),
+                    Text("팔로워 ${u.followers.length}", style: sty),
+                    Text(
+                      "팔로우 ${u.follows.length}",
+                      style: sty,
+                    )
+                  ],
+                ));
+          } else {
+            return loadingIndicator;
+          }
+        });
   }
 }
 

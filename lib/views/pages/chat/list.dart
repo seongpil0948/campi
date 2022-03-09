@@ -50,7 +50,7 @@ class ChatRoomList extends StatelessWidget {
                       context.read<NavigationCubit>().push(
                           chatRoomPath, {"roomId": roomId, "you": users[idx]});
                     },
-                    child: FollowUserList(targetUser: users[idx]),
+                    child: FollowUserTile(targetUser: users[idx]),
                   ),
                   endActionPane: ActionPane(
                     motion: const ScrollMotion(),
