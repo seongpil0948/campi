@@ -82,10 +82,8 @@ class PiAssetCarousel extends StatelessWidget {
                   return AdjRatioImgW(
                       file: file,
                       onCutted: (newFile) {
-                        debugPrint("On Cutts");
                         files.add(PiFile.file(
                             file: newFile, ftype: PiFileType.image));
-                        debugPrint("changeFs: $files");
                         feedCubit.changeFs(files);
                       });
                 },

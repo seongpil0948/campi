@@ -34,15 +34,11 @@ class _PiSingleSelectState extends State<PiSingleSelect> {
       borderRadius: BorderRadius.circular(10.0),
       child: Container(
         color: widget.color ?? Theme.of(context).cardColor,
-        width: mq.size.width / 4,
+        width: mq.size.width / 7,
         child: DropdownButton<String>(
           alignment: AlignmentDirectional.centerEnd,
           value: widget.defaultVal,
-          hint: widget.hint != null
-              ? Padding(
-                  padding: EdgeInsets.only(left: mq.size.width / 14),
-                  child: Text(widget.hint!, style: sty))
-              : null,
+          hint: widget.hint != null ? Text(widget.hint!, style: sty) : null,
           underline: Container(),
           menuMaxHeight: mq.size.height / 2,
           dropdownColor: widget.color ?? Theme.of(context).cardColor,

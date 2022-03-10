@@ -133,35 +133,34 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
                         )),
                   ))),
         ]),
-        SizedBox(
-          width: mq.size.width / 2.5,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              mat.ElevatedButton(
-                  child: const Text("확인"),
-                  onPressed: () async {
-                    // debugPrint("On Dispose, _scaleFactor: $_scaleFactor");
-                    final trimed = copyCrop(
-                        image!,
-                        (positionRect.left * multipleW).round(),
-                        (positionRect.top * multipleH).round(),
-                        (positionRect.right * multipleW).round(),
-                        (positionRect.bottom * multipleH).round());
-                    Directory tempDir = await getTemporaryDirectory();
-                    // create a new file in temporary path with random file name.
-                    File file =
-                        File(tempDir.path + (Random().nextInt(100)).toString());
-                    final encoded = encodeNamedImage(trimed, file.path) ??
-                        encodePng(trimed);
-                    file.writeAsBytesSync(encoded);
-                    widget.onCutted(file);
-                  }),
-              mat.ElevatedButton(
-                  child: const Text("제출"),
-                  onPressed: () => Navigator.of(context).pop())
-            ],
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            mat.ElevatedButton(
+                child: const Text("    확인    "),
+                onPressed: () async {
+                  // debugPrint("On Dispose, _scaleFactor: $_scaleFactor");
+                  final trimed = copyCrop(
+                      image!,
+                      (positionRect.left * multipleW).round(),
+                      (positionRect.top * multipleH).round(),
+                      (positionRect.right * multipleW).round(),
+                      (positionRect.bottom * multipleH).round());
+                  Directory tempDir = await getTemporaryDirectory();
+                  // create a new file in temporary path with random file name.
+                  File file =
+                      File(tempDir.path + (Random().nextInt(100)).toString());
+                  final encoded =
+                      encodeNamedImage(trimed, file.path) ?? encodePng(trimed);
+                  file.writeAsBytesSync(encoded);
+                  widget.onCutted(file);
+                }),
+            const mat.SizedBox(width: 10),
+            mat.ElevatedButton(
+                child: const Text("    제출    "),
+                onPressed: () => Navigator.of(context).pop()),
+            mat.SizedBox(width: mq.size.width / 8),
+          ],
         )
       ],
     );

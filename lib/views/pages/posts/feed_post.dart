@@ -1,6 +1,7 @@
 import 'package:campi/components/assets/carousel.dart';
 import 'package:campi/components/geo/pymap.dart';
 import 'package:campi/components/inputs/text_controller.dart';
+import 'package:campi/config/constants.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/modules/posts/events.dart';
 import 'package:campi/modules/posts/repo.dart';
@@ -46,107 +47,107 @@ class _FeedPostWState extends State<FeedPostW> {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    if (loading == true) {
-      return SizedBox(
-          width: mq.size.width,
-          height: mq.size.height,
-          child: const Center(child: CircularProgressIndicator()));
-    }
-    return SafeArea(
-      child: Column(
-        children: [
-          SizedBox(
-            height: mq.size.height / 2,
-            width: mq.size.width,
-            child: PiAssetCarousel(),
-          ),
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: const [
-                _EditKind(),
-                _EditPrice(),
-                _EditAround(),
-              ],
-            ),
-          ),
-          SelectMapW(onPick: (PickResult r) {
-            final l = r.geometry?.location;
-            if (l != null) {
-              context
-                  .read<FeedCubit>()
-                  .changeAddr(l.lat, l.lng, r.formattedAddress);
-            }
-          }),
-          const PiFeedEditors(),
-          const _HashList(),
-          Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(60, 0, 60, 30),
-                  child: ElevatedButton(
-                    onPressed: () async {
-                      setState(() {
-                        loading = true;
-                      });
-                      List<PiFile> paths = [];
-                      try {
-                        final feed = context.read<FeedCubit>().state;
-                        final userId = feed.writerId;
-
-                        if (feed.files.isEmpty ||
-                            feed.files
-                                .where((element) =>
-                                    element.ftype == PiFileType.image)
-                                .isEmpty) {
-                          oneMoreImg(context);
-                          setState(() {
-                            loading = false;
-                          });
-                          return;
-                        }
-
-                        for (var f in feed.files) {
-                          var file = await uploadFilePathsToFirebase(
-                              f: f, path: 'clientUploads/$userId/${f.fName}');
-                          if (file != null) paths.add(file);
-                        }
-
-                        final newFeed = feed.copyWith(fs: paths);
-                        getCollection(c: Collections.feeds)
-                            .doc(newFeed.feedId)
-                            .set(newFeed.toJson())
-                            .then((value) async {
-                          final writer = await feed.writer;
-                          writer.feedIds.add(feed.feedId);
-                          await writer.update();
+    return loading == true
+        ? loadingIndicator
+        : SafeArea(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: mq.size.height / 2,
+                  width: mq.size.width,
+                  child: PiAssetCarousel(),
+                ),
+                Container(
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      const _EditKind(),
+                      const _EditPrice(),
+                      const _EditAround(),
+                      SelectMapW(onPick: (PickResult r) {
+                        final l = r.geometry?.location;
+                        if (l != null) {
                           context
-                              .read<FeedBloc>()
-                              .add(FeedChangeOrder(order: PostOrder.latest));
-                          context.read<AppBloc>().fcm.sendPushMessage(
-                              tokens: writer.followers,
-                              data: {"tokenIsUid": true, "type": "postFeed"});
-                          context.read<NavigationCubit>().pop();
-                        });
-                      } catch (e, s) {
-                        // debugPrint('!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
-                        FirebaseCrashlytics.instance.recordError(e, s,
-                            reason: 'Post Feed Error', fatal: true);
-                      }
-                    },
-                    child: const Center(
-                      child: Text("올리기"),
-                    ),
+                              .read<FeedCubit>()
+                              .changeAddr(l.lat, l.lng, r.formattedAddress);
+                        }
+                      })
+                    ],
                   ),
                 ),
-              )
-            ],
-          )
-        ],
-      ),
-    );
+                const PiFeedEditors(),
+                const _HashList(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(60, 0, 60, 30),
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            setState(() {
+                              loading = true;
+                            });
+                            List<PiFile> paths = [];
+                            try {
+                              final feed = context.read<FeedCubit>().state;
+                              final userId = feed.writerId;
+
+                              if (feed.files.isEmpty ||
+                                  feed.files
+                                      .where((element) =>
+                                          element.ftype == PiFileType.image)
+                                      .isEmpty) {
+                                oneMoreImg(context);
+                                setState(() {
+                                  loading = false;
+                                });
+                                return;
+                              }
+
+                              for (var f in feed.files) {
+                                var file = await uploadFilePathsToFirebase(
+                                    f: f,
+                                    path: 'clientUploads/$userId/${f.fName}');
+                                if (file != null) paths.add(file);
+                              }
+
+                              final newFeed = feed.copyWith(fs: paths);
+                              getCollection(c: Collections.feeds)
+                                  .doc(newFeed.feedId)
+                                  .set(newFeed.toJson())
+                                  .then((value) async {
+                                final writer = await feed.writer;
+                                writer.feedIds.add(feed.feedId);
+                                await writer.update();
+                                context.read<FeedBloc>().add(
+                                    FeedChangeOrder(order: PostOrder.latest));
+                                context.read<AppBloc>().fcm.sendPushMessage(
+                                    tokens: writer.followers,
+                                    data: {
+                                      "tokenIsUid": true,
+                                      "type": "postFeed"
+                                    });
+                                context.read<NavigationCubit>().pop();
+                              });
+                            } catch (e, s) {
+                              // debugPrint('!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
+                              FirebaseCrashlytics.instance.recordError(e, s,
+                                  reason: 'Post Feed Error', fatal: true);
+                            }
+                          },
+                          child: const Center(
+                            child: Text("올리기"),
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                )
+              ],
+            ),
+          );
   }
 }
 
@@ -193,8 +194,14 @@ class _EditKind extends StatelessWidget {
         onChange: (String? v) {
           context.read<FeedCubit>().changeKind(v ?? "");
         },
-        hint: "캠핑 종류",
-        items: const ["__오토 캠핑", "차박 캠핑", "글램핑", "트래킹", "카라반"]);
+        hint: "    캠핑 종류",
+        items: const [
+          "    오토 캠핑",
+          "    차박 캠핑",
+          "    글램핑",
+          "    트래킹",
+          "    카라반"
+        ]);
   }
 }
 
