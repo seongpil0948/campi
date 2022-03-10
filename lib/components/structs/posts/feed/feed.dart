@@ -1,13 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/components/btn/follow.dart';
+import 'package:campi/config/constants.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/utils/io.dart';
 import 'package:campi/utils/parsers.dart';
 import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
@@ -195,8 +198,9 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
     final U = widget.U;
     final F = widget.feed;
     final fcm = context.read<AppBloc>().fcm;
+    final marginer = SizedBox(width: MediaQuery.of(context).size.width / 15);
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           children: <Widget>[
@@ -228,20 +232,10 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                       color: Colors.black,
                     ),
                   ),
-            Text("  ${F.likeCnt}  "),
+            Text("${F.likeCnt}"),
           ],
         ),
-        // Row(
-        //   children: <Widget>[
-        //     Image(
-        //       image: AssetImage("assets/images/comment_icon.png"),
-        //       width: widget.iconSize['width'],
-        //       height: widget.iconSize['heihgt'],
-        //     ),
-        //     Text("  ${F}  "),
-        //     // Text("  ${feed.comments.length}  "),
-        //   ],
-        // ),
+        marginer,
         Row(
           children: <Widget>[
             IconButton(
@@ -279,7 +273,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                       });
                 },
                 icon: const Icon(Icons.share_rounded)),
-            Text("  ${F.sharedUserIds.length}  "),
+            Text(F.sharedUserIds.length.toString()),
           ],
         ),
         // Row(
@@ -288,14 +282,15 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
         //     Text("  ${F.bookmarkedUserIds.length}  "),
         //   ],
         // ),
+        marginer,
         if (widget.tSize == ThumnailSize.medium)
-          FutureBuilder<PiUser?>(
-              future: F.writer,
-              builder: (context, snapshot) {
-                return snapshot.hasData
-                    ? FollowBtn(targetUser: snapshot.data!)
-                    : const Center(child: CircularProgressIndicator());
-              })
+          StreamBuilder<DocumentSnapshot>(
+              stream: getCollection(c: Collections.users)
+                  .doc(F.writerId)
+                  .snapshots(),
+              builder: (context, snapshot) => snapshot.hasData
+                  ? FollowBtn(targetUser: PiUser.fromSnap(snapshot))
+                  : loadingIndicator)
       ],
     );
   }

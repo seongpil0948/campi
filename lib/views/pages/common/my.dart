@@ -101,8 +101,7 @@ class _MyProfileInfo extends StatelessWidget {
         stream: targetUser.userStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final user =
-                PiUser.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+            final user = PiUser.fromSnap(snapshot);
             return SizedBox(
               height: mSize.height / 2.3,
               width: mSize.width,
@@ -144,7 +143,7 @@ class _MyProfileInfo extends StatelessWidget {
               ]),
             );
           }
-          return const Center(child: CircularProgressIndicator());
+          return loadingIndicator;
         });
   }
 }

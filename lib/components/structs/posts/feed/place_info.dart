@@ -16,28 +16,32 @@ class PlaceInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
+    final height = mq.size.height / 15;
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       width: mq.size.width,
-      child:
-          Column(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-        Container(
-            width: mq.size.width,
-            padding: const EdgeInsets.fromLTRB(60, 0, 23, 0),
-            child: Row(children: [
-              Expanded(
-                  flex: 3, child: CampKind(iconImgH: iconImgH, feed: feed)),
-              Expanded(
-                  flex: 4,
-                  child: CampAddr(feed: feed, iconImgH: iconImgH, mq: mq)),
-            ])),
-        Container(
-            width: mq.size.width,
-            padding: const EdgeInsets.fromLTRB(60, 0, 20, 0),
-            child: Row(children: [
-              Expanded(child: CampPriceW(iconImgH: iconImgH, feed: feed)),
-              Expanded(child: CampAroundW(iconImgH: iconImgH, feed: feed)),
-            ])),
+      child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+        const SizedBox(width: 40),
+        SizedBox(
+            width: mq.size.width / 2,
+            height: height,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(child: CampKind(iconImgH: iconImgH, feed: feed)),
+                  Expanded(
+                      child: CampAddr(feed: feed, iconImgH: iconImgH, mq: mq)),
+                ])),
+        SizedBox(
+            height: height,
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(child: CampPriceW(iconImgH: iconImgH, feed: feed)),
+                  Expanded(child: CampAroundW(iconImgH: iconImgH, feed: feed)),
+                ])),
       ]),
     );
   }

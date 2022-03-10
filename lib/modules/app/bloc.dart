@@ -45,7 +45,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   }
 
   void _followUser(FollowToUser event, Emitter<AppState> emit) {
-    if (event.me == event.you) return;
+    // if (event.me == event.you) return;
     if (event.unfollow) {
       event.me.follows.remove(event.you.userId);
       event.you.followers.remove(event.me.userId);

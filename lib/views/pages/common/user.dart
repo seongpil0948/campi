@@ -33,13 +33,9 @@ class UserSnsInfo extends StatelessWidget {
           if (snapshot.hasError) {
             return errorIndicator;
           } else if (snapshot.hasData) {
-            final u =
-                PiUser.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+            final u = PiUser.fromSnap(snapshot);
             return PiWhiteButton(
-                onPressed: () {
-                  debugPrint("HIHI");
-                  showFollow(context: context, targetUser: user);
-                },
+                onPressed: () => showFollow(context: context, targetUser: user),
                 widget: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [

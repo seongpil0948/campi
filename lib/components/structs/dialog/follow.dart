@@ -68,8 +68,7 @@ class _FollowTabListState extends State<FollowTabList>
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            final u =
-                PiUser.fromJson(snapshot.data!.data() as Map<String, dynamic>);
+            final u = PiUser.fromSnap(snapshot);
             return FutureBuilder<List>(
                 future: Future.wait([
                   userRepo.usersByIds(u.followers),

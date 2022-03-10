@@ -6,6 +6,7 @@ import 'package:campi/utils/moment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 // ignore: must_be_immutable
@@ -63,6 +64,8 @@ class PiUser extends Equatable {
         refreshToken = user.refreshToken,
         tenantId = user.tenantId,
         hash = user.hashCode;
+  PiUser.fromSnap(AsyncSnapshot<DocumentSnapshot> snapshot)
+      : this.fromJson(snapshot.data!.data() as Map<String, dynamic>);
 
   PiUser.empty()
       : userId = '',
