@@ -111,23 +111,22 @@ class _MgzPostWState extends State<MgzPostW> {
     return SafeArea(
       bottom: false,
       child: Scaffold(
-        appBar: toolbar,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(mq.size.height / 7),
+          child: Column(
+            children: [
+              _TitleField(titleContoller: _titleContoller),
+              toolbar,
+            ],
+          ),
+        ),
         body: SingleChildScrollView(
           child: SizedBox(
             height: mq.size.height + 100,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                _TitleField(titleContoller: _titleContoller),
-                Expanded(
-                  flex: 10,
-                  child: Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 48),
-                    child: quillEditor,
-                  ),
-                ),
-              ],
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 48),
+              child: quillEditor,
             ),
           ),
         ),
