@@ -125,7 +125,7 @@ class _PostListTabState extends State<PostListTab>
             ),
             const Spacer(),
             const Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
+              padding: EdgeInsets.only(bottom: 8.0, right: 24.0),
               child: PostOrderSelector(),
             )
           ],

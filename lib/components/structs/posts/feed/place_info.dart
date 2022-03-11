@@ -16,7 +16,7 @@ class PlaceInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mq = MediaQuery.of(context);
-    final height = mq.size.height / 15;
+    final height = mq.size.height / 10;
     return Container(
       margin: const EdgeInsets.fromLTRB(0, 0, 0, 10),
       width: mq.size.width,
