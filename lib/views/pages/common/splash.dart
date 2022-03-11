@@ -45,7 +45,7 @@ class SplashW extends StatelessWidget {
       alignment: AlignmentDirectional.center,
       children: [
         Image.asset(
-          "assets/images/splash_back_${fileNumberByRatio(mq.devicePixelRatio)}.png",
+          "assets/images/splash_back_1.png",
           fit: BoxFit.cover,
           height: mq.size.height,
         ),
