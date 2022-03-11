@@ -31,7 +31,7 @@ dependencies:
   cloud_firestore: ^3.1.6
   firebase_messaging: ^11.2.5
   firebase_in_app_messaging: ^0.6.0+6
-  firebase_remote_config: ^1.0.4
+  firebase_remote_config: ^2.0.2
   firebase_storage: ^10.2.5
   firebase_auth: ^3.3.5
   google_sign_in: ^5.2.3
@@ -49,7 +49,7 @@ dependencies:
     path: package/bloc_concurrency
   stream_transform: ^2.0.0
   formz: ^0.4.1
-  flutter_quill: ^3.4.3
+  flutter_quill: ^4.0.8
   tuple: ^2.0.0
   flutter_slidable: ^1.2.0
   path_provider: ^2.0.8
