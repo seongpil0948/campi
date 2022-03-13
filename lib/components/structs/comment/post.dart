@@ -3,6 +3,7 @@ import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/comment/repo.dart';
+import 'package:campi/modules/common/fcm/model.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -113,15 +114,28 @@ Future<void> _submit(
   if (target == null) {
     postFeedComment(txt, user, feed);
     fcm.sendPushMessage(
-        tokens: w.messageToken,
-        data: {"type": "postComment"},
-        topic: 'feed-${feed.feedId}');
+        source: PushSource(
+            tokens: w.messageToken,
+            userIds: [],
+            data: DataSource(
+              pushType: "postComment",
+              targetPage: "feedDetail--${feed.feedId}",
+            ),
+            noti: NotiSource(
+                title: "댓글 알림",
+                body: "${user.displayName}님이 당신의 게시글에 댓글을 남겼어요")));
   } else {
     postFeedReply(txt, user, feed.feedId, target.id);
     fcm.sendPushMessage(
-        tokens: [...w.messageToken],
-        data: {"type": "postReply"},
-        topic: 'feed-${feed.feedId}_comment-${target.id}');
+        source: PushSource(
+            tokens: [],
+            userIds: [target.writerId],
+            data: DataSource(
+              pushType: "postReply",
+              targetPage: "feedDetail--${feed.feedId}",
+            ),
+            noti: NotiSource(
+                title: "답글 알림", body: "${user.displayName}님이 당신의  댓글을 남겼어요")));
   }
   _commentController.clear();
   context

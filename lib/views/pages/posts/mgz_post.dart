@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:campi/components/signs/files.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/common/fcm/model.dart';
 import 'package:campi/modules/common/upload_file.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/modules/posts/events.dart';
@@ -146,8 +147,19 @@ class _MgzPostWState extends State<MgzPostW> {
             context
                 .read<MgzBloc>()
                 .add(MgzChangeOrder(order: PostOrder.latest));
+            context.read<AppBloc>().fcm.sendPushMessage(
+                source: PushSource(
+                    tokens: [],
+                    userIds: widget.user.followers,
+                    data: DataSource(
+                        pushType: "postMgz",
+                        targetPage: "mgzDetail--${c.state.mgzId}"),
+                    noti: NotiSource(
+                        title: "캠핑 SNS 좋아요 알림",
+                        body:
+                            "${widget.user.displayName}님이 캠핑 포스팅 게시글을 올렸어요!")));
           },
-          child: const Text("제출하기"),
+          child: const Text("게시"),
         ),
       ),
     );

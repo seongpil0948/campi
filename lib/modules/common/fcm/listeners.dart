@@ -7,6 +7,7 @@ void onMessage(RemoteMessage message, FlutterLocalNotificationsPlugin plugin,
     AndroidNotificationChannel channel) {
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
+  debugPrint("\n ===> onMessage: $message plugin: $plugin, channel: $channel");
   if (notification != null && android != null && !kIsWeb) {
     plugin.show(
       notification.hashCode,
@@ -22,5 +23,5 @@ void onMessage(RemoteMessage message, FlutterLocalNotificationsPlugin plugin,
 /// To verify things are working, check out the native platform logs.
 /// Background & Terminated
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  debugPrint('Handling a background message ${message.messageId}');
+  debugPrint('Handling a background message $message');
 }

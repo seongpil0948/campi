@@ -1,5 +1,6 @@
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/common/fcm/model.dart';
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
@@ -33,8 +34,16 @@ class _FollowBtnState extends State<FollowBtn> {
               me: currUser, you: widget.targetUser, unfollow: aleady));
           if (!aleady) {
             fcm.sendPushMessage(
-                tokens: widget.targetUser.messageToken,
-                data: {"type": "followUser"});
+                source: PushSource(
+                    tokens: widget.targetUser.messageToken,
+                    userIds: [],
+                    data: DataSource(
+                      pushType: "followUser",
+                      targetPage: "myPage--${currUser.userId}",
+                    ),
+                    noti: NotiSource(
+                        title: "팔로우 알림",
+                        body: "${currUser.displayName}님이 당신을 팔로우 했어요!")));
           }
         },
         child:

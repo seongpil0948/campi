@@ -34,7 +34,7 @@ class _PiSingleSelectState extends State<PiSingleSelect> {
       borderRadius: BorderRadius.circular(10.0),
       child: Container(
         color: widget.color ?? Theme.of(context).cardColor,
-        width: mq.size.width / 7,
+        // width: mq.size.width / 4,
         child: DropdownButton<String>(
           alignment: AlignmentDirectional.centerEnd,
           value: widget.defaultVal,

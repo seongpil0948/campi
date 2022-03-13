@@ -2,6 +2,7 @@ import 'package:campi/components/assets/carousel.dart';
 import 'package:campi/components/geo/pymap.dart';
 import 'package:campi/components/inputs/text_controller.dart';
 import 'package:campi/config/constants.dart';
+import 'package:campi/modules/common/fcm/model.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/modules/posts/events.dart';
 import 'package:campi/modules/posts/repo.dart';
@@ -58,8 +59,7 @@ class _FeedPostWState extends State<FeedPostW> {
                   child: PiAssetCarousel(),
                 ),
                 Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 10),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -124,11 +124,17 @@ class _FeedPostWState extends State<FeedPostW> {
                                 context.read<FeedBloc>().add(
                                     FeedChangeOrder(order: PostOrder.latest));
                                 context.read<AppBloc>().fcm.sendPushMessage(
-                                    tokens: writer.followers,
-                                    data: {
-                                      "tokenIsUid": true,
-                                      "type": "postFeed"
-                                    });
+                                    source: PushSource(
+                                        tokens: [],
+                                        userIds: writer.followers,
+                                        data: DataSource(
+                                            pushType: "postFeed",
+                                            targetPage:
+                                                "feedDetail--${feed.feedId}"),
+                                        noti: NotiSource(
+                                            title: "캠핑 SNS 포스팅 알림",
+                                            body:
+                                                "${writer.displayName}님이 SNS 게시글을 올렸어요!")));
                                 context.read<NavigationCubit>().pop();
                               });
                             } catch (e, s) {

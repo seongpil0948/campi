@@ -5,21 +5,25 @@
 * [FontAwesome](https://fontawesome.com/v5.15/icons?d=gallery&p=2)
 
 # TODO
-* 스플래쉬 이미지 campy 변경 =>  이름 반영
-* 로그인 페이지 campy 변경 =>  이름 반영
-* 사진 자르기 
-  * 제출 -> 닫기
-* 뒤로가기 두번 눌러야 꺼지거나 토스트 메시지로 꺼진다고 하거나
-* 매거진 아이콘들에 가려짐
-* 마이페이지
-  * 다른사람 프로필 볼때 소개글 편집 안보이게
-  * 내가 내 프로필 볼때 팔로우 안보이게
-  * 내가 내프로필 볼때 소개글 편집 안보임
-* 팔로잉 목록
-
-
-## 정식 배포 전
-* 백엔드 API 이후 fcm.sendPushMessage 활성화
+* 공통
+  * 테스트 리스트 제작
+* App
+  * 로깅 필요 Crashristic
+  * 스플래쉬 이미지 campy 변경 =>  이름 반영
+  * 로그인 페이지 campy 변경 =>  이름 반영
+  * 사진 자르기 
+    * 제출 -> 닫기
+  * 뒤로가기 두번 눌러야 꺼지거나 토스트 메시지로 꺼진다고 하거나
+  * 매거진 아이콘들에 가려짐
+  * 마이페이지
+    * 다른사람 프로필 볼때 소개글 편집 안보이게
+    * 내가 내 프로필 볼때 팔로우 안보이게
+    * 내가 내프로필 볼때 소개글 편집 안보임
+  * 팔로잉 목록
+* App Engine
+  * 로깅 필요
+  * https://firebase.google.com/docs/cloud-messaging/send-message?hl=ko
+    * registration-token-not-registered 토큰들에 대해 삭제 할 수 있도록
 
 ## 정식 배포 후
 * BlocBuilder 나 Provider들 Consumer 나 Selector 사용해서 최적화

@@ -1,9 +1,13 @@
 // import 'dart:convert';
 
+import 'dart:convert';
+import 'package:dio/dio.dart';
+import 'package:campi/config/constants.dart';
 import 'package:campi/modules/common/fcm/listeners.dart';
+import 'package:campi/modules/common/fcm/model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-// import 'package:http/http.dart' as http;
 
 class FcmRepo {
   final inst = FirebaseMessaging.instance;
@@ -16,28 +20,13 @@ class FcmRepo {
   String? token;
   FcmRepo({this.token});
 
-  Future<void> sendPushMessage(
-      {required List<String> tokens,
-      Map<String, dynamic>? data,
-      Map<String, dynamic>? noti,
-      String? topic}) async {
-    try {
-      // debugPrint("Try To Send Push Msg Topic: $topic  tokens: $tokens, \n data: $data, \n noti: $noti ");
-      // final res =
-      //     await http.post(Uri.parse('https://api.rnfirebase.io/messaging/send'),
-      //         headers: <String, String>{
-      //           'Content-Type': 'application/json; charset=UTF-8',
-      //         },
-      //         body: jsonEncode({
-      //           'tokens': tokens,
-      //           'data': data, // {owner: JSON.stringify(owner),}
-      //           'notification': noti,
-      //           'topic': topic
-      //         }));
-      // debugPrint("Send Push Msg Succeed ${res.toString()}");
-    } catch (e) {
-      // debugPrint(e.toString());
-    }
+  Future<void> sendPushMessage({required PushSource source}) async {
+    final res = await Dio().post(
+      multiPushUrl,
+      data: source.bodyJson,
+      options: Options(contentType: Headers.formUrlEncodedContentType),
+    );
+    debugPrint("Push Msg Response: $res");
   }
 
   void subscribe(String topic) => inst.subscribeToTopic(topic);
@@ -46,7 +35,6 @@ class FcmRepo {
   Future<void> initFcm() async {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
-    // FIXME: <after Prod> 푸시알림 이미지
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     final IOSInitializationSettings initializationSettingsIOS =
@@ -76,12 +64,8 @@ class FcmRepo {
       provisional: false,
       sound: true,
     );
-
-    // debugPrint('User granted permission: ${settings.authorizationStatus}');
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
-    /// Update the iOS foreground notification presentation options to allow
-    /// heads up notifications.
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
       alert: true,
@@ -89,12 +73,11 @@ class FcmRepo {
       sound: true,
     );
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      onMessage(message, flutterLocalNotificationsPlugin, channel);
-    });
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) =>
+        onMessage(message, flutterLocalNotificationsPlugin, channel));
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      // debugPrint('A new onMessageOpenedApp event was published! $message');
+      debugPrint('A new onMessageOpenedApp event was published! $message');
     });
   }
 }

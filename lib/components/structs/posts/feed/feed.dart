@@ -4,6 +4,7 @@ import 'package:campi/config/constants.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/common/collections.dart';
+import 'package:campi/modules/common/fcm/model.dart';
 import 'package:campi/modules/posts/feed/state.dart';
 import 'package:campi/utils/io.dart';
 import 'package:campi/utils/parsers.dart';
@@ -206,26 +207,34 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
           children: <Widget>[
             U.favoriteFeeds.contains(F.feedId)
                 ? IconButton(
-                    onPressed: () async {
+                    onPressed: () {
                       U.favoriteFeeds.remove(F.feedId);
                       F.likeUserIds.remove(U.userId);
                       F.likeCnt = F.likeUserIds.length;
                       _updates(U);
-                      final w = await F.writer;
-                      fcm.sendPushMessage(
-                          tokens: w.messageToken,
-                          data: {"type": "postComment"});
                     },
                     icon: const Icon(
                       Icons.favorite,
                       color: Colors.red,
                     ))
                 : IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       U.favoriteFeeds.add(F.feedId);
                       F.likeUserIds.add(U.userId);
                       F.likeCnt = F.likeUserIds.length;
                       _updates(U);
+                      final w = await F.writer;
+                      fcm.sendPushMessage(
+                          source: PushSource(
+                              tokens: w.messageToken,
+                              userIds: [],
+                              data: DataSource(
+                                  pushType: "favorFeed",
+                                  targetPage: "feedDetail--${F.feedId}"),
+                              noti: NotiSource(
+                                  title: "캠핑 SNS 좋아요 알림",
+                                  body:
+                                      "${U.displayName}님이 당신의 SNS 에 좋아요를 눌렀어요!")));
                     },
                     icon: const Icon(
                       Icons.favorite_border_outlined,
