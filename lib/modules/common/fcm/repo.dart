@@ -1,6 +1,5 @@
 // import 'dart:convert';
 
-import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:campi/config/constants.dart';
 import 'package:campi/modules/common/fcm/listeners.dart';
@@ -17,7 +16,7 @@ class FcmRepo {
     importance: Importance.high,
   );
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-  String? token;
+  FcmToken? token;
   FcmRepo({this.token});
 
   Future<void> sendPushMessage({required PushSource source}) async {

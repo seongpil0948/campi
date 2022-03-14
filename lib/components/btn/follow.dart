@@ -35,7 +35,7 @@ class _FollowBtnState extends State<FollowBtn> {
           if (!aleady) {
             fcm.sendPushMessage(
                 source: PushSource(
-                    tokens: widget.targetUser.messageToken,
+                    tokens: widget.targetUser.rawFcmTokens,
                     userIds: [],
                     data: DataSource(
                       pushType: "followUser",

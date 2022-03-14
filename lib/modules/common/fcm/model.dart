@@ -1,3 +1,6 @@
+import 'package:campi/utils/moment.dart';
+import 'package:equatable/equatable.dart';
+
 class DataSource {
   String pushType;
   String? targetPage;
@@ -44,4 +47,23 @@ class PushSource {
   @override
   String toString() =>
       "Push Msg Topic: $topic userIds: $userIds  tokens: $tokens, \n data: $data, \n noti: $noti";
+}
+
+class FcmToken extends Equatable {
+  final DateTime createdAt;
+  final String token;
+  FcmToken({required this.token, DateTime? createdAt})
+      : createdAt = createdAt ?? DateTime.now();
+
+  @override
+  List<Object?> get props => [token];
+
+  FcmToken.fromJson(Map<String, dynamic> j)
+      : token = j['token'],
+        createdAt = timeStamp2DateTime(j['createdAt']);
+
+  Map<String, dynamic> toJson() => {
+        'token': token,
+        'createdAt': createdAt,
+      };
 }

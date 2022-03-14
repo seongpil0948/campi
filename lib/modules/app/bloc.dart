@@ -5,8 +5,10 @@ import 'package:campi/components/inputs/text_controller.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
+import 'package:campi/modules/common/fcm/model.dart';
 import 'package:campi/modules/common/fcm/repo.dart';
 import 'package:campi/modules/posts/bloc.dart';
+import 'package:campi/utils/moment.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -62,11 +64,20 @@ class AppBloc extends Bloc<AppEvent, AppState> {
     final u = event.user;
     if (u.isNotEmpty) {
       FirebaseMessaging.instance.getToken().then((token) {
-        fcm.token = token!;
-        if (!u.messageToken.contains(token)) {
-          u.messageToken.add(token);
+        if (token != null) {
+          final newToken = FcmToken(token: token);
+          fcm.token = newToken;
+          final now = DateTime.now();
+          for (var e in u.messageToken) {
+            if (daysBetween(e.createdAt, now).abs() > 7) {
+              u.messageToken.remove(e);
+            }
+          }
+          if (!u.messageToken.contains(newToken)) {
+            u.messageToken.add(newToken);
+          }
+          u.update();
         }
-        u.update();
       });
       return emit(AppState.authenticated(u));
     }

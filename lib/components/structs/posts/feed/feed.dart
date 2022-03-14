@@ -226,7 +226,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                       final w = await F.writer;
                       fcm.sendPushMessage(
                           source: PushSource(
-                              tokens: w.messageToken,
+                              tokens: w.rawFcmTokens,
                               userIds: [],
                               data: DataSource(
                                   pushType: "favorFeed",

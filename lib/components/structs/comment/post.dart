@@ -115,7 +115,7 @@ Future<void> _submit(
     postFeedComment(txt, user, feed);
     fcm.sendPushMessage(
         source: PushSource(
-            tokens: w.messageToken,
+            tokens: w.rawFcmTokens,
             userIds: [],
             data: DataSource(
               pushType: "postComment",

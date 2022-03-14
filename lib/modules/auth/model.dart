@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:campi/modules/auth/repo.dart';
 import 'package:campi/modules/common/collections.dart';
+import 'package:campi/modules/common/fcm/model.dart';
 import 'package:campi/utils/moment.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
@@ -23,7 +24,7 @@ class PiUser extends Equatable {
   String? tenantId;
   int hash;
   String get profileImage => photoURL;
-  List<String> messageToken = [];
+  List<FcmToken> messageToken = [];
   List<String> favoriteFeeds = [];
   List<String> followers = [];
   List<String> follows = [];
@@ -37,11 +38,9 @@ class PiUser extends Equatable {
   String get name => displayName ?? email!.split("@")[0];
 
   bool get isEmpty => this == PiUser.empty();
-
-  /// Convenience getter to determine whether the current user is not empty.
   bool get isNotEmpty => this != PiUser.empty();
-  // ignore: hash_and_equals
-  // bool operator ==(other) => userId == (other as PiUser).userId;
+  List<String> get rawFcmTokens =>
+      messageToken.map<String>((e) => e.token).toList();
 
   Future<bool> update() async {
     final prefs = await SharedPreferences.getInstance();
@@ -94,7 +93,9 @@ class PiUser extends Equatable {
         phoneNumber = j['phoneNumber'],
         photoURL = j['photoURL'],
         refreshToken = j['refreshToken'],
-        messageToken = List<String>.from(j['messageToken']),
+        messageToken = j['messageToken']
+            .map<FcmToken>((f) => FcmToken.fromJson(f))
+            .toList(),
         tenantId = j['tenantId'],
         hash = j['hash'],
         desc = j['desc'] ?? '',
@@ -122,7 +123,7 @@ class PiUser extends Equatable {
         'phoneNumber': phoneNumber,
         'photoURL': photoURL,
         'refreshToken': refreshToken,
-        'messageToken': messageToken,
+        'messageToken': messageToken.map((f) => f.toJson()).toList(),
         'tenantId': tenantId,
         'hash': hash,
         'favoriteFeeds': favoriteFeeds,
