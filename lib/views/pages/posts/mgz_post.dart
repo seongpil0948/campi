@@ -108,12 +108,12 @@ class _MgzPostWState extends State<MgzPostW> {
       showStrikeThrough: false,
       showUnderLineButton: false,
     );
-
+    final appBarH = Size.fromHeight(mq.size.height / 5);
     return SafeArea(
       bottom: false,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(mq.size.height / 7),
+          preferredSize: appBarH,
           child: Column(
             children: [
               _TitleField(titleContoller: _titleContoller),
@@ -122,8 +122,9 @@ class _MgzPostWState extends State<MgzPostW> {
           ),
         ),
         body: SingleChildScrollView(
-          child: SizedBox(
+          child: Container(
             height: mq.size.height + 100,
+            margin: EdgeInsets.only(top: appBarH.height / 6),
             child: Container(
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 48),
@@ -178,7 +179,7 @@ class _TitleField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24.0),
+      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
       child: TextField(
           style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
           decoration: InputDecoration(

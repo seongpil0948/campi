@@ -65,7 +65,7 @@ class ChatRoomBody extends StatelessWidget {
               itemCount: msgs.length,
               itemBuilder: (context, idx) {
                 final msg = msgs[idx];
-                return ChatW(msg: msg, fromMe: currUser == msg.writer);
+                return ChatW(msg: msg, fromMe: currUser.imYou(msg.writer));
               });
         });
   }

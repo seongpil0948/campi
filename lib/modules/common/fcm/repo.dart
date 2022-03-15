@@ -22,7 +22,7 @@ class FcmRepo {
   Future<void> sendPushMessage({required PushSource source}) async {
     final res = await Dio().post(
       multiPushUrl,
-      data: source.bodyJson,
+      data: FormData.fromMap(source.bodyJson),
       options: Options(contentType: Headers.formUrlEncodedContentType),
     );
     debugPrint("Push Msg Response: $res");

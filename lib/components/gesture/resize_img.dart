@@ -157,7 +157,7 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
                 }),
             const mat.SizedBox(width: 10),
             mat.ElevatedButton(
-                child: const Text("    제출    "),
+                child: const Text("    닫기    "),
                 onPressed: () => Navigator.of(context).pop()),
             mat.SizedBox(width: mq.size.width / 8),
           ],

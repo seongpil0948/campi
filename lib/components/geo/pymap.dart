@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'package:campi/views/pages/posts/feed_detail.dart';
+import 'package:campi/views/router/config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -101,22 +103,19 @@ class _SelectMapWState extends State<SelectMapW> {
   PickResult? selectedPlace;
   @override
   Widget build(BuildContext context) {
-    final s = MediaQuery.of(context).size;
+    final pConfig = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
     return Row(
       children: [
         Image.asset("assets/images/map_marker.png", height: 20),
         selectedPlace != null && selectedPlace!.formattedAddress != null
-            ? Container(
-                width: s.width / 2.5,
-                padding: const EdgeInsets.only(right: 5),
+            ? Expanded(
                 child: Text(
                   selectedPlace != null
-                      ? "${selectedPlace?.formattedAddress}"
+                      ? pConfig.page.child is FeedDetailPage
+                          ? selectedPlace!.formattedAddress!
+                          : "선택 완료"
                       : '',
-                  overflow: TextOverflow.fade,
-                  textAlign: TextAlign.center,
-                  maxLines: 1,
-                  softWrap: false,
+                  overflow: TextOverflow.ellipsis,
                 ),
               )
             : TextButton(

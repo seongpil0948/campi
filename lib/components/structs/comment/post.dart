@@ -135,7 +135,8 @@ Future<void> _submit(
               targetPage: "feedDetail--${feed.feedId}",
             ),
             noti: NotiSource(
-                title: "답글 알림", body: "${user.displayName}님이 당신의  댓글을 남겼어요")));
+                title: "답글 알림",
+                body: "${user.displayName}님이 당신의 댓글에 답글을 남겼어요")));
   }
   _commentController.clear();
   context

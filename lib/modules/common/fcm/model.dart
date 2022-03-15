@@ -60,10 +60,10 @@ class FcmToken extends Equatable {
 
   FcmToken.fromJson(Map<String, dynamic> j)
       : token = j['token'],
-        createdAt = timeStamp2DateTime(j['createdAt']);
+        createdAt = toDateTime(j['createdAt']);
 
   Map<String, dynamic> toJson() => {
         'token': token,
-        'createdAt': createdAt,
+        'createdAt': createdAt.toIso8601String(),
       };
 }

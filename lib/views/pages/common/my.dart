@@ -171,7 +171,7 @@ class __UserDescState extends State<_UserDesc> {
 
   @override
   Widget build(BuildContext context) {
-    final isMe = context.read<AppBloc>().state.user == widget.user;
+    final isMe = context.read<AppBloc>().state.user.imYou(widget.user);
     final T = Theme.of(context);
     final activeBorder = Theme.of(context)
         .inputDecorationTheme
@@ -197,28 +197,30 @@ class __UserDescState extends State<_UserDesc> {
             readOnly: !editMode,
             maxLines: 1,
             controller: _controller),
-        ElevatedButton(
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.white)),
-            onPressed: () async {
-              if (!isMe) return;
-              setState(() {
-                editMode = !editMode;
-              });
-              if (editMode == false) {
-                widget.user.desc = _controller.text;
-                await widget.user.update();
-              } else {
-                descFocusNode.requestFocus();
-              }
-            },
-            child: editMode
-                ? Text("소개글 제출",
-                    style: T.textTheme.caption!.copyWith(color: T.primaryColor))
-                : Text("소개글 편집",
-                    style:
-                        T.textTheme.caption!.copyWith(color: T.primaryColor)))
+        if (isMe)
+          ElevatedButton(
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.white)),
+              onPressed: () async {
+                if (!isMe) return;
+                setState(() {
+                  editMode = !editMode;
+                });
+                if (editMode == false) {
+                  widget.user.desc = _controller.text;
+                  await widget.user.update();
+                } else {
+                  descFocusNode.requestFocus();
+                }
+              },
+              child: editMode
+                  ? Text("소개글 제출",
+                      style:
+                          T.textTheme.caption!.copyWith(color: T.primaryColor))
+                  : Text("소개글 편집",
+                      style:
+                          T.textTheme.caption!.copyWith(color: T.primaryColor)))
       ],
     );
   }

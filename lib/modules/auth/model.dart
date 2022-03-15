@@ -36,11 +36,12 @@ class PiUser extends Equatable {
 
   String get uId => email?.split("@")[0] ?? name;
   String get name => displayName ?? email!.split("@")[0];
-
   bool get isEmpty => this == PiUser.empty();
   bool get isNotEmpty => this != PiUser.empty();
   List<String> get rawFcmTokens =>
       messageToken.map<String>((e) => e.token).toList();
+
+  bool imYou(PiUser other) => userId == other.userId;
 
   Future<bool> update() async {
     final prefs = await SharedPreferences.getInstance();
@@ -104,16 +105,8 @@ class PiUser extends Equatable {
         mgzIds = List<String>.from(j['mgzIds'] ?? []),
         followers = List<String>.from(j['followers']),
         follows = List<String>.from(j['follows']),
-        createdAt = j['createdAt'] is String
-            ? DateTime.parse(j['createdAt'])
-            : j['createdAt'] is DateTime
-                ? j['createdAt']
-                : timeStamp2DateTime(j['createdAt']),
-        updatedAt = j['updatedAt'] is String
-            ? DateTime.parse(j['updatedAt'])
-            : j['updatedAt'] is DateTime
-                ? j['updatedAt']
-                : timeStamp2DateTime(j['updatedAt']);
+        createdAt = toDateTime(j['createdAt']),
+        updatedAt = toDateTime(j['updatedAt']);
 
   Map<String, dynamic> toJson() => {
         'userId': userId,

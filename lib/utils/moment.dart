@@ -9,3 +9,9 @@ int daysBetween(DateTime from, DateTime to) {
 DateTime timeStamp2DateTime(Timestamp time) {
   return DateTime.fromMicrosecondsSinceEpoch(time.microsecondsSinceEpoch);
 }
+
+DateTime toDateTime(dynamic t) => t is String
+    ? DateTime.parse(t)
+    : t is DateTime
+        ? t
+        : timeStamp2DateTime(t);

@@ -17,6 +17,7 @@ class _FollowBtnState extends State<FollowBtn> {
   @override
   Widget build(BuildContext context) {
     final currUser = context.watch<AppBloc>().state.user;
+    if (currUser.imYou(widget.targetUser)) return Container();
     // if (widget.targetUser == currUser) return Container();
     final aleady = widget.targetUser.followers.contains(currUser.userId);
     final txt = aleady ? "팔로우 취소" : "팔로우 +";
