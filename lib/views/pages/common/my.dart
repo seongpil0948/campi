@@ -1,5 +1,6 @@
 import 'package:campi/components/btn/avatar.dart';
 import 'package:campi/components/btn/follow.dart';
+import 'package:campi/components/noti/snacks.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/list.dart';
 import 'package:campi/config/constants.dart';
@@ -35,7 +36,7 @@ class MyPage extends StatelessWidget {
     );
     return Scaffold(
         // drawer: const PiDrawer(),
-        body: body);
+        body: PiBackToClose(child: body));
   }
 }
 

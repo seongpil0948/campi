@@ -1,3 +1,4 @@
+import 'package:campi/components/noti/snacks.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:flutter/material.dart';
@@ -27,37 +28,39 @@ class MgzDetailPage extends StatelessWidget {
               Navigator.of(context).pop();
             }),
       ),
-      body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(color: Colors.grey.shade200),
+      body: PiBackToClose(
+        child: SafeArea(
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.grey.shade200),
+            ),
+            height: s.height - 50,
+            // child: RawKeyboardListener(
+            //   focusNode: _focusNode,
+            //   onKey: (evt) {
+            //     if (evt.isControlPressed && evt.character == 'b') {
+            //       final atts = _controller.getSelectionStyle().attributes;
+            //       debugPrint("Selected Attributes: $atts");
+            //       atts.keys.contains("bold")
+            //           ? _controller
+            //               .formatSelection(Attribute.clone(Attribute.bold, null))
+            //           : _controller.formatSelection(Attribute.bold);
+            //     }
+            //   },
+            child: QuillEditor(
+              controller: _controller,
+              scrollController: ScrollController(),
+              scrollable: true,
+              focusNode: _focusNode,
+              autoFocus: true,
+              readOnly: true,
+              expands: true,
+              padding: const EdgeInsets.all(8),
+              showCursor: false,
+            ),
+            // ),
           ),
-          height: s.height - 50,
-          // child: RawKeyboardListener(
-          //   focusNode: _focusNode,
-          //   onKey: (evt) {
-          //     if (evt.isControlPressed && evt.character == 'b') {
-          //       final atts = _controller.getSelectionStyle().attributes;
-          //       debugPrint("Selected Attributes: $atts");
-          //       atts.keys.contains("bold")
-          //           ? _controller
-          //               .formatSelection(Attribute.clone(Attribute.bold, null))
-          //           : _controller.formatSelection(Attribute.bold);
-          //     }
-          //   },
-          child: QuillEditor(
-            controller: _controller,
-            scrollController: ScrollController(),
-            scrollable: true,
-            focusNode: _focusNode,
-            autoFocus: true,
-            readOnly: true,
-            expands: true,
-            padding: const EdgeInsets.all(8),
-            showCursor: false,
-          ),
-          // ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:campi/components/noti/snacks.dart';
 import 'package:campi/components/signs/files.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
@@ -121,14 +122,16 @@ class _MgzPostWState extends State<MgzPostW> {
             ],
           ),
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            height: mq.size.height + 100,
-            margin: EdgeInsets.only(top: appBarH.height / 6),
+        body: PiBackToClose(
+          child: SingleChildScrollView(
             child: Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 48),
-              child: quillEditor,
+              height: mq.size.height + 100,
+              margin: EdgeInsets.only(top: appBarH.height / 6),
+              child: Container(
+                color: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 48),
+                child: quillEditor,
+              ),
             ),
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:campi/components/noti/snacks.dart';
 import 'package:campi/modules/auth/login/cubit.dart';
 import 'package:campi/modules/auth/login/state.dart';
 import 'package:campi/modules/auth/repo.dart';
@@ -26,7 +27,7 @@ class LoginPage extends StatelessWidget {
         ),
         BlocProvider(
             create: (_) => LoginCubit(context.read<AuthRepo>()),
-            child: LoginW(mq: mq, body2: body2))
+            child: PiBackToClose(child: LoginW(mq: mq, body2: body2)))
       ]),
     );
   }

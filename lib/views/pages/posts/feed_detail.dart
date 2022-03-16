@@ -1,5 +1,6 @@
 import 'package:campi/components/assets/carousel.dart';
 import 'package:campi/components/geo/pymap.dart';
+import 'package:campi/components/noti/snacks.dart';
 import 'package:campi/components/structs/comment/list.dart';
 import 'package:campi/components/structs/comment/post.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
@@ -22,10 +23,12 @@ class FeedDetailPage extends StatelessWidget {
     var _commentController = TextEditingController();
     return Scaffold(
         // drawer: const PiDrawer(),
-        body: BlocProvider(
-            create: (_) => CommentBloc(),
-            child: FeedDetailW(
-                feed: feed, commentController: _commentController)));
+        body: PiBackToClose(
+      child: BlocProvider(
+          create: (_) => CommentBloc(),
+          child:
+              FeedDetailW(feed: feed, commentController: _commentController)),
+    ));
   }
 }
 
