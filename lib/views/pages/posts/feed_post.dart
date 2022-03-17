@@ -67,14 +67,16 @@ class _FeedPostWState extends State<FeedPostW> {
                       const _EditKind(),
                       const _EditPrice(),
                       const _EditAround(),
-                      SelectMapW(onPick: (PickResult r) {
-                        final l = r.geometry?.location;
-                        if (l != null) {
-                          context
-                              .read<FeedCubit>()
-                              .changeAddr(l.lat, l.lng, r.formattedAddress);
-                        }
-                      })
+                      SizedBox(
+                          width: mq.size.width / 4,
+                          child: SelectMapW(onPick: (PickResult r) {
+                            final l = r.geometry?.location;
+                            if (l != null) {
+                              context
+                                  .read<FeedCubit>()
+                                  .changeAddr(l.lat, l.lng, r.formattedAddress);
+                            }
+                          }))
                     ],
                   ),
                 ),
@@ -141,7 +143,9 @@ class _FeedPostWState extends State<FeedPostW> {
                             } catch (e, s) {
                               // debugPrint('!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
                               FirebaseCrashlytics.instance.recordError(e, s,
-                                  reason: 'Post Feed Error', fatal: true);
+                                  reason: 'Post Feed Error',
+                                  fatal: true,
+                                  printDetails: true);
                             }
                           },
                           child: const Center(

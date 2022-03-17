@@ -4,6 +4,8 @@ import 'package:campi/views/router/state.dart';
 import 'package:dio/dio.dart';
 import 'package:campi/config/constants.dart';
 import 'package:campi/modules/common/fcm/model.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -72,22 +74,19 @@ class FcmRepo {
       sound: true,
     );
 
-    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
-      debugPrint('===FCM==> Handling a background message $message');
-      navi.naviFromStr(message.data['targetPage']);
-    });
+    FirebaseMessaging.onBackgroundMessage(_onBackMessage);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
       onMessage(message, flutterLocalNotificationsPlugin, channel);
-      navi.naviFromStr(message.data['targetPage']);
+      // navi.naviFromStr(message.data['targetPage']);
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-      // FirebaseMessaging.getInitialMessage
       final initialMsg = inst.getInitialMessage();
-
-      debugPrint(
-          '===FCM==> A new onMessageOpenedApp event was published! $message \n and initial msg: $initialMsg');
+      final msg =
+          '===FCM==> A new onMessageOpenedApp event was published! $message \n and initial msg: $initialMsg';
+      debugPrint(msg);
+      FirebaseCrashlytics.instance.log(msg);
       navi.naviFromStr(message.data['targetPage']);
     });
   }
@@ -97,8 +96,10 @@ void onMessage(RemoteMessage message, FlutterLocalNotificationsPlugin plugin,
     AndroidNotificationChannel channel) {
   RemoteNotification? notification = message.notification;
   AndroidNotification? android = message.notification?.android;
-  debugPrint(
-      "\n ===FCM==> onMessage: $message plugin: $plugin, channel: $channel");
+  final msg =
+      "\n ===FCM==> onMessage: $message plugin: $plugin, channel: $channel";
+  debugPrint(msg);
+  // FirebaseCrashlytics.instance.log(msg);
   if (notification != null && android != null && !kIsWeb) {
     plugin.show(
       notification.hashCode,
@@ -109,4 +110,11 @@ void onMessage(RemoteMessage message, FlutterLocalNotificationsPlugin plugin,
       ),
     );
   }
+}
+
+Future<void> _onBackMessage(RemoteMessage message) async {
+  // final msg = '===FCM==> Handling a background message $message';
+  // debugPrint(msg);
+  // FirebaseCrashlytics.instance.log(msg);
+  // navi.naviFromStr(message.data['targetPage']);
 }

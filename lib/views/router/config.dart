@@ -18,6 +18,8 @@ class PiPageConfig extends Equatable {
   ///Our route description, this is where actual builds happen
   late final MaterialPage page;
 
+  String? get currScreenName => (page.child.key as ValueKey?)?.value;
+
   PiPageConfig({
     required String location,
     this.name,

@@ -3,8 +3,10 @@ import 'dart:convert';
 
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/common/collections.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +52,17 @@ class AuthRepo {
       if (c.exists) {
         user = PiUser.fromJson(c.data() as Map<String, dynamic>);
       } else {
-        user = PiUser(user: fireUser);
+        try {
+          /// Sign Up
+          user = PiUser(user: fireUser);
+          FirebaseAnalytics.instance
+              .logSignUp(signUpMethod: fireUser.providerData[0].providerId);
+        } catch (e, s) {
+          FirebaseCrashlytics.instance
+              .recordError(e, s, reason: "Error On SignUp");
+          FirebaseAnalytics.instance
+              .logSignUp(signUpMethod: "Anonymous Provider");
+        }
       }
       final j = user.toJsonCache();
       prefs.setString(userCacheKey, jsonEncode(j));
@@ -101,6 +113,7 @@ class AuthRepo {
           idToken: googleAuth.idToken,
         );
         await _firebaseAuth.signInWithCredential(credential);
+        FirebaseAnalytics.instance.logLogin(loginMethod: "google");
       } else {
         throw const LogInWithGoogleFailure();
       }
@@ -123,6 +136,7 @@ class AuthRepo {
         email: email,
         password: password,
       );
+      FirebaseAnalytics.instance.logLogin(loginMethod: "own");
     } on FirebaseAuthException catch (e) {
       throw LogInWithEmailAndPasswordFailure.fromCode(e.code);
     } catch (_) {

@@ -84,8 +84,9 @@ class _PostListTabState extends State<PostListTab>
   @override
   void dispose() {
     widget.scrollController
-      ..removeListener(_onScroll)
-      ..dispose();
+      ..dispose()
+      ..removeListener(_onScroll);
+
     _controller.dispose();
     super.dispose();
   }

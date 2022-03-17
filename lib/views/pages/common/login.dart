@@ -74,22 +74,22 @@ class LoginW extends StatelessWidget {
             ),
             InkWell(
                 onTap: () => context.read<LoginCubit>().logInWithGoogle(),
-                child: LoginButton(
+                child: GoogleLoginButton(
                   mq: mq,
                   aImg: "assets/images/google_login.png",
                 ))
             // const SizedBox(height: 10),
             // InkWell(
             //     onTap: () {},
-            //     child: LoginButton(
+            //     child: GoogleLoginButton(
             //         mq: mq, aImg: "assets/images/facebook_login.png"))
           ],
         ));
   }
 }
 
-class LoginButton extends StatelessWidget {
-  const LoginButton({
+class GoogleLoginButton extends StatelessWidget {
+  const GoogleLoginButton({
     Key? key,
     required this.mq,
     required this.aImg,

@@ -1,10 +1,25 @@
 import 'package:campi/views/router/config.dart';
 import 'package:campi/views/router/stack.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NavigationCubit extends Cubit<NavigationStack> {
   NavigationCubit(List<PiPageConfig> initialPages)
-      : super(NavigationStack(initialPages));
+      : super(NavigationStack(initialPages)) {
+    debugPrint("Navi Initial Page: $initialPages");
+    FirebaseAnalytics.instance
+        .setCurrentScreen(screenName: initialPages.last.currScreenName);
+  }
+
+  @override
+  void onChange(Change<NavigationStack> change) {
+    super.onChange(change);
+    FirebaseAnalytics.instance
+        .setCurrentScreen(screenName: change.nextState.last.currScreenName);
+
+    // FirebaseAnalytics.instance.setCurrentScreen(screenName: screenName);
+  }
 
   void push(String path, [Map<String, dynamic>? args]) {
     PiPageConfig config = PiPageConfig(location: path, args: args);

@@ -36,18 +36,19 @@ MaterialPage getPage(PiPageConfig config) =>
     wgetToPage(config, _routes[config.route]?.call() ?? const UnknownPage());
 
 Map<String, Widget Function()> _routes = {
-  rootPath: () => const PostListPage(),
-  splashPath: () => const SplashPage(),
-  loginPath: () => const LoginPage(),
-  postListPath: () => const PostListPage(),
-  mgzPostPath: () => const MgzPostPage(),
-  feedPostPath: () => const FeedPostPage(),
-  mgzDetailPath: () => const MgzDetailPage(),
-  feedDetailPath: () => const FeedDetailPage(),
+  rootPath: () => const PostListPage(key: ValueKey("PostListPage")),
+  splashPath: () => const SplashPage(key: ValueKey("SplashPage")),
+  loginPath: () => const LoginPage(key: ValueKey("LoginPage")),
+  postListPath: () => const PostListPage(key: ValueKey("PostListPage")),
+  mgzPostPath: () => const MgzPostPage(key: ValueKey("MagazinePostPage")),
+  feedPostPath: () => const FeedPostPage(key: ValueKey("FeedPostPage")),
+  mgzDetailPath: () => const MgzDetailPage(key: ValueKey("MagazineDetailPage")),
+  feedDetailPath: () => const FeedDetailPage(key: ValueKey("FeedDetailPage")),
   // Un Implements ....
-  storePath: () => const StorePage(),
-  myPath: () => const MyPage(),
-  storeDetailPath: () => const ProductDetailPage(),
-  chatPath: () => const ChatPage(),
-  chatRoomPath: () => const ChatRoomPage(),
+  storePath: () => const StorePage(key: ValueKey("StorePage")),
+  myPath: () => const MyPage(key: ValueKey("MyPage")),
+  storeDetailPath: () =>
+      const ProductDetailPage(key: ValueKey("ProductDetailPage")),
+  chatPath: () => const ChatPage(key: ValueKey("ChatPage")),
+  chatRoomPath: () => const ChatRoomPage(key: ValueKey("ChatRoomPage")),
 };
