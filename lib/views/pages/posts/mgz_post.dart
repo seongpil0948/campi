@@ -11,6 +11,7 @@ import 'package:campi/modules/posts/events.dart';
 import 'package:campi/modules/posts/mgz/cubit.dart';
 import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/utils/io.dart';
+import 'package:campi/views/router/page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart' as q;
@@ -157,7 +158,7 @@ class _MgzPostWState extends State<MgzPostW> {
                     userIds: widget.user.followers,
                     data: DataSource(
                         pushType: "postMgz",
-                        targetPage: "mgzDetail--${c.state.mgzId}"),
+                        targetPage: "$mgzDetailPath?magazine=${c.state.mgzId}"),
                     noti: NotiSource(
                         title: "캠핑 SNS 좋아요 알림",
                         body:

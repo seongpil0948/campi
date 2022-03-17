@@ -29,9 +29,9 @@ class PiTheme extends PiThemeInterface {
       hintColor: Colors.black,
       cardColor: Colors.grey[100],
       colorScheme: const ColorScheme.light().copyWith(
-          secondary: secondColor,
-          primary: primaryColor,
-          primaryVariant: primaryVarColor),
+        secondary: secondColor,
+        primary: primaryColor,
+      ),
       scaffoldBackgroundColor: Colors.white,
       cardTheme: CardTheme(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),

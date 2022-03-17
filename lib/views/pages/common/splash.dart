@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:campi/utils/responsive_ratio.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';

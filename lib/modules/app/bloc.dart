@@ -20,9 +20,9 @@ part 'state.dart';
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthRepo _authRepo;
   late final StreamSubscription<Future<PiUser>> _userSubscription;
-  final fcm = FcmRepo(token: null);
+  final FcmRepo fcm;
 
-  AppBloc({required AuthRepo authRepo})
+  AppBloc({required AuthRepo authRepo, required this.fcm})
       : _authRepo = authRepo,
         super(
           authRepo.currentUser.isNotEmpty

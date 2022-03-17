@@ -230,7 +230,8 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                               userIds: [],
                               data: DataSource(
                                   pushType: "favorFeed",
-                                  targetPage: "feedDetail--${F.feedId}"),
+                                  targetPage:
+                                      "$feedDetailPath?feedId=${F.feedId}"),
                               noti: NotiSource(
                                   title: "캠핑 SNS 좋아요 알림",
                                   body:

@@ -1,11 +1,11 @@
 // import 'dart:convert';
 
+import 'package:campi/views/router/state.dart';
 import 'package:dio/dio.dart';
 import 'package:campi/config/constants.dart';
-import 'package:campi/modules/common/fcm/listeners.dart';
 import 'package:campi/modules/common/fcm/model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class FcmRepo {
@@ -17,7 +17,8 @@ class FcmRepo {
   );
   final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   FcmToken? token;
-  FcmRepo({this.token});
+  NavigationCubit navi;
+  FcmRepo({this.token, required this.navi});
 
   Future<void> sendPushMessage({required PushSource source}) async {
     final res = await Dio().post(
@@ -63,7 +64,6 @@ class FcmRepo {
       provisional: false,
       sound: true,
     );
-    FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
     await FirebaseMessaging.instance
         .setForegroundNotificationPresentationOptions(
@@ -72,11 +72,41 @@ class FcmRepo {
       sound: true,
     );
 
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) =>
-        onMessage(message, flutterLocalNotificationsPlugin, channel));
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      debugPrint('A new onMessageOpenedApp event was published! $message');
+    FirebaseMessaging.onBackgroundMessage((RemoteMessage message) async {
+      debugPrint('===FCM==> Handling a background message $message');
+      navi.naviFromStr(message.data['targetPage']);
     });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      onMessage(message, flutterLocalNotificationsPlugin, channel);
+      navi.naviFromStr(message.data['targetPage']);
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+      // FirebaseMessaging.getInitialMessage
+      final initialMsg = inst.getInitialMessage();
+
+      debugPrint(
+          '===FCM==> A new onMessageOpenedApp event was published! $message \n and initial msg: $initialMsg');
+      navi.naviFromStr(message.data['targetPage']);
+    });
+  }
+}
+
+void onMessage(RemoteMessage message, FlutterLocalNotificationsPlugin plugin,
+    AndroidNotificationChannel channel) {
+  RemoteNotification? notification = message.notification;
+  AndroidNotification? android = message.notification?.android;
+  debugPrint(
+      "\n ===FCM==> onMessage: $message plugin: $plugin, channel: $channel");
+  if (notification != null && android != null && !kIsWeb) {
+    plugin.show(
+      notification.hashCode,
+      notification.title,
+      notification.body,
+      NotificationDetails(
+        android: AndroidNotificationDetails(channel.id, channel.name),
+      ),
+    );
   }
 }

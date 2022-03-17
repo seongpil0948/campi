@@ -38,9 +38,10 @@ void main() async {
     navi = NavigationCubit([PiPageConfig(location: rootPath)]);
   }
 
-  await FcmRepo().initFcm();
+  final fcm = FcmRepo(navi: navi);
+  await fcm.initFcm();
   BlocOverrides.runZoned(
-    () => runApp(CampingApp(navi: navi, auth: auth)),
+    () => runApp(CampingApp(navi: navi, auth: auth, fcm: fcm)),
     blocObserver: AppBlocObserver(),
   );
 }
@@ -48,7 +49,9 @@ void main() async {
 class CampingApp extends StatelessWidget {
   final NavigationCubit navi;
   final AuthRepo auth;
-  const CampingApp({Key? key, required this.navi, required this.auth})
+  final FcmRepo fcm;
+  const CampingApp(
+      {Key? key, required this.navi, required this.auth, required this.fcm})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -77,7 +80,8 @@ class CampingApp extends StatelessWidget {
                                 orderBy: pref.getString(prefMgzOrderKey) ??
                                     defaultPostOrderStr))),
                     BlocProvider.value(value: navi),
-                    BlocProvider(create: (_) => AppBloc(authRepo: auth)),
+                    BlocProvider(
+                        create: (_) => AppBloc(authRepo: auth, fcm: fcm)),
                     BlocProvider(create: (context) => searchBloc)
                   ],
                   child: MaterialApp.router(

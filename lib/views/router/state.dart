@@ -28,4 +28,27 @@ class NavigationCubit extends Cubit<NavigationStack> {
     final PiPageConfig config = PiPageConfig(location: path, args: args);
     emit(state.pushBeneathCurrent(config));
   }
+
+  void naviFromStr(String targetPage) {
+    /// TODO: Check & Debug lib/modules/common/fcm/repo.dart
+    /// "feedDetail?feedId=123&mgzId=456"; => PATH: feedDetail , ARGS: {feedId: [123], mgzId: [456]}
+    /// "feedDetail?feedId=14636346"; => PATH: feedDetail, ARGS: {feedId: [14636346]}
+    /// "feedDetail"; => PATH: feedDetail, ARGS: {}
+    Map<String, List<String>> args = {};
+    final splited = targetPage.split("?");
+    final path = splited[0];
+
+    if (splited.length > 1) {
+      String argStr = splited[1];
+      for (String param in argStr.split("&")) {
+        var a = param.split("=");
+        if (args.containsKey(a[0])) {
+          args[a[0]]!.add(a[1]);
+        } else {
+          args[a[0]] = [a[1]];
+        }
+      }
+    }
+    push(path, args);
+  }
 }

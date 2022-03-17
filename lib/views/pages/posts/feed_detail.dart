@@ -5,9 +5,11 @@ import 'package:campi/components/structs/comment/list.dart';
 import 'package:campi/components/structs/comment/post.dart';
 import 'package:campi/components/structs/posts/feed/feed.dart';
 import 'package:campi/components/structs/posts/feed/place_info.dart';
+import 'package:campi/config/constants.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/posts/feed/state.dart';
+import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/utils/parsers.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +21,26 @@ class FeedDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
-    final feed = args.args['selectedFeed'] as FeedState;
+    FeedState feed;
+    Widget child;
     var _commentController = TextEditingController();
+
+    if (args.args['selectedFeed'] != null) {
+      feed = args.args['selectedFeed'] as FeedState;
+      child = FeedDetailW(feed: feed, commentController: _commentController);
+    } else {
+      child = FutureBuilder<FeedState>(
+          future: PostRepo.getFeedById(args.args['feedId'] as String),
+          builder: (context, snapshot) => snapshot.hasData
+              ? FeedDetailW(
+                  feed: snapshot.data!, commentController: _commentController)
+              : loadingIndicator);
+    }
+
     return Scaffold(
         // drawer: const PiDrawer(),
         body: PiBackToClose(
-      child: BlocProvider(
-          create: (_) => CommentBloc(),
-          child:
-              FeedDetailW(feed: feed, commentController: _commentController)),
+      child: BlocProvider(create: (_) => CommentBloc(), child: child),
     ));
   }
 }

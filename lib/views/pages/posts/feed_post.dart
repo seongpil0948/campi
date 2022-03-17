@@ -15,6 +15,7 @@ import 'package:campi/modules/common/upload_file.dart';
 import 'package:campi/modules/posts/feed/cubit.dart';
 import 'package:campi/utils/io.dart';
 import 'package:campi/utils/parsers.dart';
+import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
@@ -130,7 +131,7 @@ class _FeedPostWState extends State<FeedPostW> {
                                         data: DataSource(
                                             pushType: "postFeed",
                                             targetPage:
-                                                "feedDetail--${feed.feedId}"),
+                                                "$feedDetailPath?feedId=${feed.feedId}"),
                                         noti: NotiSource(
                                             title: "캠핑 SNS 포스팅 알림",
                                             body:

@@ -30,4 +30,5 @@ String? docCheckMedia(Document dc, {checkImg = false, checkVideo = false}) {
       return j[i].values.single['video'];
     }
   }
+  return null;
 }

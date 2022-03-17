@@ -13,6 +13,7 @@ TextStyle? tagTextSty(String tag, BuildContext context) {
   } else if (tag.startsWith("!")) {
     return TextStyle(color: Theme.of(context).errorColor);
   }
+  return null;
 }
 
 List<String> strToTag(List<String> l) {

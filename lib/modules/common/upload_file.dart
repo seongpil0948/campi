@@ -37,4 +37,5 @@ Future<PiFile?> uploadFilePathsToFirebase(
     }
     // ...
   }
+  return null;
 }

@@ -1,6 +1,7 @@
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/common/fcm/model.dart';
+import 'package:campi/views/router/page.dart';
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';
@@ -40,7 +41,7 @@ class _FollowBtnState extends State<FollowBtn> {
                     userIds: [],
                     data: DataSource(
                       pushType: "followUser",
-                      targetPage: "myPage--${currUser.userId}",
+                      targetPage: "$myPath?selectedUser=${currUser.userId}",
                     ),
                     noti: NotiSource(
                         title: "팔로우 알림",

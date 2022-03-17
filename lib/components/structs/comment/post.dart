@@ -5,6 +5,7 @@ import 'package:campi/modules/comment/comment.dart';
 import 'package:campi/modules/comment/repo.dart';
 import 'package:campi/modules/common/fcm/model.dart';
 import 'package:campi/modules/posts/feed/state.dart';
+import 'package:campi/views/router/page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -119,7 +120,7 @@ Future<void> _submit(
             userIds: [],
             data: DataSource(
               pushType: "postComment",
-              targetPage: "feedDetail--${feed.feedId}",
+              targetPage: "$feedDetailPath?feedId=${feed.feedId}",
             ),
             noti: NotiSource(
                 title: "댓글 알림",
@@ -132,7 +133,7 @@ Future<void> _submit(
             userIds: [target.writerId],
             data: DataSource(
               pushType: "postReply",
-              targetPage: "feedDetail--${feed.feedId}",
+              targetPage: "$feedDetailPath?feedId=${feed.feedId}",
             ),
             noti: NotiSource(
                 title: "답글 알림",

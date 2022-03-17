@@ -18,7 +18,6 @@ const feedTabIdx = 1;
 
 class PostListTab extends StatefulWidget {
   /// FIXME: 탭바뀔때마다 두번씩 로드되고 있습니다.
-  /// 뒤로가기 하거나 다른페이지 갔다가 오면 포스트목록, 정렬 유지되어야함
   final ThumnailSize thumbSize;
   final PostsUser? targetUser;
   final scrollController = ScrollController();

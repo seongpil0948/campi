@@ -37,6 +37,11 @@ Query<Object?> addOrder(Query ref, PostOrder orderBy) {
 }
 
 class PostRepo {
+  static Future<FeedState> getFeedById(String feedId) async {
+    final ss = await getCollection(c: Collections.feeds).doc(feedId).get();
+    return FeedState.fromJson(ss.data() as Map<String, dynamic>);
+  }
+
   Future<List<FeedState>> getFeedByUser(String userId) async {
     final snapshot = await getCollection(c: Collections.feeds)
         .where('writerId', isEqualTo: userId)
@@ -62,6 +67,11 @@ class PostRepo {
           query.startAfter([lastObj.toJson()[orderToStr(orderBy: orderBy)]]);
     }
     return query.limit(pageSize).get();
+  }
+
+  static Future<MgzState> getMgzById(String mgzId) async {
+    final ss = await getCollection(c: Collections.magazines).doc(mgzId).get();
+    return MgzState.fromJson(ss.data() as Map<String, dynamic>);
   }
 
   Future<List<MgzState>> getMgzByUser(String userId) async {
