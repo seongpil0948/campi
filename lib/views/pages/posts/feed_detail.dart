@@ -30,7 +30,7 @@ class FeedDetailPage extends StatelessWidget {
       child = FeedDetailW(feed: feed, commentController: _commentController);
     } else {
       child = FutureBuilder<FeedState>(
-          future: PostRepo.getFeedById(args.args['feedId'] as String),
+          future: PostRepo.getFeedById(args.args['feedId'][0] as String),
           builder: (context, snapshot) => snapshot.hasData
               ? FeedDetailW(
                   feed: snapshot.data!, commentController: _commentController)

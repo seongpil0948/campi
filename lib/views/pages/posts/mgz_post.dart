@@ -158,7 +158,8 @@ class _MgzPostWState extends State<MgzPostW> {
                     userIds: widget.user.followers,
                     data: DataSource(
                         pushType: "postMgz",
-                        targetPage: "$mgzDetailPath?magazine=${c.state.mgzId}"),
+                        targetPage:
+                            "$mgzDetailPath?magazineId=${c.state.mgzId}"),
                     noti: NotiSource(
                         title: "캠핑 SNS 좋아요 알림",
                         body:

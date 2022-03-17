@@ -23,20 +23,45 @@ class MyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final arg = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
-    final selectedUser = arg.args['selectedUser'] as PiUser;
-    final body = FutureBuilder<PostsUser>(
-      future: getPostsUser(context: context, selectedUser: selectedUser),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        final targetUser = snapshot.data!;
-        return _MyPageW(currUser: targetUser);
-      },
-    );
+    PiUser selectedUser;
+    Widget child;
+    if (arg.args['selectedUser'] != null) {
+      selectedUser = arg.args['selectedUser'] as PiUser;
+      child = FutureBuilder<PostsUser>(
+        future: getPostsUser(context: context, selectedUser: selectedUser),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final targetUser = snapshot.data!;
+          return _MyPageW(currUser: targetUser);
+        },
+      );
+    } else {
+      child = FutureBuilder<PiUser>(
+        future: UserRepo.getUserById(arg.args['selectedUserId'][0] as String),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return loadingIndicator;
+          }
+          selectedUser = snapshot.data!;
+          return FutureBuilder<PostsUser>(
+            future: getPostsUser(context: context, selectedUser: selectedUser),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return loadingIndicator;
+              }
+              final targetUser = snapshot.data!;
+              return _MyPageW(currUser: targetUser);
+            },
+          );
+        },
+      );
+    }
+
     return Scaffold(
         // drawer: const PiDrawer(),
-        body: PiBackToClose(child: body));
+        body: PiBackToClose(child: child));
   }
 }
 

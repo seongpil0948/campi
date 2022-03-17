@@ -63,7 +63,7 @@ class LoginW extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              "assets/images/logo_w_2.png",
+              "assets/images/logo_w.png",
               width: mq.size.width / 2,
               height: mq.size.height / 15,
               fit: BoxFit.cover,

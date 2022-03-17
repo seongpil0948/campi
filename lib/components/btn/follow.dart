@@ -41,7 +41,7 @@ class _FollowBtnState extends State<FollowBtn> {
                     userIds: [],
                     data: DataSource(
                       pushType: "followUser",
-                      targetPage: "$myPath?selectedUser=${currUser.userId}",
+                      targetPage: "$myPath?selectedUserId=${currUser.userId}",
                     ),
                     noti: NotiSource(
                         title: "팔로우 알림",
