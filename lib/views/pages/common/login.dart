@@ -70,7 +70,7 @@ class LoginW extends StatelessWidget {
             ),
             VmarginContainer(
               mq: mq,
-              w: Text("캠피 서비스 이용을 위해 SNS 로그인을 해주세요", style: body2),
+              w: Text("캠핑 클라우드 서비스 이용을 위해 SNS 로그인을 해주세요", style: body2),
             ),
             InkWell(
                 onTap: () => context.read<LoginCubit>().logInWithGoogle(),

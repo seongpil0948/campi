@@ -57,9 +57,9 @@
 	<key>NSContactsUsageDescription</key>
 	<string>연락처 데이터를 제공 받아도 될까요?</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>우리 캠피에게 위치를 허용해주세요 쀵!</string>
+	<string>우리 캠클에게 위치를 허용해주세요!!</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>우리 캠피에게 위치를 허용해주세요 쀵@</string>
+	<string>우리 캠클에게 위치를 허용해주세요@@</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Post videos to profile</string>
 	<key>NSMotionUsageDescription</key>
