@@ -32,7 +32,7 @@ void main() async {
   final auth = AuthRepo(prefs: prefs);
   await auth.user.first;
   NavigationCubit navi;
-  if (auth.currentUser.isEmpty) {
+  if (auth.cachedUser.isEmpty) {
     navi = NavigationCubit([PiPageConfig(location: splashPath)]);
   } else {
     navi = NavigationCubit([PiPageConfig(location: rootPath)]);
@@ -81,7 +81,8 @@ class CampingApp extends StatelessWidget {
                                     defaultPostOrderStr))),
                     BlocProvider.value(value: navi),
                     BlocProvider(
-                        create: (_) => AppBloc(authRepo: auth, fcm: fcm)),
+                        create: (_) =>
+                            AppBloc(authRepo: auth, fcm: fcm, navi: navi)),
                     BlocProvider(create: (context) => searchBloc)
                   ],
                   child: MaterialApp.router(

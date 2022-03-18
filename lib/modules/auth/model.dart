@@ -36,8 +36,8 @@ class PiUser extends Equatable {
 
   String get uId => email?.split("@")[0] ?? name;
   String get name => displayName ?? email!.split("@")[0];
-  bool get isEmpty => this == PiUser.empty();
-  bool get isNotEmpty => this != PiUser.empty();
+  bool get isEmpty => this == PiUser.empty() || userId.length < 3;
+  bool get isNotEmpty => this != PiUser.empty() && userId.length > 3;
   List<String> get rawFcmTokens =>
       messageToken.map<String>((e) => e.token).toList();
 

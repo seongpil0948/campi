@@ -9,6 +9,8 @@ import 'package:campi/modules/common/fcm/model.dart';
 import 'package:campi/modules/common/fcm/repo.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/utils/moment.dart';
+import 'package:campi/views/router/page.dart';
+import 'package:campi/views/router/state.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -21,12 +23,13 @@ class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthRepo _authRepo;
   late final StreamSubscription<Future<PiUser>> _userSubscription;
   final FcmRepo fcm;
+  final NavigationCubit navi;
 
-  AppBloc({required AuthRepo authRepo, required this.fcm})
+  AppBloc({required AuthRepo authRepo, required this.fcm, required this.navi})
       : _authRepo = authRepo,
         super(
-          authRepo.currentUser.isNotEmpty
-              ? AppState.authenticated(authRepo.currentUser)
+          authRepo.cachedUser.isNotEmpty
+              ? AppState.authenticated(authRepo.cachedUser)
               : AppState.unauthenticated(),
         ) {
     on<AppUserChanged>(_onUserChanged);
@@ -81,6 +84,7 @@ class AppBloc extends Bloc<AppEvent, AppState> {
       });
       return emit(AppState.authenticated(u));
     }
+    navi.clearAndPush(loginPath);
     return emit(AppState.unauthenticated());
   }
 

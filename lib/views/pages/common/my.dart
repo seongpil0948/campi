@@ -86,7 +86,6 @@ class _MyPageW extends StatelessWidget {
               child: Text("로그아웃", style: Theme.of(context).textTheme.bodyText1),
               onPressed: () async {
                 await context.read<AuthRepo>().logOut();
-                context.read<NavigationCubit>().push(loginPath);
               },
             ))
       ]),

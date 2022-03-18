@@ -4,39 +4,19 @@ import 'dart:convert';
 import 'package:campi/modules/auth/model.dart';
 import 'package:campi/modules/common/collections.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
-import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthRepo {
   /// {@macro authentication_repository}
-  AuthRepo(
-      {firebase_auth.FirebaseAuth? firebaseAuth,
-      GoogleSignIn? googleSignIn,
-      required this.prefs})
-      : _firebaseAuth = firebaseAuth ?? firebase_auth.FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.standard();
+  AuthRepo({required this.prefs});
 
-  final firebase_auth.FirebaseAuth _firebaseAuth;
-  final GoogleSignIn _googleSignIn;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final SharedPreferences prefs;
-
-  /// Whether or not the current environment is web
-  /// Should only be overriden for testing purposes. Otherwise,
-  /// defaults to [kIsWeb]
-  bool isWeb = kIsWeb;
-
-  /// User cache key.
-  /// Should only be used for testing purposes.
   static const userCacheKey = '__user_cache_key__';
 
-  /// Stream of [User] which will emit the current user when
-  /// the authentication state changes.
-  ///
-  /// Emits [User.empty] if the user is not authenticated.
   Stream<Future<PiUser>> get user {
     return _firebaseAuth.authStateChanges().map((fireUser) async {
       late PiUser user;
@@ -70,9 +50,7 @@ class AuthRepo {
     });
   }
 
-  /// Returns the current cached user.
-  /// Defaults to [User.empty] if there is no cached user.
-  PiUser get currentUser {
+  PiUser get cachedUser {
     final usrStr = prefs.getString(userCacheKey);
     if (usrStr != null) {
       return PiUser.fromJson(jsonDecode(usrStr));
@@ -81,9 +59,6 @@ class AuthRepo {
     }
   }
 
-  /// Creates a new user with the provided [email] and [password].
-  ///
-  /// Throws a [SignUpWithEmailAndPasswordFailure] if an exception occurs.
   Future<void> signUp({required String email, required String password}) async {
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
@@ -97,36 +72,17 @@ class AuthRepo {
     }
   }
 
-  /// Starts the Sign In with Google Flow.
-  ///
-  /// Throws a [LogInWithGoogleFailure] if an exception occurs.
   Future<void> logInWithGoogle() async {
-    try {
-      GoogleSignInAccount? googleUser;
-      googleUser = await GoogleSignIn().signIn();
-
-      if (googleUser != null) {
-        final GoogleSignInAuthentication googleAuth =
-            await googleUser.authentication;
-        final OAuthCredential credential = GoogleAuthProvider.credential(
-          accessToken: googleAuth.accessToken,
-          idToken: googleAuth.idToken,
-        );
-        await _firebaseAuth.signInWithCredential(credential);
-        FirebaseAnalytics.instance.logLogin(loginMethod: "google");
-      } else {
-        throw const LogInWithGoogleFailure();
-      }
-    } on FirebaseAuthException catch (e) {
-      throw LogInWithGoogleFailure.fromCode(e.code);
-    } catch (_) {
-      throw const LogInWithGoogleFailure();
-    }
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+    await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
-  /// Signs in with the provided [email] and [password].
-  ///
-  /// Throws a [LogInWithEmailAndPasswordFailure] if an exception occurs.
   Future<void> logInWithEmailAndPassword({
     required String email,
     required String password,
@@ -146,15 +102,11 @@ class AuthRepo {
 
   /// Signs out the current user which will emit
   /// [User.empty] from the [user] Stream.
-  ///
   /// Throws a [LogOutFailure] if an exception occurs.
   Future<void> logOut() async {
     prefs.remove(userCacheKey);
     try {
-      await Future.wait([
-        _firebaseAuth.signOut(),
-        _googleSignIn.signOut(),
-      ]);
+      _firebaseAuth.signOut();
     } catch (_) {
       throw LogOutFailure();
     }
