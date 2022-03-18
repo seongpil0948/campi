@@ -1,20 +1,74 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as mat;
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 import 'dart:math';
-import 'package:image/image.dart';
 
 typedef OnCuttCallback = void Function(File file);
+typedef OnDone = void Function(List<File> file);
+typedef OnCancel = void Function(List<File> file);
+
+class AdjRatioImgList extends StatefulWidget {
+  final List<File> imgs;
+  final OnDone onDone;
+  final OnCancel onCancel;
+  const AdjRatioImgList(
+      {Key? key,
+      required this.imgs,
+      required this.onDone,
+      required this.onCancel})
+      : super(key: key);
+
+  @override
+  State<AdjRatioImgList> createState() => _AdjRatioImgListState();
+}
+
+class _AdjRatioImgListState extends State<AdjRatioImgList> {
+  List<File> doneFiles = [];
+  late List<Widget> widgets;
+  @override
+  void initState() {
+    super.initState();
+    widgets = widget.imgs
+        .map((e) => AdjRatioImgW(
+            file: e,
+            onCutted: (newFile) {
+              setState(() {
+                doneFiles.add(newFile);
+              });
+            },
+            onCancel: () {
+              widget.onCancel(doneFiles);
+            }))
+        .toList();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    Widget targetW;
+    if (doneFiles.length < widgets.length) {
+      targetW = widgets[doneFiles.length];
+    } else {
+      widget.onDone(doneFiles);
+      targetW = Container();
+    }
+
+    return targetW;
+  }
+}
 
 class AdjRatioImgW extends StatefulWidget {
   /// https://api.flutter.dev/flutter/widgets/AnimatedSize-class.html
   /// https://api.flutter.dev/flutter/widgets/AnimatedWidgetBaseState-class.html
   final File file;
   final OnCuttCallback onCutted;
-  const AdjRatioImgW({Key? key, required this.file, required this.onCutted})
+  final void Function() onCancel;
+  const AdjRatioImgW(
+      {Key? key,
+      required this.file,
+      required this.onCutted,
+      required this.onCancel})
       : super(key: key);
 
   @override
@@ -29,17 +83,27 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
   List<int> photoRealRect = [];
   img.Image? image;
 
-  @override
-  void initState() {
-    super.initState();
+  void _init() {
     var f = widget.file;
     List<int> bytes = f.readAsBytesSync();
-    image = decodeImage(bytes);
+    image = img.decodeImage(bytes);
     if (image == null) {
       debugPrint("decodeImage is Null: ${f.path}");
     }
-    photoRealRect =
-        findTrim(image!, mode: TrimMode.transparent); // x, y, width, height
+    photoRealRect = img.findTrim(image!, // x, y, width, height
+        mode: img.TrimMode.transparent);
+  }
+
+  @override
+  void didUpdateWidget(covariant AdjRatioImgW oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _init();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
   }
 
   @override
@@ -82,13 +146,13 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
         Stack(alignment: Alignment.center, children: [
           // Transform.scale(
           //     scale: _scaleFactor,
-          //     child: mat.Image.file(
+          //     child: Image.file(
           //       widget.file,
           //       fit: BoxFit.contain,
           //       width: imgWidgetWidth,
           //       height: imgWidgetHeight,
           //     )),
-          mat.Image.file(
+          Image.file(
             widget.file,
             fit: BoxFit.contain,
             width: imgWidgetWidth,
@@ -136,11 +200,11 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            mat.ElevatedButton(
+            ElevatedButton(
                 child: const Text("    확인    "),
                 onPressed: () async {
                   // debugPrint("On Dispose, _scaleFactor: $_scaleFactor");
-                  final trimed = copyCrop(
+                  final trimed = img.copyCrop(
                       image!,
                       (positionRect.left * multipleW).round(),
                       (positionRect.top * multipleH).round(),
@@ -150,16 +214,15 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
                   // create a new file in temporary path with random file name.
                   File file =
                       File(tempDir.path + (Random().nextInt(100)).toString());
-                  final encoded =
-                      encodeNamedImage(trimed, file.path) ?? encodePng(trimed);
+                  final encoded = img.encodeNamedImage(trimed, file.path) ??
+                      img.encodePng(trimed);
                   file.writeAsBytesSync(encoded);
                   widget.onCutted(file);
                 }),
-            const mat.SizedBox(width: 10),
-            mat.ElevatedButton(
-                child: const Text("    닫기    "),
-                onPressed: () => Navigator.of(context).pop()),
-            mat.SizedBox(width: mq.size.width / 8),
+            const SizedBox(width: 10),
+            ElevatedButton(
+                child: const Text("    닫기    "), onPressed: widget.onCancel),
+            SizedBox(width: mq.size.width / 8),
           ],
         )
       ],

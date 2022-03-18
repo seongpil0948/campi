@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:campi/components/assets/upload.dart';
 import 'package:campi/components/geo/dot.dart';
 import 'package:campi/components/gesture/resize_img.dart';
+import 'package:campi/modules/common/converter.dart';
 import 'package:campi/modules/posts/feed/cubit.dart';
 import 'package:campi/utils/io.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,7 @@ class PiAssetCarousel extends StatelessWidget {
 
   _pressAssetButton(bool isVideo, List<PiFile> fs, BuildContext context) async {
     List<PiFile> files = [...fs];
+    final feedCubit = context.read<FeedCubit>();
     if (isVideo) {
       final asset = await _picker.pickVideo(source: ImageSource.gallery);
       if (asset != null) {
@@ -68,34 +70,23 @@ class PiAssetCarousel extends StatelessWidget {
       }
       return null;
     }
+    _addFiles(List<File> newFiles) {
+      final donePiFs = newFiles
+          .map((e) => PiFile.file(file: e, ftype: PiFileType.image))
+          .toList();
+      feedCubit.changeFs([...feedCubit.state.files, ...donePiFs]);
+      Navigator.of(context).pop();
+    }
+
     final imgs = await _picker.pickMultiImage();
-    final feedCubit = context.read<FeedCubit>();
     if (imgs != null) {
       await showGeneralDialog(
           context: context,
           pageBuilder: (context, animation, secondaryAnimation) {
-            return CarouselSlider.builder(
-                itemCount: imgs.length,
-                itemBuilder: (BuildContext context, int idx, int _) {
-                  final xImg = imgs[idx];
-                  var file = File(xImg.path);
-                  return AdjRatioImgW(
-                      file: file,
-                      onCutted: (newFile) {
-                        files.add(PiFile.file(
-                            file: newFile, ftype: PiFileType.image));
-                        feedCubit.changeFs(files);
-                      });
-                },
-                options: CarouselOptions(
-                  enlargeCenterPage: true,
-                  viewportFraction: 1.0,
-                  aspectRatio: 1.0,
-                  enableInfiniteScroll: false,
-                  height: MediaQuery.of(context).size.height,
-                ));
+            final targetFs = xfilesToFiles(imgs);
+            return AdjRatioImgList(
+                imgs: targetFs, onDone: _addFiles, onCancel: _addFiles);
           });
-      feedCubit.changeFs(files);
     }
   }
 }
