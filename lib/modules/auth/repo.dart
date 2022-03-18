@@ -55,13 +55,13 @@ class AuthRepo {
         try {
           /// Sign Up
           user = PiUser(user: fireUser);
-          FirebaseAnalytics.instance
-              .logSignUp(signUpMethod: fireUser.providerData[0].providerId);
+          FirebaseAnalytics.instance.logSignUp(
+              signUpMethod: fireUser.providerData.isNotEmpty
+                  ? fireUser.providerData[0].providerId
+                  : "Anonymous Provider");
         } catch (e, s) {
           FirebaseCrashlytics.instance
               .recordError(e, s, reason: "Error On SignUp");
-          FirebaseAnalytics.instance
-              .logSignUp(signUpMethod: "Anonymous Provider");
         }
       }
       final j = user.toJsonCache();
