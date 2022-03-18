@@ -39,8 +39,8 @@ class UserSnsInfo extends StatelessWidget {
                 widget: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("포스팅 ${u.feedIds.length + u.mgzIds.length}",
-                        style: sty),
+                    Text("포스팅 ${u.mgzIds.length}", style: sty),
+                    Text("SNS ${u.feedIds.length}", style: sty),
                     Text("팔로워 ${u.followers.length}", style: sty),
                     Text(
                       "팔로우 ${u.follows.length}",

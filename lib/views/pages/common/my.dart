@@ -11,8 +11,6 @@ import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/posts/bloc.dart';
 import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/router/config.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

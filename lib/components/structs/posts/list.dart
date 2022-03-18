@@ -87,8 +87,11 @@ class _PostListTabState extends State<PostListTab>
       widget.scrollController
         ..dispose()
         ..removeListener(_onScroll);
-    } catch (e, s) {
-      debugPrint("$e $s");
+    } on FlutterError catch (e) {
+      if (e.message.contains("was used after being disposed.")) {
+        return;
+      }
+      rethrow;
     }
 
     _controller.dispose();
