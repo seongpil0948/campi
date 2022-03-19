@@ -13,8 +13,11 @@ import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/utils/io.dart';
 import 'package:campi/views/router/page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as mat;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quill/flutter_quill.dart' as q;
+import 'package:flutter_quill/flutter_quill.dart';
+import 'package:flutter_quill/src/widgets/embeds/default_embed_builder.dart';
+
 import 'package:tuple/tuple.dart';
 
 class MgzPostPage extends StatelessWidget {
@@ -38,11 +41,11 @@ class MgzPostW extends StatefulWidget {
 
 class _MgzPostWState extends State<MgzPostW> {
   late TextEditingController _titleContoller;
-  late q.QuillController _controller;
+  late QuillController _controller;
   @override
   void initState() {
     _titleContoller = TextEditingController();
-    _controller = q.QuillController.basic();
+    _controller = QuillController.basic();
     super.initState();
   }
 
@@ -63,7 +66,6 @@ class _MgzPostWState extends State<MgzPostW> {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
     Future<String> _onImagePickCallback(File file) async {
       return await _assetPickCallback(file, false, widget.user);
     }
@@ -73,18 +75,19 @@ class _MgzPostWState extends State<MgzPostW> {
     }
 
     final FocusNode _focusNode = FocusNode();
-    final quillEditor = q.QuillEditor(
+    final quillEditor = QuillEditor(
         controller: _controller,
+        locale: const Locale("ko"),
         scrollController: ScrollController(),
-        scrollable: true,
+        scrollable: false,
         focusNode: _focusNode,
-        autoFocus: false,
+        autoFocus: true,
         readOnly: false,
         placeholder: '내용을 입력 해주세요.',
         expands: false,
         padding: EdgeInsets.zero,
-        customStyles: q.DefaultStyles(
-          h1: q.DefaultTextBlockStyle(
+        customStyles: DefaultStyles(
+          h1: DefaultTextBlockStyle(
               const TextStyle(
                 fontSize: 32,
                 color: Colors.black,
@@ -95,8 +98,20 @@ class _MgzPostWState extends State<MgzPostW> {
               const Tuple2(0, 0),
               null),
           sizeSmall: const TextStyle(fontSize: 12),
-        ));
-    var toolbar = q.QuillToolbar.basic(
+        ),
+        embedBuilder: (context, controller, node, readOnly) {
+          var widget = defaultEmbedBuilder(context, controller, node, readOnly);
+          if (widget is GestureDetector) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+              child: widget.child ?? Container(),
+            );
+          }
+          return widget;
+        });
+
+    // quillEditor.embedBuilder., defaultEmbedBuilder
+    var toolbar = QuillToolbar.basic(
       locale: const Locale("ko"),
       controller: _controller,
       onImagePickCallback: _onImagePickCallback,
@@ -110,28 +125,27 @@ class _MgzPostWState extends State<MgzPostW> {
       showStrikeThrough: false,
       showUnderLineButton: false,
     );
-    final appBarH = Size.fromHeight(mq.size.height / 5);
     return SafeArea(
-      bottom: false,
+      // bottom: false,
       child: Scaffold(
-        appBar: PreferredSize(
-          preferredSize: appBarH,
-          child: Column(
-            children: [
-              _TitleField(titleContoller: _titleContoller),
-              toolbar,
-            ],
-          ),
-        ),
+        appBar: toolbar,
         body: PiBackToClose(
-          child: SingleChildScrollView(
-            child: Container(
-              height: mq.size.height + 100,
-              margin: EdgeInsets.only(top: appBarH.height / 6),
-              child: Container(
-                color: Colors.white,
-                padding: const EdgeInsets.symmetric(horizontal: 48),
-                child: quillEditor,
+          child: Container(
+            color: Colors.white,
+            padding: EdgeInsets.only(
+                left: 8,
+                right: 8,
+                top: MediaQuery.of(context).size.height / 20),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  _TitleField(titleContoller: _titleContoller),
+                  const SizedBox(height: 20),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child: quillEditor,
+                  ),
+                ],
               ),
             ),
           ),
@@ -165,7 +179,7 @@ class _MgzPostWState extends State<MgzPostW> {
                         body:
                             "${widget.user.displayName}님이 캠핑 포스팅 게시글을 올렸어요!")));
           },
-          child: const Text("게시"),
+          child: const mat.Text("게시"),
         ),
       ),
     );
@@ -183,23 +197,20 @@ class _TitleField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8),
-      child: TextField(
-          style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-          decoration: InputDecoration(
-              border: InputBorder.none,
-              focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(
-                      width: 0.3, color: Theme.of(context).primaryColor)),
-              enabledBorder: InputBorder.none,
-              errorBorder: InputBorder.none,
-              disabledBorder: InputBorder.none,
-              contentPadding: const EdgeInsets.only(
-                  left: 15, bottom: 11, top: 11, right: 15),
-              label: Text("제목을 입력 해..주세요",
-                  style: TextStyle(color: Theme.of(context).cardColor))),
-          controller: _titleContoller),
-    );
+    return TextField(
+        style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    width: 0.3, color: Theme.of(context).primaryColor)),
+            enabledBorder: InputBorder.none,
+            errorBorder: InputBorder.none,
+            disabledBorder: InputBorder.none,
+            contentPadding:
+                const EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+            label: mat.Text("제목을 입력 해주세요..",
+                style: TextStyle(color: Theme.of(context).cardColor))),
+        controller: _titleContoller);
   }
 }

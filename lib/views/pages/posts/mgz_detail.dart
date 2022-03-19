@@ -4,6 +4,7 @@ import 'package:campi/modules/posts/mgz/state.dart';
 import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as mat;
 import 'package:flutter_quill/flutter_quill.dart';
 
 class MgzDetailPage extends StatelessWidget {
@@ -38,6 +39,8 @@ class MgzDetailPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
+        title: mat.Text(args.args['magazine']?.title,
+            style: const TextStyle(color: Colors.black)),
         leading: IconButton(
             icon: const Icon(Icons.undo),
             onPressed: () {
