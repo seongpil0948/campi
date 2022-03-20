@@ -1,13 +1,22 @@
+import 'package:campi/modules/auth/model.dart';
+import 'package:campi/modules/auth/user_repo.dart';
 import 'package:campi/modules/common/collections.dart';
+import 'package:campi/modules/common/fcm/model.dart';
+import 'package:campi/modules/common/fcm/repo.dart';
 import 'package:campi/modules/posts/mgz/state.dart';
+import 'package:campi/views/router/page.dart';
 import 'package:campi/views/router/state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 
 class MgzCubit extends Cubit<MgzState> {
-  MgzCubit(String writerId)
-      : super(MgzState(writerId: writerId, content: Document(), title: ''));
+  MgzCubit({required String writerId, Document? content, String? title})
+      : super(MgzState(
+            writerId: writerId,
+            content: content ?? Document(),
+            title: title ?? ''));
+  MgzCubit.fromState(MgzState mgz) : super(mgz);
   void changeDoc(String title, Document doc) =>
       emit(state.copyWith(title: title, content: doc));
 
@@ -16,6 +25,36 @@ class MgzCubit extends Cubit<MgzState> {
         .doc(state.mgzId)
         .set(state.toJson())
         .then((value) => context.read<NavigationCubit>().pop());
+  }
+
+  Future<void> _updates(PiUser u) async {
+    Future.wait([u.update(), state.update()]);
+  }
+
+  void onLike(PiUser user, FcmRepo fcm) async {
+    final aleady = state.likeUserIds.contains(user.userId);
+    var uids = [...state.likeUserIds];
+    if (aleady) {
+      user.favoriteMgzs.remove(state.mgzId);
+      uids.remove(user.userId);
+      await _updates(user);
+    } else {
+      user.favoriteMgzs.add(state.mgzId);
+      uids.add(user.userId);
+      await _updates(user);
+      final w = await UserRepo.getUserById(state.writerId);
+      fcm.sendPushMessage(
+          source: PushSource(
+              tokens: w.rawFcmTokens,
+              userIds: [],
+              data: DataSource(
+                  pushType: "favorFeed",
+                  targetPage: "$mgzDetailPath?magazineId=${state.mgzId}"),
+              noti: NotiSource(
+                  title: "캠핑 포스팅 좋아요 알림",
+                  body: "${user.name}님이 당신의 포스팅에 좋아요를 눌렀어요!")));
+    }
+    emit(state.copyWith(likeCnt: uids.length, likeUserIds: uids));
   }
 }
 

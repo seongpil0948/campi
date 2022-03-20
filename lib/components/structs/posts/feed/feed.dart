@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/components/btn/follow.dart';
+import 'package:campi/components/btn/icon_text.dart';
 import 'package:campi/config/constants.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/auth/model.dart';
@@ -200,49 +201,43 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
     final F = widget.feed;
     final fcm = context.read<AppBloc>().fcm;
     final marginer = SizedBox(width: MediaQuery.of(context).size.width / 15);
+    final aleady = U.favoriteFeeds.contains(F.feedId);
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           children: <Widget>[
-            U.favoriteFeeds.contains(F.feedId)
-                ? IconButton(
-                    onPressed: () {
-                      U.favoriteFeeds.remove(F.feedId);
-                      F.likeUserIds.remove(U.userId);
-                      F.likeCnt = F.likeUserIds.length;
-                      _updates(U);
-                    },
-                    icon: const Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                    ))
-                : IconButton(
-                    onPressed: () async {
-                      U.favoriteFeeds.add(F.feedId);
-                      F.likeUserIds.add(U.userId);
-                      F.likeCnt = F.likeUserIds.length;
-                      _updates(U);
-                      final w = await F.writer;
-                      fcm.sendPushMessage(
-                          source: PushSource(
-                              tokens: w.rawFcmTokens,
-                              userIds: [],
-                              data: DataSource(
-                                  pushType: "favorFeed",
-                                  targetPage:
-                                      "$feedDetailPath?feedId=${F.feedId}"),
-                              noti: NotiSource(
-                                  title: "캠핑 SNS 좋아요 알림",
-                                  body:
-                                      "${U.displayName}님이 당신의 SNS 에 좋아요를 눌렀어요!")));
-                    },
-                    icon: const Icon(
-                      Icons.favorite_border_outlined,
-                      color: Colors.black,
-                    ),
-                  ),
-            Text("${F.likeCnt}"),
+            IconTxtBtn(
+                onPressed: () async {
+                  if (aleady) {
+                    U.favoriteFeeds.remove(F.feedId);
+                    F.likeUserIds.remove(U.userId);
+                    F.likeCnt = F.likeUserIds.length;
+                    _updates(U);
+                  } else {
+                    U.favoriteFeeds.add(F.feedId);
+                    F.likeUserIds.add(U.userId);
+                    F.likeCnt = F.likeUserIds.length;
+                    _updates(U);
+                    final w = await F.writer;
+                    fcm.sendPushMessage(
+                        source: PushSource(
+                            tokens: w.rawFcmTokens,
+                            userIds: [],
+                            data: DataSource(
+                                pushType: "favorFeed",
+                                targetPage:
+                                    "$feedDetailPath?feedId=${F.feedId}"),
+                            noti: NotiSource(
+                                title: "캠핑 SNS 좋아요 알림",
+                                body: "${U.name}님이 당신의 SNS 에 좋아요를 눌렀어요!")));
+                  }
+                },
+                icon: Icon(
+                  aleady ? Icons.favorite : Icons.favorite_border_outlined,
+                  color: aleady ? Colors.red : null,
+                ),
+                txt: Text("${F.likeCnt}"))
           ],
         ),
         marginer,

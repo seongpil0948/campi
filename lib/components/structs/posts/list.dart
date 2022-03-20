@@ -20,7 +20,7 @@ class PostListTab extends StatefulWidget {
   /// FIXME: 탭바뀔때마다 두번씩 로드되고 있습니다.
   final ThumnailSize thumbSize;
   final PostsUser? targetUser;
-  final scrollController = ScrollController();
+  final ScrollController scrollController = ScrollController();
   PostListTab({
     required this.thumbSize,
     this.targetUser,
@@ -84,6 +84,7 @@ class _PostListTabState extends State<PostListTab>
   @override
   void dispose() {
     try {
+      super.dispose();
       widget.scrollController
         ..dispose()
         ..removeListener(_onScroll);

@@ -26,6 +26,7 @@ class PiUser extends Equatable {
   String get profileImage => photoURL;
   List<FcmToken> messageToken = [];
   List<String> favoriteFeeds = [];
+  List<String> favoriteMgzs = [];
   List<String> followers = [];
   List<String> follows = [];
   List<String> feedIds = [];
@@ -97,10 +98,11 @@ class PiUser extends Equatable {
         messageToken = j['messageToken']
             .map<FcmToken>((f) => FcmToken.fromJson(f))
             .toList(),
-        tenantId = j['tenantId'],
-        hash = j['hash'],
+        tenantId = j['tenantId'] ?? '',
+        hash = j['hash'] ?? '',
         desc = j['desc'] ?? '',
         favoriteFeeds = List<String>.from(j['favoriteFeeds']),
+        favoriteMgzs = List<String>.from(j['favoriteMgzs'] ?? []),
         feedIds = List<String>.from(j['feedIds'] ?? []),
         mgzIds = List<String>.from(j['mgzIds'] ?? []),
         followers = List<String>.from(j['followers']),
@@ -120,6 +122,7 @@ class PiUser extends Equatable {
         'tenantId': tenantId,
         'hash': hash,
         'favoriteFeeds': favoriteFeeds,
+        'favoriteMgzs': favoriteMgzs,
         'feedIds': feedIds,
         'mgzIds': mgzIds,
         'followers': followers,

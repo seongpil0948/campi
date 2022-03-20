@@ -101,7 +101,7 @@ class ChatRoomHeader extends StatelessWidget {
             padding: const EdgeInsets.only(top: 16.0, left: 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [Text(you.displayName ?? ""), Text(you.email ?? "")],
+              children: [Text(you.name), Text(you.email ?? "")],
             ),
           )
         ],

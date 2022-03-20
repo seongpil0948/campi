@@ -45,7 +45,7 @@ class _FollowBtnState extends State<FollowBtn> {
                     ),
                     noti: NotiSource(
                         title: "팔로우 알림",
-                        body: "${currUser.displayName}님이 당신을 팔로우 했어요!")));
+                        body: "${currUser.name}님이 당신을 팔로우 했어요!")));
           }
         },
         child:

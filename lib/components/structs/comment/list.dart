@@ -11,13 +11,17 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CommentList extends StatefulWidget {
-  final String feedId;
   final String userId;
+  final String? feedId;
+  final String? mgzId;
   final Stream<QuerySnapshot> commentStream;
-  CommentList({Key? key, required this.userId, required this.feedId})
-      : commentStream =
-            getCollection(c: Collections.comments, feedId: feedId).snapshots(),
-        super(key: key);
+  const CommentList(
+      {Key? key,
+      required this.userId,
+      required this.commentStream,
+      this.feedId,
+      this.mgzId})
+      : super(key: key);
 
   @override
   _CommentListState createState() => _CommentListState();
@@ -48,7 +52,8 @@ class _CommentListState extends State<CommentList> {
               _CommentExpandList(
                   cmtExpands: cmtExpands,
                   comments: comments,
-                  feedId: widget.feedId)
+                  feedId: widget.feedId,
+                  mgzId: widget.mgzId)
             ],
           );
         }
@@ -62,12 +67,14 @@ class _CommentListState extends State<CommentList> {
 class _CommentExpandList extends StatelessWidget {
   List<bool> cmtExpands;
   List<CommentModel> comments;
-  String feedId;
+  String? feedId;
+  String? mgzId;
   _CommentExpandList(
       {Key? key,
       required this.comments,
       required this.cmtExpands,
-      required this.feedId})
+      this.feedId,
+      this.mgzId})
       : super(key: key);
 
   @override
@@ -83,7 +90,7 @@ class _CommentExpandList extends StatelessWidget {
                 daysBetween(DateTime.now(), comments[idx].updatedAt);
             return Column(children: [
               CommentW(mq: mq, c: comments[idx], diffDays: diffDays),
-              ReplyList(c: comments[idx], feedId: feedId)
+              ReplyList(c: comments[idx], feedId: feedId, mgzId: mgzId)
             ]);
           }),
     );
@@ -124,18 +131,21 @@ class AvartarIdRow extends StatelessWidget {
 
 class ReplyList extends StatelessWidget {
   final CommentModel c;
-  final String feedId;
-  const ReplyList({Key? key, required this.c, required this.feedId})
+  final String? feedId;
+  final String? mgzId;
+
+  const ReplyList({Key? key, required this.c, this.feedId, this.mgzId})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     const _margin = EdgeInsets.fromLTRB(40, 5, 10, 5);
     return StreamBuilder<QuerySnapshot>(
-        stream: getCollection(c: Collections.comments, feedId: feedId)
-            .doc(c.id)
-            .collection(replyCollection)
-            .snapshots(),
+        stream:
+            getCollection(c: Collections.comments, feedId: feedId, mgzId: mgzId)
+                .doc(c.id)
+                .collection(replyCollection)
+                .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasError &&
               snapshot.connectionState != ConnectionState.waiting) {

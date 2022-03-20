@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:campi/modules/common/collections.dart';
 import 'package:campi/utils/moment.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:uuid/uuid.dart';
@@ -32,6 +34,16 @@ class MgzState extends Equatable {
     mgzId = magazineId ?? const Uuid().v4();
   }
 
+  Future<bool> update() {
+    updatedAt = DateTime.now();
+    final fc = getCollection(c: Collections.magazines);
+    return fc
+        .doc(mgzId)
+        .set(toJson(), SetOptions(merge: true))
+        .then((value) => true)
+        .catchError((e) => false);
+  }
+
   MgzState.fromJson(Map<String, dynamic> j)
       : writerId = j['writerId'],
         content = Document.fromJson(jsonDecode(j['content'])),
@@ -59,6 +71,7 @@ class MgzState extends Equatable {
         'bookmarkedUserIds': bookmarkedUserIds,
       };
   MgzState copyWith({
+    String? mgzId,
     String? writerId,
     String? title,
     Document? content,
@@ -69,6 +82,7 @@ class MgzState extends Equatable {
     List<String>? bookmarkedUserIds,
   }) =>
       MgzState(
+          magazineId: mgzId ?? this.mgzId,
           writerId: writerId ?? this.writerId,
           title: title ?? this.title,
           content: content ?? this.content,

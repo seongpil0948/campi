@@ -8,12 +8,16 @@ import 'package:campi/components/structs/posts/feed/place_info.dart';
 import 'package:campi/config/constants.dart';
 import 'package:campi/modules/app/bloc.dart';
 import 'package:campi/modules/comment/comment.dart';
+import 'package:campi/modules/common/collections.dart';
 import 'package:campi/modules/posts/feed/state.dart';
+import 'package:campi/modules/posts/models/common.dart';
 import 'package:campi/modules/posts/repo.dart';
 import 'package:campi/utils/parsers.dart';
 import 'package:campi/views/router/config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+// ignore: implementation_imports
+import 'package:provider/src/provider.dart';
 
 class FeedDetailPage extends StatelessWidget {
   const FeedDetailPage({Key? key}) : super(key: key);
@@ -23,38 +27,39 @@ class FeedDetailPage extends StatelessWidget {
     final args = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
     FeedState feed;
     Widget child;
-    var _commentController = TextEditingController();
+    final _cmtController = TextEditingController();
 
+    Widget getDetailW(FeedState f) =>
+        Provider.value(value: f, child: const FeedDetailW());
     if (args.args['selectedFeed'] != null) {
       feed = args.args['selectedFeed'] as FeedState;
-      child = FeedDetailW(feed: feed, commentController: _commentController);
+      child = BlocProvider(
+          create: (_) => CommentBloc(
+              controller: _cmtController,
+              feedId: feed.feedId,
+              fcm: context.read<AppBloc>().fcm,
+              cmtWriter: context.watch<AppBloc>().state.user,
+              postWriterId: feed.writerId,
+              contentType: ContentType.feed),
+          child: getDetailW(feed));
     } else {
       child = FutureBuilder<FeedState>(
           future: PostRepo.getFeedById(args.args['feedId'][0] as String),
-          builder: (context, snapshot) => snapshot.hasData
-              ? FeedDetailW(
-                  feed: snapshot.data!, commentController: _commentController)
-              : loadingIndicator);
+          builder: (context, snapshot) =>
+              snapshot.hasData ? getDetailW(snapshot.data!) : loadingIndicator);
     }
 
     return Scaffold(
-        // drawer: const PiDrawer(),
-        body: PiBackToClose(
-      child: BlocProvider(create: (_) => CommentBloc(), child: child),
-    ));
+      // drawer: const PiDrawer(),
+      body: PiBackToClose(child: child),
+    );
   }
 }
 
 class FeedDetailW extends StatelessWidget {
   const FeedDetailW({
     Key? key,
-    required this.feed,
-    required TextEditingController commentController,
-  })  : _commentController = commentController,
-        super(key: key);
-
-  final FeedState feed;
-  final TextEditingController _commentController;
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +69,14 @@ class FeedDetailW extends StatelessWidget {
     final mq = MediaQuery.of(context);
 
     Map<String, Text> tagMap = {};
+    final feed = context.watch<FeedState>();
     // ignore: avoid_function_literals_in_foreach_calls
     feed.hashTags.forEach((tag) => tagMap[tag] =
         Text(rmTagAllPrefix(tag), style: tagTextSty(tag, context)));
     return SafeArea(
       child: Stack(children: [
         SingleChildScrollView(
-          child: GestureDetector(
+          child: InkWell(
             onTap: () {
               context.read<CommentBloc>().add(
                   ShowPostCmtW(targetComment: null, showPostCmtWiget: false));
@@ -130,7 +136,12 @@ class FeedDetailW extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(left: leftPadding),
                   margin: const EdgeInsets.only(bottom: 40),
-                  child: CommentList(feedId: feed.feedId, userId: U.userId),
+                  child: CommentList(
+                      feedId: feed.feedId,
+                      commentStream: getCollection(
+                              c: Collections.comments, feedId: feed.feedId)
+                          .snapshots(),
+                      userId: U.userId),
                 )
               ],
             ),
@@ -138,10 +149,9 @@ class FeedDetailW extends StatelessWidget {
         ),
         BlocBuilder<CommentBloc, CommentState>(
             builder: (context, state) => state.showPostCmtW
-                ? Positioned(
+                ? const Positioned(
                     bottom: 30,
-                    child: CommentPostW(
-                        commentController: _commentController, feed: feed),
+                    child: CommentPostW(),
                   )
                 : Container())
       ]),

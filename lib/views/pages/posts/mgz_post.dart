@@ -16,7 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
-import 'package:flutter_quill/src/widgets/embeds/default_embed_builder.dart';
+// ignore: implementation_imports
+import 'package:flutter_quill/src/widgets/embeds/default_embed_builder.dart'
+    show defaultEmbedBuilder;
 
 import 'package:tuple/tuple.dart';
 
@@ -27,7 +29,8 @@ class MgzPostPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final _user = context.select((AppBloc bloc) => bloc.state.user);
     return BlocProvider(
-        create: (_) => MgzCubit(_user.userId), child: MgzPostW(user: _user));
+        create: (_) => MgzCubit(writerId: _user.userId),
+        child: MgzPostW(user: _user));
   }
 }
 
@@ -176,8 +179,7 @@ class _MgzPostWState extends State<MgzPostW> {
                             "$mgzDetailPath?magazineId=${c.state.mgzId}"),
                     noti: NotiSource(
                         title: "캠핑 SNS 좋아요 알림",
-                        body:
-                            "${widget.user.displayName}님이 캠핑 포스팅 게시글을 올렸어요!")));
+                        body: "${widget.user.name}님이 캠핑 포스팅 게시글을 올렸어요!")));
           },
           child: const mat.Text("게시"),
         ),

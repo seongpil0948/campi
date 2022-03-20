@@ -137,7 +137,7 @@ class _FeedPostWState extends State<FeedPostW> {
                                         noti: NotiSource(
                                             title: "캠핑 SNS 포스팅 알림",
                                             body:
-                                                "${writer.displayName}님이 SNS 게시글을 올렸어요!")));
+                                                "${writer.name}님이 SNS 게시글을 올렸어요!")));
                                 context.read<NavigationCubit>().pop();
                               });
                             } catch (e, s) {
