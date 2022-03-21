@@ -1,5 +1,4 @@
-import 'package:campi/modules/comment/comment.dart';
-import 'package:campi/modules/posts/models/common.dart';
+part of './index.dart';
 
 class Reply extends CommentModel {
   // ignore: overridden_fields, annotate_overrides

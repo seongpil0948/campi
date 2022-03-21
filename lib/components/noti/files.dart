@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'index.dart';
 
 void oneMoreImg(BuildContext context) {
   showDialog(

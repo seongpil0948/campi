@@ -1,6 +1,4 @@
-import 'package:campi/modules/posts/repo.dart';
-import 'package:campi/modules/posts/state.dart';
-import 'package:flutter/material.dart';
+part of './index.dart';
 
 const apiUrl = "https://campi-f8278.du.r.appspot.com/api";
 const multiPushUrl = "$apiUrl/fcm/push";

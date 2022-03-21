@@ -1,11 +1,9 @@
-import 'package:campi/components/list/follow.dart';
-import 'package:campi/modules/app/bloc.dart';
+import 'package:campi/components/list/index.dart';
+import 'package:campi/modules/app/index.dart';
+import 'package:campi/modules/auth/index.dart';
+import 'package:campi/modules/common/index.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/user_repo.dart';
-import 'package:campi/modules/common/collections.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/state.dart';
+import 'package:campi/views/router/index.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';

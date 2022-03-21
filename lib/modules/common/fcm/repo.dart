@@ -1,14 +1,4 @@
-// import 'dart:convert';
-
-import 'package:campi/views/router/state.dart';
-import 'package:dio/dio.dart';
-import 'package:campi/config/constants.dart';
-import 'package:campi/modules/common/fcm/model.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+part of '../index.dart';
 
 class FcmRepo {
   final inst = FirebaseMessaging.instance;

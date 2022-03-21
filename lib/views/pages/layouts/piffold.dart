@@ -1,4 +1,4 @@
-import 'package:campi/components/noti/snacks.dart';
+import 'package:campi/components/noti/index.dart';
 import 'package:campi/views/pages/layouts/appbar.dart';
 import 'package:flutter/material.dart';
 

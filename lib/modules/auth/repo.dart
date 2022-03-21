@@ -1,13 +1,4 @@
-import 'dart:async';
-import 'dart:convert';
-
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/common/collections.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+part of './index.dart';
 
 class AuthRepo {
   /// {@macro authentication_repository}

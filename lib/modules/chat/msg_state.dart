@@ -1,5 +1,4 @@
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/posts/models/common.dart';
+part of './index.dart';
 
 class MsgState extends Time {
   String id;

@@ -1,7 +1,4 @@
-import 'package:campi/views/router/config.dart';
-import 'package:campi/views/router/stack.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of './index.dart';
 
 class NavigationCubit extends Cubit<NavigationStack> {
   NavigationCubit(List<PiPageConfig> initialPages)
@@ -43,7 +40,6 @@ class NavigationCubit extends Cubit<NavigationStack> {
   }
 
   void naviFromStr(String targetPage) {
-    /// TODO: Check & Debug lib/modules/common/fcm/repo.dart
     /// "feedDetail?feedId=123&mgzId=456"; => PATH: feedDetail , ARGS: {feedId: [123], mgzId: [456]}
     /// "feedDetail?feedId=14636346"; => PATH: feedDetail, ARGS: {feedId: [14636346]}
     /// "feedDetail"; => PATH: feedDetail, ARGS: {}

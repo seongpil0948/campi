@@ -1,4 +1,4 @@
-part of 'bloc.dart';
+part of './index.dart';
 
 enum AppStatus {
   authenticated,

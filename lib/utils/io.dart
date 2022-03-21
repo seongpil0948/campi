@@ -1,9 +1,4 @@
-import 'dart:io';
-import 'package:campi/components/assets/video.dart';
-import 'package:video_player/video_player.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+part of './index.dart';
 
 enum PiFileType { video, image }
 

@@ -1,12 +1,4 @@
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/comment/comment.dart';
-import 'package:campi/modules/comment/reply.dart';
-import 'package:campi/modules/common/collections.dart';
-import 'package:campi/modules/posts/feed/state.dart';
-import 'package:campi/modules/posts/mgz/state.dart';
-import 'package:campi/modules/posts/models/common.dart';
-import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:uuid/uuid.dart';
+part of './index.dart';
 
 Future<List<CommentModel>> loadComment(String userId, String feedId) async {
   final comments = await getCollection(c: Collections.comments)

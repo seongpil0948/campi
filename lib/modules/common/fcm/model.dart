@@ -1,5 +1,4 @@
-import 'package:campi/utils/moment.dart';
-import 'package:equatable/equatable.dart';
+part of '../index.dart';
 
 class DataSource {
   String pushType;

@@ -1,17 +1,4 @@
-import 'dart:io';
-
-import 'package:campi/components/assets/upload.dart';
-import 'package:campi/components/geo/dot.dart';
-import 'package:campi/components/gesture/resize_img.dart';
-import 'package:campi/modules/common/converter.dart';
-import 'package:campi/modules/posts/feed/cubit.dart';
-import 'package:campi/utils/io.dart';
-import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-
-import 'package:image_picker/image_picker.dart';
-// ignore: implementation_imports
-import 'package:provider/src/provider.dart';
+part of './index.dart';
 
 // https://github.com/serenader2014/flutter_carousel_slider/blob/master/lib/carousel_options.dart
 final pyCarouselOption = CarouselOptions(

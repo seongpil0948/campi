@@ -1,10 +1,7 @@
-import 'package:campi/components/noti/snacks.dart';
-import 'package:campi/modules/auth/login/cubit.dart';
-import 'package:campi/modules/auth/login/state.dart';
-import 'package:campi/modules/auth/repo.dart';
-import 'package:campi/utils/responsive_ratio.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/state.dart';
+import 'package:campi/components/noti/index.dart';
+import 'package:campi/modules/auth/index.dart';
+import 'package:campi/utils/index.dart';
+import 'package:campi/views/router/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';

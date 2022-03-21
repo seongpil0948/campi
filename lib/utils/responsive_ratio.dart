@@ -1,3 +1,5 @@
+part of './index.dart';
+
 int fileNumberByRatio(double ratio) {
   final rr = ratio.round();
   if (rr > 3) {

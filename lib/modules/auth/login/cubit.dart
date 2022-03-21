@@ -1,8 +1,4 @@
-import 'package:bloc/bloc.dart';
-import 'package:campi/modules/auth/login/state.dart';
-import 'package:formz/formz.dart';
-
-import '../repo.dart';
+part of '../index.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit(this._authRepo) : super(const LoginState());

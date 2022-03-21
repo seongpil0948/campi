@@ -1,5 +1,4 @@
-import 'package:flutter/services.dart';
-import 'package:flutter/material.dart';
+part of './index.dart';
 
 enum StatusBarTo { transparent, restore, ignore }
 

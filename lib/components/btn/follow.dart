@@ -1,10 +1,4 @@
-import 'package:campi/modules/app/bloc.dart';
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/common/fcm/model.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:flutter/material.dart';
-// ignore: implementation_imports
-import 'package:provider/src/provider.dart';
+part of 'index.dart';
 
 class FollowBtn extends StatefulWidget {
   final PiUser targetUser;

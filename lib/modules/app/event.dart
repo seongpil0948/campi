@@ -1,4 +1,4 @@
-part of 'bloc.dart';
+part of './index.dart';
 
 abstract class AppEvent extends Equatable {
   const AppEvent();

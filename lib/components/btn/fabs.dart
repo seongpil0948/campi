@@ -1,9 +1,4 @@
-import 'package:campi/modules/posts/bloc.dart';
-import 'package:campi/modules/posts/state.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of 'index.dart';
 
 class PostingFab extends StatelessWidget {
   const PostingFab({

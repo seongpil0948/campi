@@ -1,3 +1,5 @@
+part of './index.dart';
+
 enum ProductCardSize { small, medium, large }
 
 class ProductInfo {

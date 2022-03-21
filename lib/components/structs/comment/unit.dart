@@ -1,7 +1,4 @@
-import 'package:campi/components/structs/comment/list.dart';
-import 'package:campi/modules/comment/comment.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+part of './index.dart';
 
 class CommentW extends StatelessWidget {
   const CommentW({

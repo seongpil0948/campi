@@ -1,14 +1,4 @@
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/user_repo.dart';
-import 'package:campi/modules/common/collections.dart';
-import 'package:campi/modules/common/fcm/model.dart';
-import 'package:campi/modules/common/fcm/repo.dart';
-import 'package:campi/modules/posts/mgz/state.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_quill/flutter_quill.dart';
+part of './index.dart';
 
 class MgzCubit extends Cubit<MgzState> {
   MgzCubit({required String writerId, Document? content, String? title})

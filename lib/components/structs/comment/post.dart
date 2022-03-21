@@ -1,9 +1,4 @@
-import 'package:campi/components/btn/avatar.dart';
-import 'package:campi/modules/app/bloc.dart';
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/comment/comment.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of './index.dart';
 
 class CommentPostW extends StatelessWidget {
   const CommentPostW({Key? key}) : super(key: key);

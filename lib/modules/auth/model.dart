@@ -1,14 +1,4 @@
-import 'dart:convert';
-
-import 'package:campi/modules/auth/repo.dart';
-import 'package:campi/modules/common/collections.dart';
-import 'package:campi/modules/common/fcm/model.dart';
-import 'package:campi/utils/moment.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+part of './index.dart';
 
 // ignore: must_be_immutable
 class PiUser extends Equatable {

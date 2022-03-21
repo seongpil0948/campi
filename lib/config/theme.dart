@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of './index.dart';
 
 const buttonRadius = 18.0;
 const ovalRadius = 40.0;

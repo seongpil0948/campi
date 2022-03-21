@@ -1,19 +1,4 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
-import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:campi/config/constants.dart';
-import 'package:campi/modules/app/bloc.dart';
-import 'package:campi/modules/auth/user_repo.dart';
-import 'package:campi/modules/posts/events.dart';
-import 'package:campi/modules/posts/feed/state.dart';
-import 'package:campi/modules/posts/mgz/state.dart';
-import 'package:campi/modules/posts/repo.dart';
-import 'package:campi/modules/posts/state.dart';
-import 'package:campi/utils/parsers.dart';
-import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:stream_transform/stream_transform.dart';
+part of './index.dart';
 
 // const _postLimit = 20;
 const throttleDuration = Duration(milliseconds: 1000);

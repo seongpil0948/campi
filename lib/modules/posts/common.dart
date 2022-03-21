@@ -1,4 +1,4 @@
-import 'package:campi/utils/moment.dart';
+part of './index.dart';
 
 enum ContentType { feed, mgz, store, reply }
 

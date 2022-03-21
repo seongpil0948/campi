@@ -1,5 +1,4 @@
-import 'package:campi/modules/posts/feed/state.dart';
-import 'package:campi/utils/io.dart';
+part of './index.dart';
 
 Future<List<PiFile>> imgsOfFeed({required FeedState f, int limit = 1}) async {
   List<PiFile> imgs = [];

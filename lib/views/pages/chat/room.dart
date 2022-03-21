@@ -1,9 +1,9 @@
-import 'package:campi/components/btn/avatar.dart';
-import 'package:campi/modules/app/bloc.dart';
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/chat/msg_state.dart';
-import 'package:campi/modules/common/collections.dart';
-import 'package:campi/views/router/config.dart';
+import 'package:campi/components/btn/index.dart';
+import 'package:campi/modules/app/index.dart';
+import 'package:campi/modules/auth/index.dart';
+import 'package:campi/modules/chat/index.dart';
+import 'package:campi/modules/common/index.dart';
+import 'package:campi/views/router/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 // ignore: implementation_imports

@@ -1,16 +1,4 @@
-// import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:campi/modules/app/bloc.dart';
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/common/upload_file.dart';
-import 'package:campi/utils/io.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/state.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-// ignore: implementation_imports
-import 'package:provider/src/provider.dart';
-import 'package:uuid/uuid.dart';
+part of 'index.dart';
 
 const uuid = Uuid();
 
@@ -75,5 +63,34 @@ class _PiEditAvatarState extends State<PiEditAvatar> {
           });
         },
         child: getAvatar(widget.radius, widget.user.profileImage));
+  }
+}
+
+class AvartarIdRow extends StatelessWidget {
+  const AvartarIdRow({
+    Key? key,
+    required this.c,
+  }) : super(key: key);
+
+  final CommentModel c;
+
+  @override
+  Widget build(BuildContext context) {
+    final T = Theme.of(context).textTheme;
+    return FutureBuilder<PiUser>(
+        future: c.writer,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return Row(children: [
+              getAvatar(15, snapshot.data!.photoURL),
+              Container(
+                  margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                  child: Text(snapshot.data!.name,
+                      style:
+                          T.bodyText2!.copyWith(fontWeight: FontWeight.bold))),
+            ]);
+          }
+          return const Center(child: CircularProgressIndicator());
+        });
   }
 }

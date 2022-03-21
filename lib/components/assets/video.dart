@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
+part of './index.dart';
 
 class VideoW extends StatelessWidget {
   final VideoPlayerController controller;

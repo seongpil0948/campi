@@ -1,17 +1,4 @@
-import 'package:campi/components/select/single.dart';
-import 'package:campi/components/structs/posts/feed/feed.dart';
-import 'package:campi/components/structs/posts/feed/list.dart';
-import 'package:campi/components/structs/posts/mgz/list.dart';
-import 'package:campi/config/constants.dart';
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/user_repo.dart';
-import 'package:campi/modules/posts/bloc.dart';
-import 'package:campi/modules/posts/events.dart';
-import 'package:campi/modules/posts/repo.dart';
-import 'package:campi/modules/posts/state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-// ignore: implementation_imports
+part of './index.dart';
 
 const mgzTabIdx = 0;
 const feedTabIdx = 1;
@@ -48,7 +35,15 @@ class _PostListTabState extends State<PostListTab>
     mgzBloc = context.read<MgzBloc>();
     changeTurn();
     _controller = TabController(length: 2, vsync: this);
-    widget.scrollController.addListener(_onScroll);
+    try {
+      widget.scrollController.addListener(_onScroll);
+    } on FlutterError catch (e) {
+      if (e.message.contains("was used after being disposed.")) {
+        return;
+      }
+      rethrow;
+    }
+
     _controller.addListener(() {
       setState(() {
         selectedIndex = _controller.index;
@@ -91,6 +86,9 @@ class _PostListTabState extends State<PostListTab>
       super.dispose();
     } on FlutterError catch (e) {
       if (e.message.contains("was used after being disposed.")) {
+        if (mounted) {
+          super.dispose();
+        }
         return;
       }
       rethrow;

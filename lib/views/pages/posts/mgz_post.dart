@@ -1,17 +1,12 @@
 import 'dart:io';
-
-import 'package:campi/components/noti/snacks.dart';
-import 'package:campi/components/signs/files.dart';
-import 'package:campi/modules/app/bloc.dart';
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/common/fcm/model.dart';
-import 'package:campi/modules/common/upload_file.dart';
-import 'package:campi/modules/posts/bloc.dart';
-import 'package:campi/modules/posts/events.dart';
-import 'package:campi/modules/posts/mgz/cubit.dart';
-import 'package:campi/modules/posts/repo.dart';
-import 'package:campi/utils/io.dart';
-import 'package:campi/views/router/page.dart';
+import 'package:campi/components/noti/index.dart';
+import 'package:campi/modules/app/index.dart';
+import 'package:campi/modules/auth/index.dart';
+import 'package:campi/modules/common/index.dart';
+import 'package:campi/modules/posts/index.dart';
+import 'package:campi/modules/posts/mgz/index.dart';
+import 'package:campi/utils/index.dart';
+import 'package:campi/views/router/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_bloc/flutter_bloc.dart';

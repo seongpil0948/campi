@@ -1,8 +1,4 @@
-import 'package:campi/views/router/config.dart';
-import 'package:campi/views/router/stack.dart';
-import 'package:campi/views/router/state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of './index.dart';
 
 class PiRouteDelegator extends RouterDelegate<PiPageConfig>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {

@@ -1,23 +1,4 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
-import 'package:campi/components/inputs/text_controller.dart';
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/repo.dart';
-import 'package:campi/modules/common/collections.dart';
-import 'package:campi/modules/common/fcm/model.dart';
-import 'package:campi/modules/common/fcm/repo.dart';
-import 'package:campi/modules/posts/bloc.dart';
-import 'package:campi/utils/moment.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/state.dart';
-import 'package:equatable/equatable.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
-import 'package:rich_text_controller/rich_text_controller.dart';
-
-part 'event.dart';
-part 'state.dart';
+part of './index.dart';
 
 class AppBloc extends Bloc<AppEvent, AppState> {
   final AuthRepo _authRepo;

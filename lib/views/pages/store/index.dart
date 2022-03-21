@@ -1,7 +1,7 @@
-import 'package:campi/components/assets/carousel.dart';
+import 'package:campi/components/assets/index.dart';
+import 'package:campi/components/structs/store/index.dart';
+import 'package:campi/modules/store/index.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
-import 'package:campi/components/structs/store/product.dart';
-import 'package:campi/modules/store/state.dart';
 import 'package:flutter/material.dart';
 // ignore: unused_import
 import 'package:provider/provider.dart';

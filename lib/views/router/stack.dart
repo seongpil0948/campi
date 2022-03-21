@@ -1,5 +1,4 @@
-import 'package:campi/views/router/config.dart';
-import 'package:flutter/material.dart';
+part of './index.dart';
 
 class NavigationStack {
   final List<PiPageConfig> _stack;

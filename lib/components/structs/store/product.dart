@@ -1,10 +1,4 @@
-import 'package:campi/modules/store/state.dart';
-import 'package:campi/utils/parsers.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/state.dart';
-import 'package:flutter/material.dart';
-// ignore: implementation_imports
-import 'package:provider/src/provider.dart';
+part of './index.dart';
 
 enum ProdCardType { topImgBottomInfo, detail }
 enum ProdInfoType { common, detail }

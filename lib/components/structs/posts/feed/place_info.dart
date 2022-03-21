@@ -1,8 +1,4 @@
-import 'package:campi/components/geo/pymap.dart';
-import 'package:campi/modules/posts/feed/state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+part of './index.dart';
 
 class PlaceInfo extends StatelessWidget {
   const PlaceInfo({

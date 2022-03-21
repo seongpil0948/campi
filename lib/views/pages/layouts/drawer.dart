@@ -1,11 +1,8 @@
-import 'package:campi/components/btn/avatar.dart';
-import 'package:campi/components/btn/white.dart';
-import 'package:campi/modules/app/bloc.dart';
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/repo.dart';
+import 'package:campi/components/btn/index.dart';
+import 'package:campi/modules/app/index.dart';
+import 'package:campi/modules/auth/index.dart';
 import 'package:campi/views/pages/common/user.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/state.dart';
+import 'package:campi/views/router/index.dart';
 import 'package:flutter/material.dart';
 // ignore: implementation_imports
 import 'package:provider/src/provider.dart';

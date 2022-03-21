@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+part of './index.dart';
 
 int daysBetween(DateTime from, DateTime to) {
   from = DateTime(from.year, from.month, from.day);

@@ -1,8 +1,7 @@
-import 'package:campi/components/btn/avatar.dart';
-import 'package:campi/components/inputs/appbar_text_field.dart';
-import 'package:campi/modules/app/bloc.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/state.dart';
+import 'package:campi/components/btn/index.dart';
+import 'package:campi/components/inputs/index.dart';
+import 'package:campi/modules/app/index.dart';
+import 'package:campi/views/router/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

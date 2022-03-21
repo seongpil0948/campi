@@ -1,7 +1,4 @@
-import 'package:campi/modules/common/collections.dart';
-import 'package:campi/modules/posts/feed/state.dart';
-import 'package:campi/modules/posts/mgz/state.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+part of './index.dart';
 
 enum PostOrder { latest, popular }
 const postOpts = [

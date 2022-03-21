@@ -1,7 +1,4 @@
-import 'package:campi/components/btn/avatar.dart';
-import 'package:campi/components/btn/follow.dart';
-import 'package:campi/modules/auth/model.dart';
-import 'package:flutter/material.dart';
+part of 'index.dart';
 
 class FollowUserTile extends StatelessWidget {
   final PiUser targetUser;

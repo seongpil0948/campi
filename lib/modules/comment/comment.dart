@@ -1,18 +1,4 @@
-import 'dart:io';
-
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/user_repo.dart';
-import 'package:campi/modules/comment/repo.dart';
-import 'package:campi/modules/common/fcm/model.dart';
-import 'package:campi/modules/common/fcm/repo.dart';
-import 'package:campi/modules/posts/feed/state.dart';
-import 'package:campi/modules/posts/mgz/state.dart';
-import 'package:campi/modules/posts/models/common.dart';
-import 'package:campi/utils/moment.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of './index.dart';
 
 class CommentModel {
   ContentType ctype;

@@ -1,13 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:campi/components/structs/posts/feed/feed.dart';
-import 'package:campi/modules/posts/mgz/cubit.dart';
-import 'package:campi/modules/posts/mgz/state.dart';
-import 'package:campi/views/pages/common/user.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/state.dart';
-import 'package:flutter/material.dart';
-// ignore: implementation_imports
-import 'package:provider/src/provider.dart';
+part of './index.dart';
 
 class MgzThumnail extends StatelessWidget {
   const MgzThumnail({

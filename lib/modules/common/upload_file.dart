@@ -1,7 +1,4 @@
-import 'dart:io';
-
-import 'package:campi/utils/io.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+part of './index.dart';
 
 Future<PiFile?> uploadFilePathsToFirebase(
     {required PiFile f, required String path}) async {

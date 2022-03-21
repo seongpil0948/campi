@@ -1,5 +1,4 @@
-import 'package:campi/modules/posts/repo.dart';
-import 'package:equatable/equatable.dart';
+part of './index.dart';
 
 enum PostStatus { initial, success, failure }
 enum PostType { feed, mgz }

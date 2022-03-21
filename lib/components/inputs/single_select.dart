@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+part of 'index.dart';
 
 // ignore: must_be_immutable
 class PiSingleSelect extends StatefulWidget {

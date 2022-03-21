@@ -1,7 +1,4 @@
-import 'package:campi/modules/app/bloc.dart';
-import 'package:flutter/material.dart';
-// ignore: implementation_imports
-import 'package:provider/src/provider.dart';
+part of 'index.dart';
 
 class PiAppBarTextField extends StatelessWidget {
   const PiAppBarTextField({Key? key}) : super(key: key);

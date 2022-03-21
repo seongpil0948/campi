@@ -1,11 +1,4 @@
-import 'dart:convert';
-
-import 'package:campi/modules/common/collections.dart';
-import 'package:campi/utils/moment.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_quill/flutter_quill.dart';
-import 'package:uuid/uuid.dart';
+part of './index.dart';
 
 // ignore: must_be_immutable
 class MgzState extends Equatable {

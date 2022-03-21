@@ -1,16 +1,13 @@
-import 'package:campi/components/btn/icon_text.dart';
-import 'package:campi/components/noti/snacks.dart';
-import 'package:campi/components/structs/comment/list.dart';
-import 'package:campi/components/structs/comment/post.dart';
-import 'package:campi/config/constants.dart';
-import 'package:campi/modules/app/bloc.dart';
-import 'package:campi/modules/comment/comment.dart';
-import 'package:campi/modules/common/collections.dart';
-import 'package:campi/modules/posts/mgz/cubit.dart';
-import 'package:campi/modules/posts/mgz/state.dart';
-import 'package:campi/modules/posts/models/common.dart';
-import 'package:campi/modules/posts/repo.dart';
-import 'package:campi/views/router/config.dart';
+import 'package:campi/components/btn/index.dart';
+import 'package:campi/components/noti/index.dart';
+import 'package:campi/components/structs/comment/index.dart';
+import 'package:campi/config/index.dart';
+import 'package:campi/modules/app/index.dart';
+import 'package:campi/modules/comment/index.dart';
+import 'package:campi/modules/common/index.dart';
+import 'package:campi/modules/posts/index.dart';
+import 'package:campi/modules/posts/mgz/index.dart';
+import 'package:campi/views/router/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as mat;
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -106,7 +103,6 @@ class MgzDetailW extends StatelessWidget {
                       height: s.height / 11,
                       child: const MgzStatusRow(),
                     ),
-                    // TODO:
                     Padding(
                       padding: const EdgeInsets.only(left: 20, bottom: 40),
                       child: CommentList(

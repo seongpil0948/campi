@@ -1,9 +1,4 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:image/image.dart' as img;
-import 'package:path_provider/path_provider.dart';
-import 'dart:math';
+part of 'index.dart';
 
 typedef OnCuttCallback = void Function(File file);
 typedef OnDone = void Function(List<File> file);

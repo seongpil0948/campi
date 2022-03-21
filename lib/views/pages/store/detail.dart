@@ -1,8 +1,8 @@
-import 'package:campi/components/assets/carousel.dart';
+import 'package:campi/components/assets/index.dart';
+import 'package:campi/components/structs/store/index.dart';
+import 'package:campi/modules/store/index.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
-import 'package:campi/components/structs/store/product.dart';
-import 'package:campi/modules/store/state.dart';
-import 'package:campi/views/router/config.dart';
+import 'package:campi/views/router/index.dart';
 import 'package:flutter/material.dart';
 
 class ProductDetailPage extends StatelessWidget {

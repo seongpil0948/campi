@@ -1,6 +1,4 @@
-import 'package:campi/views/router/page.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+part of './index.dart';
 
 class PiPageConfig extends Equatable {
   ///full path to the page

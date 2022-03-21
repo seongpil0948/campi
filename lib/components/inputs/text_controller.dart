@@ -1,7 +1,4 @@
-import 'package:campi/modules/posts/feed/cubit.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rich_text_controller/rich_text_controller.dart';
+part of 'index.dart';
 
 Map<RegExp, TextStyle> tagPatternMap(BuildContext c) => {
       RegExp("#[|ㄱ-ㅎ가-힣a-zA-Z0-9]+"):

@@ -1,11 +1,4 @@
-import 'package:campi/components/structs/posts/feed/feed.dart';
-import 'package:campi/components/structs/posts/list.dart';
-import 'package:campi/components/structs/posts/mgz/thumnail.dart';
-import 'package:campi/modules/posts/bloc.dart';
-import 'package:campi/modules/posts/mgz/state.dart';
-import 'package:campi/modules/posts/state.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+part of './index.dart';
 
 class MgzListW extends StatelessWidget {
   const MgzListW({

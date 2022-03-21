@@ -1,11 +1,4 @@
-import 'dart:async';
-import 'package:campi/views/pages/posts/feed_detail.dart';
-import 'package:campi/views/router/config.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_maps_place_picker/google_maps_place_picker.dart';
+part of 'index.dart';
 
 const defaultZoom = 15.0;
 const CameraPosition defaultPosition = CameraPosition(

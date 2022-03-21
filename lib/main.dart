@@ -1,15 +1,10 @@
-import 'package:campi/config/constants.dart';
-import 'package:campi/config/theme.dart';
+import 'package:campi/config/index.dart';
 import 'package:campi/firebase_options.dart';
-import 'package:campi/modules/app/bloc.dart';
-import 'package:campi/modules/auth/repo.dart';
-import 'package:campi/modules/posts/bloc.dart';
-import 'package:campi/modules/posts/repo.dart';
-import 'package:campi/views/router/config.dart';
-import 'package:campi/views/router/delegate.dart';
-import 'package:campi/views/router/page.dart';
-import 'package:campi/views/router/parser.dart';
-import 'package:campi/views/router/state.dart';
+import 'package:campi/modules/app/index.dart';
+import 'package:campi/modules/auth/index.dart';
+import 'package:campi/modules/common/index.dart';
+import 'package:campi/modules/posts/index.dart';
+import 'package:campi/views/router/index.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -18,7 +13,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'modules/bloc_observer.dart';
-import 'modules/common/fcm/repo.dart';
 
 final appTheme = PiTheme();
 

@@ -1,10 +1,4 @@
-import 'package:campi/components/list/follow.dart';
-import 'package:campi/config/constants.dart';
-import 'package:campi/modules/auth/model.dart';
-import 'package:campi/modules/auth/user_repo.dart';
-import 'package:campi/modules/common/collections.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+part of './index.dart';
 
 const userRepo = UserRepo();
 
