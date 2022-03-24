@@ -30,103 +30,116 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
     final U = widget.U;
     final F = widget.feed;
     final fcm = context.read<AppBloc>().fcm;
-    final marginer = SizedBox(width: MediaQuery.of(context).size.width / 15);
+    final s = MediaQuery.of(context).size;
+    final marginer = SizedBox(width: s.width / 15);
     final aleady = U.favoriteFeeds.contains(F.feedId);
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          children: <Widget>[
-            IconTxtBtn(
-                onPressed: () async {
-                  if (aleady) {
-                    U.favoriteFeeds.remove(F.feedId);
-                    F.likeUserIds.remove(U.userId);
-                    F.likeCnt = F.likeUserIds.length;
-                    _updates(U);
-                  } else {
-                    U.favoriteFeeds.add(F.feedId);
-                    F.likeUserIds.add(U.userId);
-                    F.likeCnt = F.likeUserIds.length;
-                    _updates(U);
-                    final w = await F.writer;
-                    fcm.sendPushMessage(
-                        source: PushSource(
-                            tokens: w.rawFcmTokens,
-                            userIds: [],
-                            data: DataSource(
-                                pushType: "favorFeed",
-                                targetPage:
-                                    "$feedDetailPath?feedId=${F.feedId}"),
-                            noti: NotiSource(
-                                title: "캠핑 SNS 좋아요 알림",
-                                body: "${U.name}님이 당신의 SNS 에 좋아요를 눌렀어요!")));
-                  }
-                },
-                icon: Icon(
-                  aleady ? Icons.favorite : Icons.favorite_border_outlined,
-                  color: aleady ? Colors.red : null,
-                ),
-                txt: Text("${F.likeCnt}"))
-          ],
-        ),
-        marginer,
-        Row(
-          children: <Widget>[
-            IconButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                      context: context,
-                      builder: (context) {
-                        return Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: <Widget>[
-                            ListTile(
-                              leading: const Icon(Icons.account_box),
-                              title: const Text('Twitter'),
-                              onTap: () async {
-                                // FIXME: <after Prod>
-                                // snsShare(SocialShare.Twitter, F);
-                                // F.sharedUserIds.add(F.feedId);
-                                // widget.feed.update();
-                                // Navigator.pop(context);
-                              },
-                            ),
-                            ListTile(
-                              leading: const Icon(Icons.videocam),
-                              title: const Text('Email'),
-                              onTap: () {
-                                // FIXME: <after Prod>
-                                // snsShare(SocialShare.Email, F);
-                                // F.sharedUserIds.add(F.feedId);
-                                // widget.feed.update();
-                                // Navigator.pop(context);
-                              },
-                            ),
-                          ],
-                        );
-                      });
-                },
-                icon: const Icon(Icons.share_rounded)),
-            Text(F.sharedUserIds.length.toString()),
-          ],
-        ),
-        // Row(
-        //   children: <Widget>[
-        //     Icon(Icons.bookmark_border_outlined),
-        //     Text("  ${F.bookmarkedUserIds.length}  "),
-        //   ],
-        // ),
-        marginer,
-        if (widget.tSize == ThumnailSize.medium)
-          StreamBuilder<DocumentSnapshot>(
-              stream: getCollection(c: Collections.users)
-                  .doc(F.writerId)
-                  .snapshots(),
-              builder: (context, snapshot) => snapshot.hasData
-                  ? FollowBtn(targetUser: PiUser.fromSnap(snapshot))
-                  : loadingIndicator)
-      ],
+    return ConstrainedBox(
+      constraints: BoxConstraints(maxWidth: s.width),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: <Widget>[
+              IconTxtBtn(
+                  onPressed: () async {
+                    if (aleady) {
+                      U.favoriteFeeds.remove(F.feedId);
+                      F.likeUserIds.remove(U.userId);
+                      F.likeCnt = F.likeUserIds.length;
+                      _updates(U);
+                    } else {
+                      U.favoriteFeeds.add(F.feedId);
+                      F.likeUserIds.add(U.userId);
+                      F.likeCnt = F.likeUserIds.length;
+                      _updates(U);
+                      final w = await F.writer;
+                      fcm.sendPushMessage(
+                          source: PushSource(
+                              tokens: w.rawFcmTokens,
+                              userIds: [],
+                              data: DataSource(
+                                  pushType: "favorFeed",
+                                  targetPage:
+                                      "$feedDetailPath?feedId=${F.feedId}"),
+                              noti: NotiSource(
+                                  title: "캠핑 SNS 좋아요 알림",
+                                  body: "${U.name}님이 당신의 SNS 에 좋아요를 눌렀어요!")));
+                    }
+                  },
+                  icon: Icon(
+                    aleady ? Icons.favorite : Icons.favorite_border_outlined,
+                    color: aleady ? Colors.red : null,
+                  ),
+                  txt: Text("${F.likeCnt}"))
+            ],
+          ),
+          marginer,
+          Row(
+            children: <Widget>[
+              IconButton(
+                  onPressed: () {
+                    showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: <Widget>[
+                              ListTile(
+                                leading: const Icon(Icons.account_box),
+                                title: const Text('Twitter'),
+                                onTap: () async {
+                                  // FIXME: <after Prod>
+                                  // snsShare(SocialShare.Twitter, F);
+                                  // F.sharedUserIds.add(F.feedId);
+                                  // widget.feed.update();
+                                  // Navigator.pop(context);
+                                },
+                              ),
+                              ListTile(
+                                leading: const Icon(Icons.videocam),
+                                title: const Text('Email'),
+                                onTap: () {
+                                  // FIXME: <after Prod>
+                                  // snsShare(SocialShare.Email, F);
+                                  // F.sharedUserIds.add(F.feedId);
+                                  // widget.feed.update();
+                                  // Navigator.pop(context);
+                                },
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                  icon: const Icon(Icons.share_rounded)),
+              Text(F.sharedUserIds.length.toString()),
+            ],
+          ),
+          // Row(
+          //   children: <Widget>[
+          //     Icon(Icons.bookmark_border_outlined),
+          //     Text("  ${F.bookmarkedUserIds.length}  "),
+          //   ],
+          // ),
+          if (widget.tSize == ThumnailSize.medium) marginer,
+          if (widget.tSize == ThumnailSize.medium)
+            StreamBuilder<DocumentSnapshot>(
+                stream: getCollection(c: Collections.users)
+                    .doc(F.writerId)
+                    .snapshots(),
+                builder: (context, snapshot) => snapshot.hasData
+                    ? FollowBtn(targetUser: PiUser.fromSnap(snapshot))
+                    : loadingIndicator),
+          marginer,
+          ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: s.width / 7),
+            child: MoreSelect(onDelete: () {
+              debugPrint("On Delete $F");
+            }, onEdit: () {
+              debugPrint("On Edit $F");
+            }),
+          )
+        ],
+      ),
     );
   }
 }
