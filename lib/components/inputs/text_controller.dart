@@ -26,8 +26,11 @@ class _PiEditorsState extends State<PiFeedEditors> {
 
   @override
   void didChangeDependencies() {
+    debugPrint("Feed Post Editors didChangeDependencies");
     if (once == false) {
+      _titleController.text = context.read<FeedCubit>().state.title;
       _contentController = RichTextController(
+          text: context.read<FeedCubit>().state.content,
           patternMatchMap: tagPatternMap(context),
           onMatch: (matches) {
             setHashTags(context, matches);

@@ -13,7 +13,7 @@ class MgzCubit extends Cubit<MgzState> {
   void posting(BuildContext context) {
     getCollection(c: Collections.magazines)
         .doc(state.mgzId)
-        .set(state.toJson())
+        .set(state.toJson(), SetOptions(merge: true))
         .then((value) => context.read<NavigationCubit>().pop());
   }
 

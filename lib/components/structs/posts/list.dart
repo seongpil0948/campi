@@ -33,7 +33,8 @@ class _PostListTabState extends State<PostListTab>
     super.initState();
     feedBloc = context.read<FeedBloc>();
     mgzBloc = context.read<MgzBloc>();
-    changeTurn();
+    feedBloc.add(InitPosts());
+    mgzBloc.add(InitPosts());
     _controller = TabController(length: 2, vsync: this);
     try {
       widget.scrollController.addListener(_onScroll);
@@ -100,63 +101,74 @@ class _PostListTabState extends State<PostListTab>
     super.build(context);
     final size = MediaQuery.of(context).size;
     final T = Theme.of(context);
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              margin: EdgeInsets.only(left: size.width / 23, bottom: 10),
-              height: size.height / 30,
-              width: size.width / 2,
-              child: TabBar(
-                  controller: _controller,
-                  indicator: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      color: T.primaryColor),
-                  tabs: [
-                    PiTab(
-                        targetIndex: mgzTabIdx,
-                        txt: "캠핑 포스팅",
-                        selectedIndex: selectedIndex,
-                        T: T),
-                    PiTab(
-                        targetIndex: feedTabIdx,
-                        txt: "캠핑 SNS",
-                        selectedIndex: selectedIndex,
-                        T: T)
-                  ]),
-            ),
-            const Spacer(),
-            const Padding(
-              padding: EdgeInsets.only(bottom: 8.0, right: 24.0),
-              child: PostOrderSelector(),
-            )
-          ],
+    return SizedBox(
+      height: size.height,
+      width: size.width,
+      child: SingleChildScrollView(
+        controller: widget.scrollController,
+        child: SizedBox(
+          height: size.height,
+          width: size.width,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: size.width / 23, bottom: 10),
+                    height: size.height / 30,
+                    width: size.width / 2,
+                    child: TabBar(
+                        controller: _controller,
+                        indicator: BoxDecoration(
+                            borderRadius: BorderRadius.circular(50),
+                            color: T.primaryColor),
+                        tabs: [
+                          PiTab(
+                              targetIndex: mgzTabIdx,
+                              txt: "캠핑 포스팅",
+                              selectedIndex: selectedIndex,
+                              T: T),
+                          PiTab(
+                              targetIndex: feedTabIdx,
+                              txt: "캠핑 SNS",
+                              selectedIndex: selectedIndex,
+                              T: T)
+                        ]),
+                  ),
+                  const Spacer(),
+                  const Padding(
+                    padding: EdgeInsets.only(bottom: 8.0, right: 24.0),
+                    child: PostOrderSelector(),
+                  )
+                ],
+              ),
+              Expanded(
+                child: TabBarView(
+                    controller: _controller,
+                    children: widget.thumbSize == ThumnailSize.small &&
+                            widget.targetUser != null
+                        ? [
+                            GridMgzs(mgzs: widget.targetUser!.mgzs),
+                            FutureBuilder<PiUser>(
+                                future: UserRepo.getUserById(
+                                    widget.targetUser!.userId),
+                                builder: (context, snapshot) => snapshot.hasData
+                                    ? GridFeeds(
+                                        feeds: widget.targetUser!.feeds,
+                                        currUser: snapshot.data!)
+                                    : const Center(
+                                        child: CircularProgressIndicator())),
+                          ]
+                        : [
+                            MgzListW(widget: widget),
+                            FeedListW(widget: widget),
+                          ]),
+              )
+            ],
+          ),
         ),
-        Expanded(
-          child: TabBarView(
-              controller: _controller,
-              children: widget.thumbSize == ThumnailSize.small &&
-                      widget.targetUser != null
-                  ? [
-                      GridMgzs(mgzs: widget.targetUser!.mgzs),
-                      FutureBuilder<PiUser>(
-                          future:
-                              UserRepo.getUserById(widget.targetUser!.userId),
-                          builder: (context, snapshot) => snapshot.hasData
-                              ? GridFeeds(
-                                  feeds: widget.targetUser!.feeds,
-                                  currUser: snapshot.data!)
-                              : const Center(
-                                  child: CircularProgressIndicator())),
-                    ]
-                  : [
-                      MgzListW(widget: widget),
-                      FeedListW(widget: widget),
-                    ]),
-        )
-      ],
+      ),
     );
     // return super.build(context);
   }

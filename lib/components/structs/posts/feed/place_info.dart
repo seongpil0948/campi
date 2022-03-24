@@ -85,7 +85,7 @@ class CampPriceW extends StatelessWidget {
         "assets/images/won.png",
         height: iconImgH - 7,
       ),
-      Text(feed.placePrice != null ? "  ${feed.placePrice} 만원" : '')
+      Text(feed.placePrice ?? '')
     ]);
   }
 }

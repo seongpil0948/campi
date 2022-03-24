@@ -11,14 +11,14 @@ class MoreSelect extends StatelessWidget {
 
     if (onEdit != null) {
       items.add(DropdownMenuItem(
-        child: Icon(Icons.edit),
+        child: const Icon(Icons.edit),
         onTap: onEdit,
         value: 'edit',
       ));
     }
     if (onDelete != null) {
       items.add(DropdownMenuItem(
-        child: Icon(Icons.delete_forever_rounded),
+        child: const Icon(Icons.delete_forever_rounded),
         onTap: onDelete,
         value: 'delete',
       ));
@@ -30,11 +30,9 @@ class MoreSelect extends StatelessWidget {
         isDense: true,
         isExpanded: true,
         iconSize: 0,
-        hint: Icon(Icons.more_horiz_rounded),
+        hint: const Icon(Icons.more_horiz_rounded),
         dropdownColor: Colors.white,
         elevation: 0,
-        onChanged: (v) {
-          debugPrint(v.toString());
-        });
+        onChanged: (v) {});
   }
 }

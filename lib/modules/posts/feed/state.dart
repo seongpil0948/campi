@@ -8,7 +8,7 @@ class FeedState extends Equatable {
   late String title;
   late String content;
   String? placeAround;
-  int? placePrice;
+  String? placePrice;
   String? campKind;
   String? addr;
   double? lat;
@@ -23,7 +23,8 @@ class FeedState extends Equatable {
   PiUser? _writer;
 
   FeedState(
-      {this.files = const [],
+      {String? feedId,
+      this.files = const [],
       this.title = '',
       this.content = '',
       this.placeAround,
@@ -38,7 +39,7 @@ class FeedState extends Equatable {
       this.bookmarkedUserIds = const [],
       this.likeCnt = 0,
       required this.writerId})
-      : feedId = const Uuid().v4();
+      : feedId = feedId ?? const Uuid().v4();
 
   Future<PiUser> get writer async {
     if (_writer != null) return _writer!;
@@ -57,13 +58,14 @@ class FeedState extends Equatable {
   }
 
   FeedState copyWith({
+    String? feedId,
     List<PiFile>? fs,
     String? wrterId,
     String? title,
     String? content,
     String? around,
     String? campKind,
-    int? price,
+    String? price,
     String? addr,
     double? lat,
     double? lng,
@@ -74,6 +76,7 @@ class FeedState extends Equatable {
     List<String>? bookmarkedUserIds,
   }) {
     var feed = FeedState(
+        feedId: feedId ?? this.feedId,
         writerId: writerId,
         files: fs ?? files,
         title: title ?? this.title,

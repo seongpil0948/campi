@@ -92,104 +92,104 @@ class SelectMapW extends StatefulWidget {
 }
 
 class _SelectMapWState extends State<SelectMapW> {
-  static const kInitialPosition = LatLng(37.48030185005912, 126.85525781355892);
   PickResult? selectedPlace;
   @override
   Widget build(BuildContext context) {
-    final pConfig = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
+    // final pConfig = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
     return Row(
       children: [
         Image.asset("assets/images/map_marker.png", height: 20),
-        selectedPlace != null && selectedPlace!.formattedAddress != null
-            ? Expanded(
-                child: Text(
-                  selectedPlace != null
-                      ? pConfig.page.child is FeedDetailPage
-                          ? selectedPlace!.formattedAddress!
-                          : "선택 완료"
-                      : '',
-                  overflow: TextOverflow.ellipsis,
-                ),
-              )
-            : TextButton(
-                child: const Text("위치 선택", textAlign: TextAlign.center),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) {
-                        return Theme(
-                            data: Theme.of(context).copyWith(
-                                inputDecorationTheme:
-                                    const InputDecorationTheme()),
-                            child: PlacePicker(
-                              apiKey: 'AIzaSyAIVJL0nZPQc-N3EZ0YJCH90R4ZYxWMipY',
-                              initialPosition: kInitialPosition,
-                              useCurrentLocation: true,
-                              selectInitialPosition: true,
-                              //usePlaceDetailSearch: true,
-                              autocompleteLanguage: "ko",
-                              region: 'KR',
-                              selectedPlaceWidgetBuilder:
-                                  (_, place, state, isSearchBarFocused) {
-                                return isSearchBarFocused
-                                    ? Container()
-                                    : FloatingCard(
-                                        bottomPosition: 0.0,
-                                        leftPosition: 0.0,
-                                        rightPosition: 0.0,
-                                        width: 500,
-                                        borderRadius:
-                                            BorderRadius.circular(12.0),
-                                        child: state == SearchingState.Searching
-                                            ? const Center(
-                                                child:
-                                                    CircularProgressIndicator())
-                                            : Column(
-                                                children: [
-                                                  const SizedBox(height: 20),
-                                                  Text(
-                                                      "${place?.formattedAddress}"),
-                                                  ElevatedButton(
-                                                    child: Text(
-                                                      "위치 선택 완료",
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .bodyText1,
-                                                    ),
-                                                    onPressed: () {
-                                                      if (place != null) {
-                                                        setState(() {
-                                                          selectedPlace = place;
-                                                          widget.onPick(place);
-                                                        });
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      }
-                                                    },
-                                                  ),
-                                                  const SizedBox(height: 20)
-                                                ],
-                                              ),
-                                      );
-                              },
-                              pinBuilder: (context, state) {
-                                if (state == PinState.Idle) {
-                                  return const Icon(Icons.favorite_border);
-                                } else {
-                                  return const Icon(Icons.favorite);
-                                }
-                              },
-                            ));
-                      },
-                    ),
-                  );
-                  selectedPlace == null
-                      ? Container()
-                      : Text(selectedPlace!.formattedAddress ?? "");
-                },
-              ),
+        Expanded(
+          child: TextButton(
+            child: Text(
+              selectedPlace != null && selectedPlace!.formattedAddress != null
+                  ? selectedPlace!.formattedAddress!
+                  : "위치 선택",
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+            ),
+            onPressed: () {
+              loadMap(
+                  context: context,
+                  onPick: (place) {
+                    if (place != null) {
+                      setState(() {
+                        selectedPlace = place;
+                        widget.onPick(place);
+                      });
+                    }
+                  });
+              selectedPlace == null
+                  ? Container()
+                  : Text(selectedPlace!.formattedAddress ?? "");
+            },
+          ),
+        ),
       ],
     );
   }
+}
+
+void loadMap(
+    {required BuildContext context,
+    required void Function(PickResult? place) onPick}) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) {
+        return Theme(
+            data: Theme.of(context)
+                .copyWith(inputDecorationTheme: const InputDecorationTheme()),
+            child: PlacePicker(
+              apiKey: 'AIzaSyAIVJL0nZPQc-N3EZ0YJCH90R4ZYxWMipY',
+              initialPosition:
+                  const LatLng(37.48030185005912, 126.85525781355892),
+              useCurrentLocation: true,
+              selectInitialPosition: true,
+              //usePlaceDetailSearch: true,
+              autocompleteLanguage: "ko",
+              region: 'KR',
+              selectedPlaceWidgetBuilder:
+                  (_, place, state, isSearchBarFocused) {
+                return isSearchBarFocused
+                    ? Container()
+                    : FloatingCard(
+                        bottomPosition: 0.0,
+                        leftPosition: 0.0,
+                        rightPosition: 0.0,
+                        width: 500,
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: state == SearchingState.Searching
+                            ? const Center(child: CircularProgressIndicator())
+                            : Column(
+                                children: [
+                                  const SizedBox(height: 20),
+                                  Text("${place?.formattedAddress}"),
+                                  ElevatedButton(
+                                    child: Text(
+                                      "위치 선택 완료",
+                                      style:
+                                          Theme.of(context).textTheme.bodyText1,
+                                    ),
+                                    onPressed: () {
+                                      onPick(place);
+                                      Navigator.of(context).pop();
+                                    },
+                                  ),
+                                  const SizedBox(height: 20)
+                                ],
+                              ),
+                      );
+              },
+              pinBuilder: (context, state) {
+                if (state == PinState.Idle) {
+                  return const Icon(Icons.favorite_border);
+                } else {
+                  return const Icon(Icons.favorite);
+                }
+              },
+            ));
+      },
+    ),
+  );
 }

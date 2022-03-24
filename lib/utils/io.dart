@@ -42,6 +42,7 @@ class PiFile {
   }
 
   String? get fName => file != null ? file!.path.split("/").last : url;
+  bool get isUploaded => url != null;
 
   Map<String, dynamic> toJson() => {
         'url': url,

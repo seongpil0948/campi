@@ -29,10 +29,12 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
   Widget build(BuildContext context) {
     final U = widget.U;
     final F = widget.feed;
-    final fcm = context.read<AppBloc>().fcm;
+    final app = context.read<AppBloc>();
+    final fcm = app.fcm;
     final s = MediaQuery.of(context).size;
     final marginer = SizedBox(width: s.width / 15);
     final aleady = U.favoriteFeeds.contains(F.feedId);
+    final navi = context.read<NavigationCubit>();
     return ConstrainedBox(
       constraints: BoxConstraints(maxWidth: s.width),
       child: Row(
@@ -129,15 +131,21 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                 builder: (context, snapshot) => snapshot.hasData
                     ? FollowBtn(targetUser: PiUser.fromSnap(snapshot))
                     : loadingIndicator),
-          marginer,
-          ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: s.width / 7),
-            child: MoreSelect(onDelete: () {
-              debugPrint("On Delete $F");
-            }, onEdit: () {
-              debugPrint("On Edit $F");
-            }),
-          )
+          if (U == app.state.user) marginer,
+          if (U == app.state.user)
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: s.width / 7),
+              child: MoreSelect(onDelete: () async {
+                debugPrint("On Delete $F");
+                await getCollection(c: Collections.feeds)
+                    .doc(F.feedId)
+                    .delete();
+                navi.canPop() ? navi.pop() : navi.clearAndPush(rootPath);
+              }, onEdit: () {
+                debugPrint("On Edit $F");
+                navi.push(feedPostPath, {'selectedFeed': F});
+              }),
+            )
         ],
       ),
     );

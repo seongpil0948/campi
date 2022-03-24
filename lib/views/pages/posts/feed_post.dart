@@ -10,6 +10,7 @@ import 'package:campi/modules/posts/index.dart';
 import 'package:campi/utils/index.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/views/router/index.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,11 +21,15 @@ class FeedPostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
+
     return BlocBuilder<AppBloc, AppState>(
         builder: (context, state) => Piffold(
                 body: SingleChildScrollView(
                     child: BlocProvider(
-              create: (_) => FeedCubit(state.user.userId),
+              create: (_) => args.args['selectedFeed'] != null
+                  ? FeedCubit.fromState(args.args['selectedFeed'] as FeedState)
+                  : FeedCubit(state.user.userId),
               child: const FeedPostW(),
             ))));
   }
@@ -102,17 +107,22 @@ class _FeedPostWState extends State<FeedPostW> {
                                 return;
                               }
 
-                              for (var f in feed.files) {
+                              final aleadyFiles =
+                                  feed.files.where((e) => e.isUploaded);
+                              for (var f
+                                  in feed.files.where((e) => !e.isUploaded)) {
                                 var file = await uploadFilePathsToFirebase(
                                     f: f,
                                     path: 'clientUploads/$userId/${f.fName}');
                                 if (file != null) paths.add(file);
                               }
 
-                              final newFeed = feed.copyWith(fs: paths);
+                              final newFeed =
+                                  feed.copyWith(fs: [...aleadyFiles, ...paths]);
                               getCollection(c: Collections.feeds)
                                   .doc(newFeed.feedId)
-                                  .set(newFeed.toJson())
+                                  .set(
+                                      newFeed.toJson(), SetOptions(merge: true))
                                   .then((value) async {
                                 final writer = await feed.writer;
                                 writer.feedIds.add(feed.feedId);
@@ -131,7 +141,9 @@ class _FeedPostWState extends State<FeedPostW> {
                                             title: "캠핑 SNS 포스팅 알림",
                                             body:
                                                 "${writer.name}님이 SNS 게시글을 올렸어요!")));
-                                context.read<NavigationCubit>().pop();
+                                context
+                                    .read<NavigationCubit>()
+                                    .push(postListPath);
                               });
                             } catch (e, s) {
                               // debugPrint('!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
@@ -165,6 +177,7 @@ class _EditAround extends StatelessWidget {
     return PiSingleSelect(
         onChange: (String? v) =>
             context.read<FeedCubit>().changeAround(v ?? ""),
+        defaultVal: context.watch<FeedCubit>().state.placeAround,
         hint: "주변 정보",
         items: const ["마트 없음", "관광코스 없음", "계곡 없음", "산 없음"]);
   }
@@ -177,11 +190,13 @@ class _EditPrice extends StatelessWidget {
   Widget build(BuildContext context) {
     return PiSingleSelect(
         onChange: (String? v) {
-          context.read<FeedCubit>().changePrice(int.parse(
-              RegExp(r"\d+", caseSensitive: false, multiLine: false)
-                  .stringMatch(v ?? "0")
-                  .toString()));
+          if (v != null) context.read<FeedCubit>().changePrice(v);
+          // context.read<FeedCubit>().changePrice(int.parse(
+          //     RegExp(r"\d+", caseSensitive: false, multiLine: false)
+          //         .stringMatch(v ?? "0")
+          //         .toString()));
         },
+        defaultVal: context.watch<FeedCubit>().state.placePrice,
         hint: "가격 정보",
         items: const ["5만원 이하", "10만원 이하", "15만원 이하 ", "20만원 이하", "20만원 이상"]);
   }
@@ -198,6 +213,7 @@ class _EditKind extends StatelessWidget {
         onChange: (String? v) {
           context.read<FeedCubit>().changeKind(v ?? "");
         },
+        defaultVal: context.watch<FeedCubit>().state.campKind,
         hint: "    캠핑 종류",
         items: const [
           "    오토 캠핑",
