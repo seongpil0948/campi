@@ -131,7 +131,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                 builder: (context, snapshot) => snapshot.hasData
                     ? FollowBtn(targetUser: PiUser.fromSnap(snapshot))
                     : loadingIndicator),
-          if (U == app.state.user) marginer,
+          const Spacer(),
           if (U == app.state.user)
             ConstrainedBox(
               constraints: BoxConstraints(maxWidth: s.width / 7),

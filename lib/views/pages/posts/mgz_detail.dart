@@ -160,6 +160,7 @@ class MgzStatusRow extends StatelessWidget {
                 icon: const Icon(
                   Icons.mode_comment_outlined,
                 )),
+            const Spacer(),
             if (app.state.user.userId == state.writerId)
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: s.width / 7),
