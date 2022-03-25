@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'package:campi/views/pages/posts/feed_detail.dart';
-import 'package:campi/views/router/index.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

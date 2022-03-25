@@ -164,14 +164,13 @@ class MgzStatusRow extends StatelessWidget {
             if (app.state.user.userId == state.writerId)
               ConstrainedBox(
                 constraints: BoxConstraints(maxWidth: s.width / 7),
-                child: MoreSelect(onDelete: () async {
-                  await getCollection(c: Collections.magazines)
-                      .doc(state.mgzId)
-                      .delete();
-                  navi.canPop() ? navi.pop() : navi.clearAndPush(rootPath);
-                }, onEdit: () {
-                  navi.push(mgzPostPath, {'magazine': state});
-                }),
+                child: MoreSelect(
+                    onDelete: () => context
+                        .read<MgzBloc>()
+                        .add(MgzDeleted(mgzId: state.mgzId)),
+                    onEdit: () {
+                      navi.push(mgzPostPath, {'magazine': state});
+                    }),
               )
           ]);
         });

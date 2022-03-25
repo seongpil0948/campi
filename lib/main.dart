@@ -65,14 +65,16 @@ class CampingApp extends StatelessWidget {
                             context,
                             orderFromStr(
                                 orderBy: pref.getString(prefFeedOrderKey) ??
-                                    defaultPostOrderStr))),
+                                    defaultPostOrderStr),
+                            navi)),
                     BlocProvider(
                         create: (context) => MgzBloc(
                             searchBloc,
                             context,
                             orderFromStr(
                                 orderBy: pref.getString(prefMgzOrderKey) ??
-                                    defaultPostOrderStr))),
+                                    defaultPostOrderStr),
+                            navi)),
                     BlocProvider.value(value: navi),
                     BlocProvider(
                         create: (_) =>

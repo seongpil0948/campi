@@ -1,9 +1,10 @@
 part of './index.dart';
 
+final naviKey = GlobalKey<NavigatorState>();
+
 class PiRouteDelegator extends RouterDelegate<PiPageConfig>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin {
   final NavigationCubit navi;
-  final _navigatorKey = GlobalKey<NavigatorState>();
   PiRouteDelegator({required this.navi});
 
   @override
@@ -16,7 +17,7 @@ class PiRouteDelegator extends RouterDelegate<PiPageConfig>
 
   @override
   Future<void> setNewRoutePath(configuration) async {
-    // debugPrint("setNewRoutePath: $configuration");
+    debugPrint("setNewRoutePath: $configuration");
   }
 
   bool _onPopPage(Route<dynamic> route, result) {
@@ -35,5 +36,5 @@ class PiRouteDelegator extends RouterDelegate<PiPageConfig>
   }
 
   @override
-  GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
+  GlobalKey<NavigatorState>? get navigatorKey => naviKey;
 }

@@ -7,12 +7,22 @@ abstract class PostEvent extends Equatable {
 
 class MgzFetched extends PostEvent {}
 
+class MgzDeleted extends PostEvent {
+  final String mgzId;
+  MgzDeleted({required this.mgzId});
+}
+
 class MgzChangeOrder extends PostEvent {
   final PostOrder order;
   MgzChangeOrder({required this.order});
 }
 
 class FeedFetched extends PostEvent {}
+
+class FeedDeleted extends PostEvent {
+  final String feedId;
+  FeedDeleted({required this.feedId});
+}
 
 class InitPosts extends PostEvent {}
 

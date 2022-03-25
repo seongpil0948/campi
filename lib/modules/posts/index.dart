@@ -6,6 +6,7 @@ import 'package:campi/modules/common/index.dart';
 import 'package:campi/modules/posts/feed/index.dart';
 import 'package:campi/modules/posts/mgz/index.dart';
 import 'package:campi/utils/index.dart';
+import 'package:campi/views/router/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';

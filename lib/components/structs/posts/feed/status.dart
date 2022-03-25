@@ -32,7 +32,7 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
     final app = context.read<AppBloc>();
     final fcm = app.fcm;
     final s = MediaQuery.of(context).size;
-    final marginer = SizedBox(width: s.width / 15);
+    const marginer = SizedBox(width: 10);
     final aleady = U.favoriteFeeds.contains(F.feedId);
     final navi = context.read<NavigationCubit>();
     return ConstrainedBox(
@@ -135,16 +135,14 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
           if (U == app.state.user)
             ConstrainedBox(
               constraints: BoxConstraints(maxWidth: s.width / 7),
-              child: MoreSelect(onDelete: () async {
-                debugPrint("On Delete $F");
-                await getCollection(c: Collections.feeds)
-                    .doc(F.feedId)
-                    .delete();
-                navi.canPop() ? navi.pop() : navi.clearAndPush(rootPath);
-              }, onEdit: () {
-                debugPrint("On Edit $F");
-                navi.push(feedPostPath, {'selectedFeed': F});
-              }),
+              child: MoreSelect(
+                  onDelete: () => context
+                      .read<FeedBloc>()
+                      .add(FeedDeleted(feedId: F.feedId)),
+                  onEdit: () {
+                    debugPrint("On Edit $F");
+                    navi.push(feedPostPath, {'selectedFeed': F});
+                  }),
             )
         ],
       ),

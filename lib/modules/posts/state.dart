@@ -41,5 +41,6 @@ class PostState extends Equatable {
   }
 
   @override
-  List<Object> get props => [status, posts, hasReachedMax, myTurn, orderBy];
+  List<Object> get props =>
+      [status, posts, hasReachedMax, myTurn, orderBy, posts.length];
 }

@@ -93,12 +93,14 @@ class _MyPageW extends StatelessWidget {
                         create: (context) => FeedBloc(
                             context.read<SearchValBloc>(),
                             context,
-                            defaultPostOrder)),
+                            defaultPostOrder,
+                            context.read<NavigationCubit>())),
                     BlocProvider(
                         create: (context) => MgzBloc(
                             context.read<SearchValBloc>(),
                             context,
-                            defaultPostOrder))
+                            defaultPostOrder,
+                            context.read<NavigationCubit>()))
                   ],
                   child: PostListTab(
                       thumbSize: ThumnailSize.small, targetUser: targetUser))))

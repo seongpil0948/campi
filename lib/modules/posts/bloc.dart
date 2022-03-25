@@ -12,34 +12,52 @@ EventTransformer<E> throttleDroppable<E>(Duration duration) {
 }
 
 class MgzBloc extends PostBloc {
-  MgzBloc(SearchValBloc sBloc, BuildContext context, PostOrder orderBy)
+  MgzBloc(SearchValBloc sBloc, BuildContext context, PostOrder orderBy,
+      NavigationCubit navi)
       : super(
             searchBloc: sBloc,
+            navi: navi,
             postType: PostType.mgz,
             orderBy: orderBy,
             myTurn: entryPostType == PostType.mgz) {
     add(MgzFetched());
+    on<MgzDeleted>((event, emit) async {
+      //  FIXME:  스토리지 에셋도 지울 수 있어야함
+      await getCollection(c: Collections.magazines).doc(event.mgzId).delete();
+      navi.canPop() ? navi.pop() : navi.clearAndPush(rootPath);
+      add(InitPosts());
+    });
   }
 }
 
 class FeedBloc extends PostBloc {
-  FeedBloc(SearchValBloc sBloc, BuildContext context, PostOrder orderBy)
+  FeedBloc(SearchValBloc sBloc, BuildContext context, PostOrder orderBy,
+      NavigationCubit navi)
       : super(
             searchBloc: sBloc,
+            navi: navi,
             postType: PostType.feed,
             orderBy: orderBy,
             myTurn: entryPostType == PostType.feed) {
     add(FeedFetched());
+    on<FeedDeleted>((event, emit) async {
+      //  FIXME:  스토리지 에셋도 지울 수 있어야함
+      await getCollection(c: Collections.feeds).doc(event.feedId).delete();
+      navi.canPop() ? navi.pop() : navi.clearAndPush(rootPath);
+      add(InitPosts());
+    });
   }
 }
 
 class PostBloc extends Bloc<PostEvent, PostState> {
   PostRepo postRepo = PostRepo();
   UserRepo userRepo = const UserRepo();
+  final NavigationCubit navi;
   final SearchValBloc searchBloc;
 
   PostBloc(
-      {required this.searchBloc,
+      {required this.navi,
+      required this.searchBloc,
       required PostType postType,
       required PostOrder orderBy,
       required bool myTurn})
