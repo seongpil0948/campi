@@ -22,9 +22,12 @@ class MgzPostPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)!.settings.arguments as PiPageConfig;
     final _user = context.select((AppBloc bloc) => bloc.state.user);
     return BlocProvider(
-        create: (_) => MgzCubit(writerId: _user.userId),
+        create: (_) => args.args['magazine'] != null
+            ? MgzCubit.fromState(args.args['magazine'] as MgzState)
+            : MgzCubit(writerId: _user.userId),
         child: MgzPostW(user: _user));
   }
 }
@@ -42,8 +45,11 @@ class _MgzPostWState extends State<MgzPostW> {
   late QuillController _controller;
   @override
   void initState() {
-    _titleContoller = TextEditingController();
-    _controller = QuillController.basic();
+    final bloc = context.read<MgzCubit>();
+    _titleContoller = TextEditingController(text: bloc.state.title);
+    _controller = QuillController(
+        document: bloc.state.content,
+        selection: const TextSelection(baseOffset: 0, extentOffset: 0));
     super.initState();
   }
 

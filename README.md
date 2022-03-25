@@ -10,7 +10,7 @@
   * go web engine 내리고 firefunction 으로 옮기자,,?
 * App
   * 최적화 (기한 미정)
-  * 함수 인자 context 등 컨텍스트가 필요할때 인자로 받을 필요 없이
+  * 함수 인자 context 등 컨텍스트가 필요할때 인자로 받을 필요 없이             
     그냥 그 위젯의 키를 가져와서 context.of(key) 하면됌
     아니면 https://www.youtube.com/watch?v=lytQi-slT5Y&list=PLjxrf2q8roU23XGwz3Km7sQZFTdB996iG&index=1
     1분 7초 참고
@@ -19,6 +19,7 @@
   * 매거진 수정, 삭제 기능 필요
   * 피드 삭제 : 스토리지 데이터도 지워야함(미디어)
   * 피드 삭제후 리스트 초기화 안됌;; 왜??
+    * 마이페이지에서 잘보는거보면,, 일단 bloc 는 초기화 되는데 페이지가 alive 되어있는듯 수동 얼라이브 필요
   * 스토리지 한번 정리
 
 

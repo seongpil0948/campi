@@ -1,4 +1,5 @@
 import 'package:campi/components/btn/index.dart';
+import 'package:campi/components/inputs/index.dart';
 import 'package:campi/components/noti/index.dart';
 import 'package:campi/components/structs/comment/index.dart';
 import 'package:campi/config/index.dart';
@@ -137,29 +138,41 @@ class MgzStatusRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final app = context.watch<AppBloc>();
-    return Row(children: [
-      BlocBuilder<MgzCubit, MgzState>(
-          buildWhen: ((previous, current) =>
-              previous.likeCnt != current.likeCnt),
-          builder: (context, state) {
-            final aleady = state.likeUserIds.contains(app.state.user.userId);
-            return IconTxtBtn(
+    final s = MediaQuery.of(context).size;
+    final navi = context.read<NavigationCubit>();
+    return BlocBuilder<MgzCubit, MgzState>(
+        buildWhen: ((previous, current) => previous.likeCnt != current.likeCnt),
+        builder: (context, state) {
+          final aleady = state.likeUserIds.contains(app.state.user.userId);
+          return Row(children: [
+            IconTxtBtn(
                 onPressed: () =>
                     context.read<MgzCubit>().onLike(app.state.user, app.fcm),
                 icon: Icon(
                     aleady ? Icons.favorite : Icons.favorite_border_outlined,
                     color: aleady ? Colors.red : null),
-                txt: mat.Text("${state.likeCnt}"));
-          }),
-      IconButton(
-          onPressed: () {
-            context
-                .read<CommentBloc>()
-                .add(ShowPostCmtW(targetComment: null, showPostCmtWiget: true));
-          },
-          icon: const Icon(
-            Icons.mode_comment_outlined,
-          ))
-    ]);
+                txt: mat.Text("${state.likeCnt}")),
+            IconButton(
+                onPressed: () {
+                  context.read<CommentBloc>().add(ShowPostCmtW(
+                      targetComment: null, showPostCmtWiget: true));
+                },
+                icon: const Icon(
+                  Icons.mode_comment_outlined,
+                )),
+            if (app.state.user.userId == state.writerId)
+              ConstrainedBox(
+                constraints: BoxConstraints(maxWidth: s.width / 7),
+                child: MoreSelect(onDelete: () async {
+                  await getCollection(c: Collections.magazines)
+                      .doc(state.mgzId)
+                      .delete();
+                  navi.canPop() ? navi.pop() : navi.clearAndPush(rootPath);
+                }, onEdit: () {
+                  navi.push(mgzPostPath, {'magazine': state});
+                }),
+              )
+          ]);
+        });
   }
 }
