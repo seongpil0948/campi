@@ -1,9 +1,6 @@
 # CampyCampyCampy
 
 
-# INFO
-* [FontAwesome](https://fontawesome.com/v5.15/icons?d=gallery&p=2)
-
 # TODO
 미완료
 ----------------------------
@@ -11,12 +8,14 @@
   * 테스트 리스트 제작
 
 * App
+  * https://pub.dev/packages/google_fonts
+  * FutueBuilder 가 매 빌드마다 다시 실행 될 필요가 있을까? 아니다 didUpdateWidget 일때만 하면 된다
+    * https://medium.com/saugo360/flutter-my-futurebuilder-keeps-firing-6e774830bc2
   * 신규 모델 제작시 테스트 개념으로 code generation 형식으로 가보자
     * https://firebase.flutter.dev/docs/firestore-odm/defining-models
     * https://pub.dev/packages/freezed
   *   로깅 필요 Crashristic, Analytics
       * 아예 작성이 안되는듯
-  * 피드 삭제후 리스트 초기화 안됌;; 왜??
   * 사진 확대/축소 기능
 
 
