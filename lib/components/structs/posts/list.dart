@@ -4,7 +4,6 @@ const mgzTabIdx = 0;
 const feedTabIdx = 1;
 
 class PostListTab extends StatefulWidget {
-  /// FIXME: 탭바뀔때마다 두번씩 로드되고 있습니다.
   final ThumnailSize thumbSize;
   final PostsUser? targetUser;
   final ScrollController scrollController = ScrollController();

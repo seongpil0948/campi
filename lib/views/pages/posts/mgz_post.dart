@@ -136,7 +136,7 @@ class _MgzPostWState extends State<MgzPostW> {
         body: PiBackToClose(
           child: Container(
             color: Colors.white,
-            padding: EdgeInsets.only(left: 8, right: 8),
+            padding: const EdgeInsets.only(left: 8, right: 8),
             child: SingleChildScrollView(
               child: Column(
                 children: [

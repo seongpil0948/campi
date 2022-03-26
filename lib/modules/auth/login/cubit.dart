@@ -6,7 +6,6 @@ class LoginCubit extends Cubit<LoginState> {
   final AuthRepo _authRepo;
 
   Future<void> logInWithGoogle() async {
-    // FIXME: 지금 유저데이터가 제대로 안들어오는듯
     if (isClosed) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
