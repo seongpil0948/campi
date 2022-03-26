@@ -116,19 +116,19 @@ class _MgzPostWState extends State<MgzPostW> {
 
     // quillEditor.embedBuilder., defaultEmbedBuilder
     var toolbar = QuillToolbar.basic(
-      locale: const Locale("ko"),
-      controller: _controller,
-      onImagePickCallback: _onImagePickCallback,
-      onVideoPickCallback: _onVideoPickCallback,
-      showAlignmentButtons: false,
-      showCodeBlock: false,
-      showDividers: false,
-      showInlineCode: false,
-      showItalicButton: false,
-      showQuote: false,
-      showStrikeThrough: false,
-      showUnderLineButton: false,
-    );
+        locale: const Locale("ko"),
+        controller: _controller,
+        onImagePickCallback: _onImagePickCallback,
+        onVideoPickCallback: _onVideoPickCallback,
+        toolbarSectionSpacing: 1,
+        showCameraButton: false,
+        showCodeBlock: false,
+        showDividers: false,
+        showStrikeThrough: false,
+        showSmallButton: true,
+        showAlignmentButtons: true,
+        showListNumbers: false,
+        multiRowsDisplay: false);
     return SafeArea(
       // bottom: false,
       child: Scaffold(
@@ -136,10 +136,7 @@ class _MgzPostWState extends State<MgzPostW> {
         body: PiBackToClose(
           child: Container(
             color: Colors.white,
-            padding: EdgeInsets.only(
-                left: 8,
-                right: 8,
-                top: MediaQuery.of(context).size.height / 20),
+            padding: EdgeInsets.only(left: 8, right: 8),
             child: SingleChildScrollView(
               child: Column(
                 children: [
