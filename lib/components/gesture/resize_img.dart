@@ -163,8 +163,7 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
                   onScaleUpdate: (details) {
                     setState(() {
                       // _scaleFactor = _baseScaleFactor * details.scale;
-                      debugPrint(
-                          "\n before dx: ${coord.dx}, dy: ${coord.dy} delta x: ${details.focalPointDelta.dx} y: ${details.focalPointDelta.dy} ");
+                      // debugPrint("\n before dx: ${coord.dx}, dy: ${coord.dy} delta x: ${details.focalPointDelta.dx} y: ${details.focalPointDelta.dy} ");
                       var newDy = coord.dy + details.focalPointDelta.dy;
                       var newDx = coord.dx + details.focalPointDelta.dx;
                       if (newDy < 0) {
@@ -177,8 +176,7 @@ class _AdjRatioImgWState extends State<AdjRatioImgW> {
                         newDx = imgWidgetWidth - positionRect.width;
                       }
                       coord = Offset(newDx, newDy);
-                      debugPrint(
-                          "after setState coord: $coord  rect  $positionRect");
+                      // debugPrint("after setState coord: $coord  rect  $positionRect");
                     });
                   },
                   child: Align(

@@ -33,14 +33,6 @@ class _PostListTabState extends State<PostListTab>
     super.initState();
     feedBloc = context.read<FeedBloc>();
     mgzBloc = context.read<MgzBloc>();
-    if (feedBloc.state.posts.isEmpty ||
-        feedBloc.state.status == PostStatus.initial) {
-      feedBloc.add(FeedFetched());
-    }
-    if (mgzBloc.state.posts.isEmpty ||
-        mgzBloc.state.status == PostStatus.initial) {
-      mgzBloc.add(FeedFetched());
-    }
     _controller = TabController(length: 2, vsync: this);
     try {
       widget.scrollController.addListener(_onScroll);

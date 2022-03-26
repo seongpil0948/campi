@@ -22,10 +22,14 @@ class MgzBloc extends PostBloc {
             myTurn: entryPostType == PostType.mgz) {
     add(MgzFetched());
     on<MgzDeleted>((event, emit) async {
-      //  FIXME:  스토리지 에셋도 지울 수 있어야함
-      await getCollection(c: Collections.magazines).doc(event.mgzId).delete();
+      event.owner.mgzIds.remove(event.mgzId);
+      await Future.wait([
+        getCollection(c: Collections.magazines).doc(event.mgzId).delete(),
+        event.owner.update()
+      ]);
       navi.canPop() ? navi.pop() : navi.clearAndPush(rootPath);
       add(InitPosts());
+      add(MgzFetched());
     });
   }
 }
@@ -41,10 +45,14 @@ class FeedBloc extends PostBloc {
             myTurn: entryPostType == PostType.feed) {
     add(FeedFetched());
     on<FeedDeleted>((event, emit) async {
-      //  FIXME:  스토리지 에셋도 지울 수 있어야함
-      await getCollection(c: Collections.feeds).doc(event.feedId).delete();
+      event.owner.feedIds.remove(event.feedId);
+      await Future.wait([
+        getCollection(c: Collections.feeds).doc(event.feedId).delete(),
+        event.owner.update()
+      ]);
       navi.canPop() ? navi.pop() : navi.clearAndPush(rootPath);
       add(InitPosts());
+      add(FeedFetched());
     });
   }
 }

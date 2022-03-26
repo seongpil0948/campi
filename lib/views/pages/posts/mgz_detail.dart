@@ -4,6 +4,7 @@ import 'package:campi/components/noti/index.dart';
 import 'package:campi/components/structs/comment/index.dart';
 import 'package:campi/config/index.dart';
 import 'package:campi/modules/app/index.dart';
+import 'package:campi/modules/auth/index.dart';
 import 'package:campi/modules/comment/index.dart';
 import 'package:campi/modules/common/index.dart';
 import 'package:campi/modules/posts/index.dart';
@@ -144,35 +145,43 @@ class MgzStatusRow extends StatelessWidget {
         buildWhen: ((previous, current) => previous.likeCnt != current.likeCnt),
         builder: (context, state) {
           final aleady = state.likeUserIds.contains(app.state.user.userId);
-          return Row(children: [
-            IconTxtBtn(
-                onPressed: () =>
-                    context.read<MgzCubit>().onLike(app.state.user, app.fcm),
-                icon: Icon(
-                    aleady ? Icons.favorite : Icons.favorite_border_outlined,
-                    color: aleady ? Colors.red : null),
-                txt: mat.Text("${state.likeCnt}")),
-            IconButton(
-                onPressed: () {
-                  context.read<CommentBloc>().add(ShowPostCmtW(
-                      targetComment: null, showPostCmtWiget: true));
-                },
-                icon: const Icon(
-                  Icons.mode_comment_outlined,
-                )),
-            const Spacer(),
-            if (app.state.user.userId == state.writerId)
-              ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: s.width / 7),
-                child: MoreSelect(
-                    onDelete: () => context
-                        .read<MgzBloc>()
-                        .add(MgzDeleted(mgzId: state.mgzId)),
-                    onEdit: () {
-                      navi.push(mgzPostPath, {'magazine': state});
-                    }),
-              )
-          ]);
+          return FutureBuilder<PiUser?>(
+              future: UserRepo.getUserById(state.writerId),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) return loadingIndicator;
+                return Row(children: [
+                  IconTxtBtn(
+                      onPressed: () => context
+                          .read<MgzCubit>()
+                          .onLike(app.state.user, app.fcm),
+                      icon: Icon(
+                          aleady
+                              ? Icons.favorite
+                              : Icons.favorite_border_outlined,
+                          color: aleady ? Colors.red : null),
+                      txt: mat.Text("${state.likeCnt}")),
+                  IconButton(
+                      onPressed: () {
+                        context.read<CommentBloc>().add(ShowPostCmtW(
+                            targetComment: null, showPostCmtWiget: true));
+                      },
+                      icon: const Icon(
+                        Icons.mode_comment_outlined,
+                      )),
+                  const Spacer(),
+                  if (app.state.user == snapshot.data!)
+                    ConstrainedBox(
+                      constraints: BoxConstraints(maxWidth: s.width / 7),
+                      child: MoreSelect(
+                          onDelete: () => context.read<MgzBloc>().add(
+                              MgzDeleted(
+                                  mgzId: state.mgzId, owner: snapshot.data!)),
+                          onEdit: () {
+                            navi.push(mgzPostPath, {'magazine': state});
+                          }),
+                    )
+                ]);
+              });
         });
   }
 }

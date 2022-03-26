@@ -89,10 +89,7 @@ class FeedDetailW extends StatelessWidget {
                     padding: const EdgeInsets.only(left: leftPadding),
                     margin:
                         EdgeInsets.symmetric(vertical: mq.size.height / 100),
-                    child: FeedStatusRow(
-                      feed: feed,
-                      U: U,
-                    )),
+                    child: FeedStatusRow(feed: feed)),
                 if (feed.hashTags.isNotEmpty) ...[
                   const _Divider(),
                   Wrap(

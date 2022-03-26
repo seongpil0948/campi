@@ -9,7 +9,8 @@ class MgzFetched extends PostEvent {}
 
 class MgzDeleted extends PostEvent {
   final String mgzId;
-  MgzDeleted({required this.mgzId});
+  final PiUser owner;
+  MgzDeleted({required this.mgzId, required this.owner});
 }
 
 class MgzChangeOrder extends PostEvent {
@@ -21,7 +22,8 @@ class FeedFetched extends PostEvent {}
 
 class FeedDeleted extends PostEvent {
   final String feedId;
-  FeedDeleted({required this.feedId});
+  final PiUser owner;
+  FeedDeleted({required this.feedId, required this.owner});
 }
 
 class InitPosts extends PostEvent {}
