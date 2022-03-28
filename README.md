@@ -8,6 +8,7 @@
   * 테스트 리스트 제작
 
 * App
+  * 답글 작성시, 닉네임이 잘못되었다,,
   * https://pub.dev/packages/google_fonts
   * FutueBuilder 가 매 빌드마다 다시 실행 될 필요가 있을까? 아니다 didUpdateWidget 일때만 하면 된다
     * https://medium.com/saugo360/flutter-my-futurebuilder-keeps-firing-6e774830bc2
@@ -21,21 +22,7 @@
 
 완료
 ----------------------------
-  * 매거진 수정, 삭제 기능 필요 => O
-  * 푸쉬메시지 사용자 이름 null로 뜸 => O
-  * 사진자르기 => O
-    * 확인 누르면 자르기 사진 목록에서 삭제 및 넘어갈수 있도록 (백그라운드 이미지도 넘어가게 할 수 있도)=> O
-  * 왜 앱이 안켜지고 => O
-  * 성훈이가 내걸로 로그인됌? => O
-  * 포스팅 2 => sns 1 포스팅 1 => O
-  * 매거진  (지속적인 흠 필요)
-    * 작성 => O
-      * 이미지 근처 커서 잘 안뜨는거랑 전체적으로 사용감 향상 해야함 => O
-    * 디테일 => O
-      * 편집, 좋아요, 댓글,  => O
-      * 타이틀 맨위에 보이게 => O
-* App Engine
-  * 로깅 필요
+
 
 ## 정식 배포 후
 * BlocBuilder 나 Provider들 Consumer 나 Selector 사용해서 최적화

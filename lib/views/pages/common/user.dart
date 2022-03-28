@@ -39,10 +39,7 @@ class UserSnsInfo extends StatelessWidget {
                     Text("포스팅 ${u.mgzIds.length}", style: sty),
                     Text("SNS ${u.feedIds.length}", style: sty),
                     Text("팔로워 ${u.followers.length}", style: sty),
-                    Text(
-                      "팔로우 ${u.follows.length}",
-                      style: sty,
-                    )
+                    Text("팔로우 ${u.follows.length}", style: sty)
                   ],
                 ));
           } else {

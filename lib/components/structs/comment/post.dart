@@ -63,11 +63,8 @@ class CmtPostTxtField extends StatelessWidget {
         ? txtFieldW(null)
         : FutureBuilder<PiUser>(
             future: target.writer,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return txtFieldW(snapshot.data!.name);
-              }
-              return const Center(child: CircularProgressIndicator());
-            });
+            builder: (context, snapshot) => snapshot.hasData
+                ? txtFieldW(snapshot.data!.name)
+                : loadingIndicator);
   }
 }

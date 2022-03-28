@@ -1,4 +1,5 @@
 import 'package:campi/components/btn/index.dart';
+import 'package:campi/config/index.dart';
 import 'package:campi/modules/app/index.dart';
 import 'package:campi/modules/auth/index.dart';
 import 'package:campi/modules/comment/index.dart';
