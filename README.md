@@ -8,7 +8,7 @@
   * 테스트 리스트 제작
 
 * App
-  * 답글 작성시, 닉네임이 잘못되었다,,
+  * 답글 작성시, 닉네임이 잘못되었다,, 올라가는건 정상, 표시가 비정상
   * https://pub.dev/packages/google_fonts
   * FutueBuilder 가 매 빌드마다 다시 실행 될 필요가 있을까? 아니다 didUpdateWidget 일때만 하면 된다
     * https://medium.com/saugo360/flutter-my-futurebuilder-keeps-firing-6e774830bc2

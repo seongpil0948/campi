@@ -15,7 +15,11 @@ class CommentW extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(children: [
-      Column(children: [AvartarIdRow(c: c)]),
+      FutureBuilder<PiUser>(
+          future: c.writer,
+          builder: (context, snapshot) => snapshot.hasData
+              ? AvartarIdRow(user: snapshot.data!)
+              : loadingIndicator),
       Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
         Padding(
             padding: const EdgeInsets.only(top: 10, left: 10),

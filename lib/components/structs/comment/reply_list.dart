@@ -36,7 +36,11 @@ class ReplyList extends StatelessWidget {
                     margin: _margin,
                     child: Row(
                       children: [
-                        AvartarIdRow(c: c),
+                        FutureBuilder<PiUser>(
+                            future: r.writer,
+                            builder: (context, snapshot) => snapshot.hasData
+                                ? AvartarIdRow(user: snapshot.data!)
+                                : loadingIndicator),
                         Wrap(children: [Text(r.content)])
                       ],
                     ),

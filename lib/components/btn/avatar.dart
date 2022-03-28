@@ -69,28 +69,20 @@ class _PiEditAvatarState extends State<PiEditAvatar> {
 class AvartarIdRow extends StatelessWidget {
   const AvartarIdRow({
     Key? key,
-    required this.c,
+    required this.user,
   }) : super(key: key);
 
-  final CommentModel c;
+  final PiUser user;
 
   @override
   Widget build(BuildContext context) {
     final T = Theme.of(context).textTheme;
-    return FutureBuilder<PiUser>(
-        future: c.writer,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Row(children: [
-              getAvatar(15, snapshot.data!.photoURL),
-              Container(
-                  margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
-                  child: Text(snapshot.data!.name,
-                      style:
-                          T.bodyText2!.copyWith(fontWeight: FontWeight.bold))),
-            ]);
-          }
-          return const Center(child: CircularProgressIndicator());
-        });
+    return Row(children: [
+      getAvatar(15, user.photoURL),
+      Container(
+          margin: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+          child: Text(user.name,
+              style: T.bodyText2!.copyWith(fontWeight: FontWeight.bold)))
+    ]);
   }
 }
