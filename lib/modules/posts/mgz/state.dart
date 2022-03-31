@@ -1,7 +1,7 @@
 part of './index.dart';
 
 // ignore: must_be_immutable
-class MgzState extends Equatable {
+class MgzState extends Equatable with IsPost {
   final String writerId;
   final String title;
   final Document content;

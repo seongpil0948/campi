@@ -72,76 +72,89 @@ class _FollowTabListState extends State<FollowTabList>
                   if (usersSnapshot.hasData) {
                     final followers = usersSnapshot.data![0] as List<PiUser>;
                     final follows = usersSnapshot.data![1] as List<PiUser>;
-                    return Column(
-                      children: [
-                        SizedBox(
-                            height: MediaQuery.of(context).size.height / 7,
-                            child: Center(
-                              child: RichText(
-                                  text: TextSpan(
-                                      style:
-                                          Theme.of(context).textTheme.subtitle1,
-                                      children: [
-                                    const TextSpan(
-                                        text: '목록  ',
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.bold)),
-                                    const TextSpan(
-                                        text: '|',
-                                        style: TextStyle(fontSize: 25)),
-                                    TextSpan(
-                                        text: isFollower
-                                            ? "  ${followers.length}명"
-                                            : "  ${follows.length}명"),
-                                  ])),
-                            )),
-                        Container(
-                          margin: EdgeInsets.only(left: size.width / 23),
-                          height: size.height / 30,
-                          width: size.width / 2,
-                          child: TabBar(
-                              controller: _controller,
-                              indicator: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(50),
-                                  color: T.primaryColor),
-                              tabs: [
-                                Tab(
-                                    child: Text("팔로워",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: isFollower
-                                            ? tStyle.copyWith(
-                                                color: Colors.white)
-                                            : tStyle.copyWith(
-                                                color: T.primaryColor))),
-                                Tab(
-                                    child: Text("팔로잉",
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: !isFollower
-                                            ? tStyle.copyWith(
-                                                color: Colors.white)
-                                            : tStyle.copyWith(
-                                                color: T.primaryColor))),
-                              ]),
-                        ),
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 16.0),
-                          child: const Divider(),
-                        ),
-                        Expanded(
+                    return SizedBox(
+                      height: size.height - 30,
+                      width: size.width - 30,
+                      child: Column(
+                        children: [
+                          SizedBox(
+                              height: size.height / 7,
+                              child: Center(
+                                child: RichText(
+                                    text: TextSpan(
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .subtitle1,
+                                        children: [
+                                      const TextSpan(
+                                          text: '목록  ',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.bold)),
+                                      const TextSpan(
+                                          text: '|',
+                                          style: TextStyle(fontSize: 25)),
+                                      TextSpan(
+                                          text: isFollower
+                                              ? "  ${followers.length}명"
+                                              : "  ${follows.length}명"),
+                                    ])),
+                              )),
+                          Container(
+                            margin: EdgeInsets.only(left: size.width / 23),
+                            height: size.height / 30,
+                            width: size.width / 2,
+                            child: TabBar(
+                                controller: _controller,
+                                indicator: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(50),
+                                    color: T.primaryColor),
+                                tabs: [
+                                  Tab(
+                                      child: Text("팔로워",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: isFollower
+                                              ? tStyle.copyWith(
+                                                  color: Colors.white)
+                                              : tStyle.copyWith(
+                                                  color: T.primaryColor))),
+                                  Tab(
+                                      child: Text("팔로잉",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: !isFollower
+                                              ? tStyle.copyWith(
+                                                  color: Colors.white)
+                                              : tStyle.copyWith(
+                                                  color: T.primaryColor))),
+                                ]),
+                          ),
+                          const SizedBox(height: 16, child: Divider()),
+                          SizedBox(
+                            height: size.height / 4,
+                            width: size.width - 50,
                             child:
                                 TabBarView(controller: _controller, children: [
-                          ListView.builder(
-                              itemBuilder: (context, idx) =>
-                                  FollowUserTile(targetUser: followers[idx]),
-                              itemCount: followers.length),
-                          ListView.builder(
-                              itemBuilder: (context, idx) =>
-                                  FollowUserTile(targetUser: follows[idx]),
-                              itemCount: follows.length)
-                        ]))
-                      ],
+                              Column(children: [
+                                for (var i = 0; i < followers.length; i++)
+                                  SizedBox(
+                                    height: size.height / 12,
+                                    child: FollowUserTile(
+                                        targetUser: followers[i]),
+                                  )
+                              ]),
+                              Column(children: [
+                                for (var j = 0; j < follows.length; j++)
+                                  SizedBox(
+                                    height: size.height / 12,
+                                    child:
+                                        FollowUserTile(targetUser: follows[j]),
+                                  )
+                              ])
+                            ]),
+                          )
+                        ],
+                      ),
                     );
                   } else {
                     return usersSnapshot.hasError

@@ -25,6 +25,7 @@ class PiTheme extends PiThemeInterface {
     const bodyTxt2 = TextStyle(color: Colors.black);
     final origin = ThemeData.light();
     return ThemeData(
+      fontFamily: 'KOPUB',
       brightness: Brightness.light,
       primaryColor: primaryColor,
       hintColor: Colors.black,

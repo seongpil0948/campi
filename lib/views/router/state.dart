@@ -1,6 +1,7 @@
 part of './index.dart';
 
 class NavigationCubit extends Cubit<NavigationStack> {
+  // TODO: State Not Updated when Emit
   NavigationCubit(List<PiPageConfig> initialPages)
       : super(NavigationStack(initialPages)) {
     FirebaseAnalytics.instance

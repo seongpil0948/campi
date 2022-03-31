@@ -14,8 +14,11 @@ class GoMyAvatar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () =>
-          context.read<NavigationCubit>().push(myPath, {"selectedUser": user}),
+      onTap: () {
+        final navi = context.read<NavigationCubit>();
+        // Navigator.of(context).pop();
+        navi.clearAndPush(myPath, {"selectedUser": user});
+      },
       child: getAvatar(radius, user.photoURL),
     );
   }

@@ -1,9 +1,9 @@
 part of './index.dart';
 
-class NavigationStack {
+class NavigationStack extends Equatable {
   final List<PiPageConfig> _stack;
 
-  NavigationStack(this._stack);
+  const NavigationStack(this._stack);
 
   List<MaterialPage> get pages => List.unmodifiable(_stack.map((e) => e.page));
   List<PiPageConfig> get configs => _stack;
@@ -61,4 +61,7 @@ class NavigationStack {
     _stack.addAll(configs);
     return NavigationStack(_stack);
   }
+
+  @override
+  List<Object?> get props => [_stack, length, first, last];
 }

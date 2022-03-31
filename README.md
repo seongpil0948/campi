@@ -8,8 +8,9 @@
   * 테스트 리스트 제작
 
 * App
-  * 답글 작성시, 닉네임이 잘못되었다,, 올라가는건 정상, 표시가 비정상
-  * https://pub.dev/packages/google_fonts
+  * 성훈이 폰트 반영
+  * 매거진 좋아요 클릭시 DB 미반영됌 (푸쉬알림 및 화면엔 반영);
+  * 받아올때 좋아요 오더바이 잘되는지 확인
   * FutueBuilder 가 매 빌드마다 다시 실행 될 필요가 있을까? 아니다 didUpdateWidget 일때만 하면 된다
     * https://medium.com/saugo360/flutter-my-futurebuilder-keeps-firing-6e774830bc2
   * 신규 모델 제작시 테스트 개념으로 code generation 형식으로 가보자
@@ -22,7 +23,8 @@
 
 완료
 ----------------------------
-
+* 답글 작성시, 닉네임이 코멘트 작성자로 보이는 현상 수정
+* 
 
 ## 정식 배포 후
 * BlocBuilder 나 Provider들 Consumer 나 Selector 사용해서 최적화

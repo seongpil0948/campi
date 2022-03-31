@@ -6,7 +6,6 @@ import 'package:campi/config/index.dart';
 import 'package:campi/modules/app/index.dart';
 import 'package:campi/modules/common/index.dart';
 import 'package:campi/modules/posts/feed/index.dart';
-import 'package:campi/modules/posts/index.dart';
 import 'package:campi/utils/index.dart';
 import 'package:campi/views/pages/layouts/piffold.dart';
 import 'package:campi/views/router/index.dart';
@@ -127,8 +126,6 @@ class _FeedPostWState extends State<FeedPostW> {
                                 final writer = await feed.writer;
                                 writer.feedIds.add(feed.feedId);
                                 await writer.update();
-                                context.read<FeedBloc>().add(
-                                    FeedChangeOrder(order: PostOrder.latest));
                                 context.read<AppBloc>().fcm.sendPushMessage(
                                     source: PushSource(
                                         tokens: [],

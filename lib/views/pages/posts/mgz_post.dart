@@ -3,7 +3,6 @@ import 'package:campi/components/noti/index.dart';
 import 'package:campi/modules/app/index.dart';
 import 'package:campi/modules/auth/index.dart';
 import 'package:campi/modules/common/index.dart';
-import 'package:campi/modules/posts/index.dart';
 import 'package:campi/modules/posts/mgz/index.dart';
 import 'package:campi/utils/index.dart';
 import 'package:campi/views/router/index.dart';
@@ -132,22 +131,18 @@ class _MgzPostWState extends State<MgzPostW> {
     return SafeArea(
       // bottom: false,
       child: Scaffold(
-        appBar: toolbar,
+        appBar: PreferredSize(
+          preferredSize:
+              Size(double.infinity, MediaQuery.of(context).size.height / 7),
+          child: Column(
+            children: [_TitleField(titleContoller: _titleContoller), toolbar],
+          ),
+        ),
         body: PiBackToClose(
-          child: Container(
-            color: Colors.white,
-            padding: const EdgeInsets.only(left: 8, right: 8),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _TitleField(titleContoller: _titleContoller),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: quillEditor,
-                  ),
-                ],
-              ),
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: quillEditor,
             ),
           ),
         ),
@@ -164,9 +159,6 @@ class _MgzPostWState extends State<MgzPostW> {
             c.posting(context);
             widget.user.mgzIds.add(c.state.mgzId);
             widget.user.update();
-            context
-                .read<MgzBloc>()
-                .add(MgzChangeOrder(order: PostOrder.latest));
             context.read<AppBloc>().fcm.sendPushMessage(
                 source: PushSource(
                     tokens: [],
@@ -208,7 +200,7 @@ class _TitleField extends StatelessWidget {
             errorBorder: InputBorder.none,
             disabledBorder: InputBorder.none,
             contentPadding:
-                const EdgeInsets.only(left: 15, bottom: 11, top: 11, right: 15),
+                const EdgeInsets.only(left: 15, bottom: 11, top: 0, right: 15),
             label: mat.Text("제목을 입력 해주세요..",
                 style: TextStyle(color: Theme.of(context).cardColor))),
         controller: _titleContoller);

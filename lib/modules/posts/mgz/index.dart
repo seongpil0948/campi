@@ -11,5 +11,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_quill/flutter_quill.dart';
 import 'package:uuid/uuid.dart';
 
+import '../index.dart';
+
 part './cubit.dart';
 part './state.dart';

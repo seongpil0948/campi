@@ -1,5 +1,6 @@
 import 'package:campi/modules/auth/index.dart';
 import 'package:campi/modules/common/index.dart';
+import 'package:campi/modules/posts/index.dart';
 import 'package:campi/utils/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';

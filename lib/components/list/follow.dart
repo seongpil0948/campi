@@ -9,12 +9,14 @@ class FollowUserTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-        leading: GoMyAvatar(user: targetUser),
-        title: Text(targetUser.uId),
-        subtitle: Text(targetUser.email ?? ""),
-        trailing: FollowBtn(
-          targetUser: targetUser,
-        ));
+    return Row(children: [
+      GoMyAvatar(user: targetUser),
+      const SizedBox(width: 10),
+      Text(targetUser.name),
+      const Spacer(),
+      FollowBtn(
+        targetUser: targetUser,
+      )
+    ]);
   }
 }

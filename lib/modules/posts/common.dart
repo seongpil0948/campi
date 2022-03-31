@@ -2,6 +2,8 @@ part of './index.dart';
 
 enum ContentType { feed, mgz, store, reply }
 
+mixin IsPost {}
+
 extension ParseToString on ContentType {
   String toCustomString() {
     return toString().split('.').last;

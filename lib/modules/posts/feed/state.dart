@@ -1,7 +1,7 @@
 part of './index.dart';
 
 // ignore: must_be_immutable
-class FeedState extends Equatable {
+class FeedState extends Equatable with IsPost {
   final String feedId;
   final List<PiFile> files;
   final String writerId;

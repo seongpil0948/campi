@@ -2,8 +2,7 @@ part of './index.dart';
 
 // const _postLimit = 20;
 const throttleDuration = Duration(milliseconds: 1000);
-const mgzFetchPSize = 3;
-const feedFetchPSize = 3;
+const postFetchSize = 3;
 
 EventTransformer<E> throttleDroppable<E>(Duration duration) {
   return (events, mapper) {
@@ -96,11 +95,9 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       }
 
       if (postType == PostType.feed) {
-        final feeds = await _fetchFeeds(tags: tags);
-        add(UpdatePosts(posts: feeds));
+        await _fetchFeeds(tags: tags);
       } else if (postType == PostType.mgz) {
-        final mgzs = await _fetchMgzs(tags: tags);
-        add(UpdatePosts(posts: mgzs));
+        await _fetchMgzs(tags: tags);
       }
     });
   }
@@ -121,8 +118,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         posts: [],
         hasReachedMax: false,
         orderBy: event.order));
-    final feeds = await _fetchFeeds();
-    add(UpdatePosts(posts: feeds));
+    await _fetchFeeds();
   }
 
   _mgzChangeOrder(MgzChangeOrder event, Emitter<PostState> emit) async {
@@ -133,8 +129,7 @@ class PostBloc extends Bloc<PostEvent, PostState> {
         posts: [],
         hasReachedMax: false,
         orderBy: event.order));
-    final mgzs = await _fetchMgzs();
-    add(UpdatePosts(posts: mgzs));
+    await _fetchMgzs();
   }
 
   _postTurnChaged(PostTurnChange event, Emitter<PostState> emit) {
@@ -143,66 +138,95 @@ class PostBloc extends Bloc<PostEvent, PostState> {
 
   Future<void> _updatePosts(UpdatePosts event, Emitter<PostState> emit) async {
     final newPosts = event.posts;
+
     var posts = List.of(state.posts)..addAll(newPosts);
-    newPosts.isEmpty || newPosts.length < feedFetchPSize
-        ? emit(state.copyWith(
-            status: PostStatus.success, hasReachedMax: true, posts: posts))
-        : emit(
-            state.copyWith(
-              status: PostStatus.success,
-              posts: posts,
-              hasReachedMax: false,
-            ),
-          );
+    if (newPosts.isEmpty || newPosts.length < postFetchSize) {
+      emit(state.copyWith(
+          status: event.status, hasReachedMax: true, posts: posts));
+    } else {
+      emit(state.copyWith(
+        status: PostStatus.success,
+        posts: posts,
+        hasReachedMax: event.hasReachedMax,
+      ));
+    }
   }
 
   Future<void> _onFeedFetched(
     FeedFetched event,
     Emitter<PostState> emit,
-  ) async {
-    try {
-      final feeds = await _fetchFeeds();
-      add(UpdatePosts(posts: feeds));
-    } catch (_) {
-      emit(state.copyWith(status: PostStatus.failure));
-    }
-  }
+  ) async =>
+      await _fetchFeeds();
 
   Future<void> _onMgzFetched(
     MgzFetched event,
     Emitter<PostState> emit,
-  ) async {
+  ) async =>
+      await _fetchMgzs();
+
+  Future<void> _fetchFeeds({List<String>? tags}) async {
     try {
-      final mgzs = await _fetchMgzs();
-      add(UpdatePosts(posts: mgzs));
+      final len = state.posts.length;
+      final lastFeed = len > 0 ? state.posts.last as FeedState : null;
+      final feeds = await postRepo.getFeeds(
+          lastObj: tags == null || tags.isEmpty ? lastFeed : null,
+          pageSize: postFetchSize,
+          orderBy: state.orderBy,
+          tags: tags);
+      final newFeeds = feeds.docs
+          .map((m) => FeedState.fromJson(m.data() as Map<String, dynamic>))
+          .toList();
+      if (newFeeds.isNotEmpty &&
+          lastFeed != null &&
+          newFeeds.any((element) => element.feedId == lastFeed.feedId)) {
+        add(UpdatePosts(
+            posts: newFeeds
+                .where((element) => element.feedId != lastFeed.feedId)
+                .toList(),
+            status: PostStatus.success,
+            hasReachedMax: true));
+      } else {
+        add(UpdatePosts(
+          posts: newFeeds,
+          status: PostStatus.success,
+          hasReachedMax: false,
+        ));
+      }
     } catch (_) {
-      emit(state.copyWith(status: PostStatus.failure));
+      add(UpdatePosts(posts: state.posts, status: PostStatus.failure));
     }
   }
 
-  Future<List<FeedState>> _fetchFeeds({List<String>? tags}) async {
-    final len = state.posts.length;
-    final lastFeed = len > 0 ? state.posts.last as FeedState : null;
-    final feeds = await postRepo.getFeeds(
-        lastObj: tags == null || tags.isEmpty ? lastFeed : null,
-        pageSize: feedFetchPSize,
-        orderBy: state.orderBy,
-        tags: tags);
-    return feeds.docs
-        .map((m) => FeedState.fromJson(m.data() as Map<String, dynamic>))
-        .toList();
-  }
-
-  Future<List<MgzState>> _fetchMgzs({List<String>? tags}) async {
-    final len = state.posts.length;
-    final lastMgz = len > 0 ? state.posts.last as MgzState : null;
-    final mgzs = await postRepo.getMgzs(
-        lastObj: tags == null || tags.isEmpty ? lastMgz : null,
-        pageSize: mgzFetchPSize,
-        orderBy: state.orderBy,
-        tags: tags);
-    return mgzs.docs
-        .map((m) => MgzState.fromJson(m.data() as Map<String, dynamic>))
-        .toList();
+  Future<void> _fetchMgzs({List<String>? tags}) async {
+    try {
+      final len = state.posts.length;
+      final lastMgz = len > 0 ? state.posts.last as MgzState : null;
+      final mgzs = await postRepo.getMgzs(
+          lastObj: tags == null || tags.isEmpty ? lastMgz : null,
+          pageSize: postFetchSize,
+          orderBy: state.orderBy,
+          tags: tags);
+      final newMgzs = mgzs.docs
+          .map((m) => MgzState.fromJson(m.data() as Map<String, dynamic>))
+          .toList();
+      if (newMgzs.isNotEmpty &&
+          lastMgz != null &&
+          newMgzs.any((element) => element.mgzId == lastMgz.mgzId)) {
+        add(UpdatePosts(
+            posts: newMgzs
+                .where((element) => element.mgzId != lastMgz.mgzId)
+                .toList(),
+            status: PostStatus.success,
+            hasReachedMax: true));
+      } else {
+        add(UpdatePosts(
+          posts: newMgzs,
+          status: PostStatus.success,
+          hasReachedMax: false,
+        ));
+      }
+    } catch (_) {
+      add(UpdatePosts(posts: state.posts, status: PostStatus.failure));
+    }
   }
 }

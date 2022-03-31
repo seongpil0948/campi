@@ -29,8 +29,10 @@ class FeedDeleted extends PostEvent {
 class InitPosts extends PostEvent {}
 
 class UpdatePosts extends PostEvent {
-  final List<dynamic> posts;
-  UpdatePosts({required this.posts});
+  final List<IsPost> posts;
+  final PostStatus? status;
+  final bool? hasReachedMax;
+  UpdatePosts({required this.posts, this.status, this.hasReachedMax});
 }
 
 class FeedChangeOrder extends PostEvent {

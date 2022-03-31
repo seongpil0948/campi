@@ -1,12 +1,11 @@
 part of './index.dart';
 
 class FeedListW extends StatelessWidget {
-  final PostListTab widget;
   const FeedListW({
     Key? key,
-    required this.widget,
+    required this.scrollController,
   }) : super(key: key);
-
+  final ScrollController scrollController;
   @override
   Widget build(BuildContext context) {
     final txtSty = Theme.of(context).textTheme.bodyText2;
@@ -29,7 +28,7 @@ class FeedListW extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) =>
                   FeedW(mq: mq, f: state.posts[index] as FeedState),
               itemCount: state.posts.length,
-              controller: widget.scrollController,
+              controller: scrollController,
             );
           default:
             return Container();

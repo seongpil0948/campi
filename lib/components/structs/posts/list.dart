@@ -6,7 +6,6 @@ const feedTabIdx = 1;
 class PostListTab extends StatefulWidget {
   final ThumnailSize thumbSize;
   final PostsUser? targetUser;
-  final ScrollController scrollController = ScrollController();
   PostListTab({
     required this.thumbSize,
     this.targetUser,
@@ -19,6 +18,7 @@ class PostListTab extends StatefulWidget {
 class _PostListTabState extends State<PostListTab>
     with AutomaticKeepAliveClientMixin<PostListTab>, TickerProviderStateMixin {
   late final TabController _controller;
+  late final ScrollController scrollController;
   late final FeedBloc feedBloc;
   late final MgzBloc mgzBloc;
   int selectedIndex = entryPostType == PostType.mgz ? mgzTabIdx : feedTabIdx;
@@ -33,15 +33,8 @@ class _PostListTabState extends State<PostListTab>
     feedBloc = context.read<FeedBloc>();
     mgzBloc = context.read<MgzBloc>();
     _controller = TabController(length: 2, vsync: this);
-    try {
-      widget.scrollController.addListener(_onScroll);
-    } on FlutterError catch (e) {
-      if (e.message.contains("was used after being disposed.")) {
-        return;
-      }
-      rethrow;
-    }
-
+    scrollController = ScrollController();
+    scrollController.addListener(_onScroll);
     _controller.addListener(() {
       setState(() {
         selectedIndex = _controller.index;
@@ -63,8 +56,8 @@ class _PostListTabState extends State<PostListTab>
   }
 
   bool get _isBottom {
-    final maxScroll = widget.scrollController.position.maxScrollExtent;
-    final currentScroll = widget.scrollController.offset;
+    final maxScroll = scrollController.position.maxScrollExtent;
+    final currentScroll = scrollController.offset;
     return currentScroll >= (maxScroll * 0.9);
   }
 
@@ -77,7 +70,7 @@ class _PostListTabState extends State<PostListTab>
   @override
   void dispose() {
     try {
-      widget.scrollController
+      scrollController
         ..dispose()
         ..removeListener(_onScroll);
       _controller.dispose();
@@ -152,8 +145,8 @@ class _PostListTabState extends State<PostListTab>
                                     child: CircularProgressIndicator())),
                       ]
                     : [
-                        MgzListW(widget: widget),
-                        FeedListW(widget: widget),
+                        MgzListW(scrollController: scrollController),
+                        FeedListW(scrollController: scrollController),
                       ]),
           )
         ],

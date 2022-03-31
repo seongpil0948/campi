@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:campi/components/btn/index.dart';
 import 'package:campi/components/geo/index.dart';
 import 'package:campi/components/inputs/index.dart';
-import 'package:campi/components/structs/posts/index.dart';
 import 'package:campi/config/index.dart';
 import 'package:campi/modules/app/index.dart';
 import 'package:campi/modules/auth/index.dart';

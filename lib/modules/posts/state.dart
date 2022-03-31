@@ -14,7 +14,7 @@ class PostState extends Equatable {
       required this.myTurn});
 
   final PostStatus status;
-  final List<dynamic> posts;
+  final List<IsPost> posts;
   final bool hasReachedMax;
   final PostType postType;
   final bool myTurn;
@@ -22,7 +22,7 @@ class PostState extends Equatable {
 
   PostState copyWith(
       {PostStatus? status,
-      List<dynamic>? posts,
+      List<IsPost>? posts,
       bool? hasReachedMax,
       bool? myTurn,
       PostOrder? orderBy}) {

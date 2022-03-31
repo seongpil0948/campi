@@ -1,12 +1,9 @@
 part of './index.dart';
 
 class MgzListW extends StatelessWidget {
-  const MgzListW({
-    Key? key,
-    required this.widget,
-  }) : super(key: key);
+  const MgzListW({Key? key, required this.scrollController}) : super(key: key);
 
-  final PostListTab widget;
+  final ScrollController scrollController;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +27,7 @@ class MgzListW extends StatelessWidget {
                   mgz: state.posts[index] as MgzState,
                   tSize: ThumnailSize.medium),
               itemCount: state.posts.length,
-              controller: widget.scrollController,
+              controller: scrollController,
             );
           default:
             return Container();

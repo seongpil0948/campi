@@ -37,7 +37,7 @@ class PiPageConfig extends Equatable {
   }
 
   @override
-  List<Object?> get props => [path];
+  List<Object?> get props => [path, args];
 }
 
 ///An extension function to facilitate adding nullable Maps (I need it in other places, declared it here for clarity)
