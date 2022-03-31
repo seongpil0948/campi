@@ -24,8 +24,9 @@ class PiTheme extends PiThemeInterface {
     const secondColor = Colors.grey; //1
     const bodyTxt2 = TextStyle(color: Colors.black);
     final origin = ThemeData.light();
+    const fontName = "Kopub";
     return ThemeData(
-      fontFamily: 'KOPUB',
+      fontFamily: fontName,
       brightness: Brightness.light,
       primaryColor: primaryColor,
       hintColor: Colors.black,
@@ -37,18 +38,18 @@ class PiTheme extends PiThemeInterface {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
       ),
       textTheme: TextTheme(
-          bodyText1: const TextStyle(color: Colors.white),
+          bodyText1: const TextStyle(color: Colors.white, fontFamily: fontName),
           bodyText2: bodyTxt2,
           subtitle2: bodyTxt2.copyWith(color: primaryColor),
           overline: origin.textTheme.overline!.copyWith(color: Colors.white)),
       primaryTextTheme: TextTheme(
-          bodyText1: TextStyle(
-            color: primaryColor,
-          ),
-          bodyText2: const TextStyle(color: primaryVarColor)),
+          bodyText1: TextStyle(fontFamily: fontName, color: primaryColor),
+          bodyText2:
+              const TextStyle(color: primaryVarColor, fontFamily: fontName)),
       appBarTheme: const AppBarTheme(
           iconTheme: IconThemeData(color: Colors.black),
-          toolbarTextStyle: TextStyle(color: Colors.black),
+          toolbarTextStyle:
+              TextStyle(color: Colors.black, fontFamily: fontName),
           backgroundColor: Colors.white,
           elevation: 0),
       // visualDensity: VisualDensity(vertical: 0.5, horizontal: 0.5),
