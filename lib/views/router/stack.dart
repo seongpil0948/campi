@@ -16,7 +16,8 @@ class NavigationStack extends Equatable {
   //not to go into how a cubit defines a state to be new with lists, I've just returned a new instance
 
   void clear() {
-    _stack.removeRange(0, _stack.length - 2);
+    final stack = List<PiPageConfig>.from(_stack);
+    stack.removeRange(0, stack.length - 2);
     //pages list in navigator can't be empty, remember
   }
 
@@ -25,41 +26,51 @@ class NavigationStack extends Equatable {
   }
 
   NavigationStack pop() {
-    if (canPop()) _stack.remove(_stack.last);
-    return NavigationStack(_stack);
+    final stack = List<PiPageConfig>.from(_stack);
+    if (canPop()) {
+      stack.remove(stack.last);
+    }
+    return NavigationStack(stack);
   }
 
   NavigationStack pushBeneathCurrent(PiPageConfig config) {
-    _stack.insert(_stack.length - 1, config);
+    final stack = List<PiPageConfig>.from(_stack);
+    stack.insert(stack.length - 1, config);
     return NavigationStack(_stack);
   }
 
   NavigationStack push(PiPageConfig config) {
-    if (_stack.last != config) _stack.add(config);
-    return NavigationStack(_stack);
+    final stack = List<PiPageConfig>.from(_stack);
+    if (stack.last != config) {
+      stack.add(config);
+    }
+    return NavigationStack(stack);
   }
 
   NavigationStack replace(PiPageConfig config) {
+    final stack = List<PiPageConfig>.from(_stack);
     if (canPop()) {
-      _stack.removeLast();
+      stack.removeLast();
       push(config);
     } else {
-      _stack.insert(0, config);
-      _stack.removeLast();
+      stack.insert(0, config);
+      stack.removeLast();
     }
-    return NavigationStack(_stack);
+    return NavigationStack(stack);
   }
 
   NavigationStack clearAndPush(PiPageConfig config) {
-    _stack.clear();
-    _stack.add(config);
-    return NavigationStack(_stack);
+    final stack = List<PiPageConfig>.from(_stack);
+    stack.clear();
+    stack.add(config);
+    return NavigationStack(stack);
   }
 
   NavigationStack clearAndPushAll(List<PiPageConfig> configs) {
-    _stack.clear();
-    _stack.addAll(configs);
-    return NavigationStack(_stack);
+    final stack = List<PiPageConfig>.from(_stack);
+    stack.clear();
+    stack.addAll(configs);
+    return NavigationStack(stack);
   }
 
   @override

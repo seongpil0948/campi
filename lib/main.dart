@@ -90,7 +90,7 @@ class CampingApp extends StatelessWidget {
                     routerDelegate: PiRouteDelegator(navi: navi),
                   ));
             } else {
-              return const Center(child: CircularProgressIndicator());
+              return loadingIndicator;
             }
           }),
     );

@@ -10,7 +10,13 @@ class FollowUserTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(children: [
-      GoMyAvatar(user: targetUser),
+      GoMyAvatar(
+          user: targetUser,
+          onTap: () {
+            final navi = context.read<NavigationCubit>();
+            navi.push(myPath, {"selectedUser": targetUser});
+            Navigator.of(context).pop();
+          }),
       const SizedBox(width: 10),
       Text(targetUser.name),
       const Spacer(),

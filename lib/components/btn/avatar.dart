@@ -8,17 +8,16 @@ Widget getAvatar(double? radius, String imgUrl) => CircleAvatar(
 class GoMyAvatar extends StatelessWidget {
   final double? radius;
   final PiUser user;
-  const GoMyAvatar({Key? key, required this.user, this.radius})
+  final void Function()? onTap;
+  const GoMyAvatar({Key? key, required this.user, this.radius, this.onTap})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        final navi = context.read<NavigationCubit>();
-        // Navigator.of(context).pop();
-        navi.clearAndPush(myPath, {"selectedUser": user});
-      },
+      onTap: () => onTap == null
+          ? context.read<NavigationCubit>().push(myPath, {"selectedUser": user})
+          : onTap!(),
       child: getAvatar(radius, user.photoURL),
     );
   }
