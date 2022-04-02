@@ -10,11 +10,11 @@ class MgzCubit extends Cubit<MgzState> {
   void changeDoc(String title, Document doc) =>
       emit(state.copyWith(title: title, content: doc));
 
-  void posting(BuildContext context) {
-    getCollection(c: Collections.magazines)
+  Future<void> posting(BuildContext context) async {
+    await getCollection(c: Collections.magazines)
         .doc(state.mgzId)
-        .set(state.toJson(), SetOptions(merge: true))
-        .then((value) => context.read<NavigationCubit>().pop());
+        .set(state.toJson(), SetOptions(merge: true));
+    context.read<NavigationCubit>().pop();
   }
 
   Future<void> _updates(PiUser u, MgzState mgz) async {

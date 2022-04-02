@@ -197,6 +197,7 @@ class __UserDescState extends State<_UserDesc> {
         .inputDecorationTheme
         .focusedBorder!
         .copyWith(borderSide: const BorderSide(color: Colors.black));
+    final tstyle = T.textTheme.caption!.copyWith(color: T.primaryColor);
     return Column(
       children: [
         TextField(
@@ -235,12 +236,8 @@ class __UserDescState extends State<_UserDesc> {
                 }
               },
               child: editMode
-                  ? Text("소개글 제출",
-                      style:
-                          T.textTheme.caption!.copyWith(color: T.primaryColor))
-                  : Text("소개글 편집",
-                      style:
-                          T.textTheme.caption!.copyWith(color: T.primaryColor)))
+                  ? Text("소개글 제출", style: tstyle)
+                  : Text("소개글 편집", style: tstyle))
       ],
     );
   }

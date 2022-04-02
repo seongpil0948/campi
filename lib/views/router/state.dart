@@ -23,6 +23,13 @@ class NavigationCubit extends Cubit<NavigationStack> {
     emit(newState);
   }
 
+  void replace(String path, [Map<String, dynamic>? args]) {
+    PiPageConfig config = PiPageConfig(location: path, args: args);
+
+    final newState = state.replace(config);
+    emit(newState);
+  }
+
   void clearAndPush(String path, [Map<String, dynamic>? args]) {
     PiPageConfig config = PiPageConfig(location: path, args: args);
     emit(state.clearAndPush(config));

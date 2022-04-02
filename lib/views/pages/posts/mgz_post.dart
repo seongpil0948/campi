@@ -147,7 +147,7 @@ class _MgzPostWState extends State<MgzPostW> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
+          onPressed: () async {
             final mediaUrl =
                 docCheckMedia(_controller.document, checkImg: true);
             if (mediaUrl == null) {
@@ -156,7 +156,7 @@ class _MgzPostWState extends State<MgzPostW> {
             }
             final c = context.read<MgzCubit>();
             c.changeDoc(_titleContoller.text, _controller.document);
-            c.posting(context);
+            await c.posting(context);
             widget.user.mgzIds.add(c.state.mgzId);
             widget.user.update();
             context.read<AppBloc>().fcm.sendPushMessage(

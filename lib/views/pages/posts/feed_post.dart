@@ -138,9 +138,7 @@ class _FeedPostWState extends State<FeedPostW> {
                                             title: "캠핑 SNS 포스팅 알림",
                                             body:
                                                 "${writer.name}님이 SNS 게시글을 올렸어요!")));
-                                context
-                                    .read<NavigationCubit>()
-                                    .push(postListPath);
+                                context.read<NavigationCubit>().pop();
                               });
                             } catch (e, s) {
                               // debugPrint('!!!Failed to add Feed!!! Exception details:\n $e \n Stack trace:\n $s');
