@@ -15,7 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'modules/bloc_observer.dart';
 
 final appTheme = PiTheme();
-
+final searchBloc = SearchValBloc();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -49,7 +49,6 @@ class CampingApp extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final searchBloc = SearchValBloc(context: context);
     return RepositoryProvider.value(
       value: auth,
       child: FutureBuilder<List>(
@@ -61,20 +60,18 @@ class CampingApp extends StatelessWidget {
                   providers: [
                     BlocProvider(
                         create: (context) => FeedBloc(
-                            searchBloc,
-                            context,
-                            orderFromStr(
+                            sBloc: searchBloc,
+                            orderBy: orderFromStr(
                                 orderBy: pref.getString(prefFeedOrderKey) ??
                                     defaultPostOrderStr),
-                            navi)),
+                            navi: navi)),
                     BlocProvider(
                         create: (context) => MgzBloc(
-                            searchBloc,
-                            context,
-                            orderFromStr(
-                                orderBy: pref.getString(prefMgzOrderKey) ??
+                            sBloc: searchBloc,
+                            orderBy: orderFromStr(
+                                orderBy: pref.getString(prefFeedOrderKey) ??
                                     defaultPostOrderStr),
-                            navi)),
+                            navi: navi)),
                     BlocProvider.value(value: navi),
                     BlocProvider(
                         create: (_) =>

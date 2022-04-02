@@ -30,14 +30,7 @@ abstract class SearchEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class AppSearchInit extends SearchEvent {
-  final BuildContext context;
-  const AppSearchInit({required this.context});
-}
-
-class AppOnSearch extends SearchEvent {}
-
-class OnChangedTag extends SearchEvent {
-  final List<String> tags;
-  const OnChangedTag({required this.tags});
+class AppOnSearch extends SearchEvent {
+  final List<String> terms;
+  const AppOnSearch({required this.terms});
 }

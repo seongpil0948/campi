@@ -54,7 +54,7 @@ class PostRepo {
       required PostOrder orderBy,
       List<String>? tags}) async {
     Query collect = getCollection(c: Collections.feeds);
-    if (tags != null) {
+    if (tags != null && tags.isNotEmpty) {
       collect = collect.where('hashTags', arrayContainsAny: tags);
     }
     var query = addOrder(collect, orderBy);
@@ -86,7 +86,7 @@ class PostRepo {
       required PostOrder orderBy,
       List<String>? tags}) async {
     Query collect = getCollection(c: Collections.magazines);
-    if (tags != null) {
+    if (tags != null && tags.isNotEmpty) {
       collect = collect.where('hashTags', arrayContainsAny: tags);
     }
     var query = addOrder(collect, orderBy);

@@ -5,7 +5,7 @@ class PiAppBarTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final searchBloc = context.watch<SearchValBloc>();
+    final txtController = TextEditingController();
     final b = UnderlineInputBorder(
         borderSide:
             BorderSide(width: 0.3, color: Theme.of(context).primaryColor));
@@ -16,7 +16,7 @@ class PiAppBarTextField extends StatelessWidget {
           child: TextField(
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.caption,
-              controller: searchBloc.state.appSearchController,
+              controller: txtController,
               keyboardType: TextInputType.text,
               decoration: InputDecoration(
                   border: b,
@@ -34,7 +34,12 @@ class PiAppBarTextField extends StatelessWidget {
             flex: 1,
             child: IconButton(
                 onPressed: () {
-                  searchBloc.add(AppOnSearch());
+                  final terms = txtController.text
+                      .trim()
+                      .split(" ")
+                      .where((e) => e.isNotEmpty)
+                      .toList();
+                  context.read<SearchValBloc>().add(AppOnSearch(terms: terms));
                 },
                 icon: Icon(Icons.search_outlined,
                     size: 35, color: Theme.of(context).primaryColor)))

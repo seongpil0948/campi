@@ -82,41 +82,11 @@ class AppBloc extends Bloc<AppEvent, AppState> {
 
 class SearchValBloc extends Bloc<SearchEvent, SearchValState> {
   /// Must Init while Building Page Before use Search Text Controller
-  BuildContext context;
-  SearchValBloc({required this.context})
-      : super(SearchValState(
-            sibal: false,
-            context: context,
-            appSearchController: RichTextController(
-                patternMatchMap: tagPatternMap(context),
-                onMatch: (matches) {}))) {
-    on<AppSearchInit>(_onInit);
-    on<OnChangedTag>(_onChangeTags,
-        transformer: throttleDroppable(const Duration(milliseconds: 500)));
-    on<AppOnSearch>(_onSearch);
-  }
-  void _onInit(AppSearchInit event, Emitter<SearchValState> emit) {
-    final c = event.context;
-    final newState = state.copyWith(
-        context: c,
-        tags: [],
-        appSearchController: RichTextController(
-            patternMatchMap: tagPatternMap(c),
-            onMatch: (matches) {
-              add(OnChangedTag(tags: [...state.tags, ...matches]));
-
-              return matches.join(" ");
-            }));
-    emit(newState);
+  SearchValBloc() : super(const SearchValState(terms: [])) {
+    on<AppOnSearch>(_onSearch,
+        transformer: throttleDroppable(const Duration(seconds: 10)));
   }
 
-  void _onChangeTags(OnChangedTag event, Emitter<SearchValState> emit) {
-    emit(state.copyWith(tags: event.tags));
-  }
-
-  void _onSearch(AppOnSearch event, Emitter<SearchValState> emit) {
-    debugPrint(
-        "on Search In AppBloc ${state.tags} \n ${state.appSearchController.text}");
-    emit(state.copyWith(sibal: !state.sibal));
-  }
+  void _onSearch(AppOnSearch event, Emitter<SearchValState> emit) =>
+      emit(state.copyWith(terms: event.terms));
 }
