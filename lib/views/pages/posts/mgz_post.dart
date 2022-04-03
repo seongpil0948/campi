@@ -43,7 +43,7 @@ class MgzPostW extends StatefulWidget {
 class _MgzPostWState extends State<MgzPostW> {
   late TextEditingController _titleContoller;
   late QuillController _controller;
-  bool loading = true;
+  bool loading = false;
   @override
   void initState() {
     final bloc = context.read<MgzCubit>();
@@ -93,7 +93,7 @@ class _MgzPostWState extends State<MgzPostW> {
         scrollable: false,
         focusNode: _focusNode,
         autoFocus: true,
-        readOnly: false,
+        readOnly: loading,
         placeholder: '내용을 입력 해주세요.',
         expands: false,
         padding: EdgeInsets.zero,
@@ -159,33 +159,36 @@ class _MgzPostWState extends State<MgzPostW> {
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            final mediaUrl =
-                docCheckMedia(_controller.document, checkImg: true);
-            if (mediaUrl == null) {
-              oneMoreImg(context);
-              return;
-            }
-            final c = context.read<MgzCubit>();
-            c.changeDoc(_titleContoller.text, _controller.document);
-            await c.posting(context);
-            widget.user.mgzIds.add(c.state.mgzId);
-            widget.user.update();
-            context.read<AppBloc>().fcm.sendPushMessage(
-                source: PushSource(
-                    tokens: [],
-                    userIds: widget.user.followers,
-                    data: DataSource(
-                        pushType: "postMgz",
-                        targetPage:
-                            "$mgzDetailPath?magazineId=${c.state.mgzId}"),
-                    noti: NotiSource(
-                        title: "캠핑 SNS 좋아요 알림",
-                        body: "${widget.user.name}님이 캠핑 포스팅 게시글을 올렸어요!")));
-          },
-          child: const mat.Text("게시"),
-        ),
+        floatingActionButton: loading
+            ? null
+            : FloatingActionButton(
+                onPressed: () async {
+                  final mediaUrl =
+                      docCheckMedia(_controller.document, checkImg: true);
+                  if (mediaUrl == null) {
+                    oneMoreImg(context);
+                    return;
+                  }
+                  final c = context.read<MgzCubit>();
+                  c.changeDoc(_titleContoller.text, _controller.document);
+                  await c.posting(context);
+                  widget.user.mgzIds.add(c.state.mgzId);
+                  widget.user.update();
+                  context.read<AppBloc>().fcm.sendPushMessage(
+                      source: PushSource(
+                          tokens: [],
+                          userIds: widget.user.followers,
+                          data: DataSource(
+                              pushType: "postMgz",
+                              targetPage:
+                                  "$mgzDetailPath?magazineId=${c.state.mgzId}"),
+                          noti: NotiSource(
+                              title: "캠핑 SNS 좋아요 알림",
+                              body:
+                                  "${widget.user.name}님이 캠핑 포스팅 게시글을 올렸어요!")));
+                },
+                child: const mat.Text("게시"),
+              ),
       ),
     );
   }

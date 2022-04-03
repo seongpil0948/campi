@@ -125,7 +125,7 @@ class MgzDetailW extends StatelessWidget {
                         bottom: 30,
                         child: CommentPostW(),
                       )
-                    : loadingIndicator)
+                    : Container())
           ],
         ),
       ),
