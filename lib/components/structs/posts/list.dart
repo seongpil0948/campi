@@ -141,8 +141,7 @@ class _PostListTabState extends State<PostListTab>
                                 ? GridFeeds(
                                     feeds: widget.targetUser!.feeds,
                                     currUser: snapshot.data!)
-                                : const Center(
-                                    child: CircularProgressIndicator())),
+                                : loadingIndicator),
                       ]
                     : [
                         MgzListW(scrollController: scrollController),

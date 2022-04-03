@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:campi/components/gesture/index.dart';
+import 'package:campi/config/index.dart';
 import 'package:campi/modules/common/index.dart';
 import 'package:campi/modules/posts/feed/index.dart';
 import 'package:campi/utils/index.dart';

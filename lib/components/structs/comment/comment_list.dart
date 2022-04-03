@@ -47,7 +47,7 @@ class _CommentListState extends State<CommentList> {
             ],
           );
         }
-        return const Center(child: CircularProgressIndicator());
+        return loadingIndicator;
       },
     );
   }

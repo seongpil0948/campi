@@ -76,7 +76,7 @@ class UserRow extends StatelessWidget {
                     ],
                   ),
                 )
-              : const Center(child: CircularProgressIndicator());
+              : loadingIndicator;
         });
   }
 }

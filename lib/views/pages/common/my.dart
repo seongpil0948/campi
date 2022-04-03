@@ -26,7 +26,7 @@ class MyPage extends StatelessWidget {
         future: getPostsUser(context: context, selectedUser: selectedUser),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
+            return loadingIndicator;
           }
           final targetUser = snapshot.data!;
           return _MyPageW(currUser: targetUser);

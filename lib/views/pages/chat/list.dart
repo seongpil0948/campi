@@ -1,4 +1,5 @@
 import 'package:campi/components/list/index.dart';
+import 'package:campi/config/index.dart';
 import 'package:campi/modules/app/index.dart';
 import 'package:campi/modules/auth/index.dart';
 import 'package:campi/modules/common/index.dart';
@@ -31,7 +32,7 @@ class ChatRoomList extends StatelessWidget {
         initialData: const [],
         builder: (context, snapshot) {
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(child: CircularProgressIndicator());
+            return loadingIndicator;
           }
 
           final currUser = context.watch<AppBloc>().state.user;

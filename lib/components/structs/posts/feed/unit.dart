@@ -22,7 +22,7 @@ class FeedW extends StatelessWidget {
                       feedInfo: f,
                       tSize: ThumnailSize.medium,
                       writer: snapshot.data!))
-              : Container();
+              : loadingIndicator;
         });
   }
 }

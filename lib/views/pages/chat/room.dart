@@ -1,4 +1,5 @@
 import 'package:campi/components/btn/index.dart';
+import 'package:campi/config/index.dart';
 import 'package:campi/modules/app/index.dart';
 import 'package:campi/modules/auth/index.dart';
 import 'package:campi/modules/chat/index.dart';
@@ -55,7 +56,7 @@ class ChatRoomBody extends StatelessWidget {
         builder:
             (BuildContext context2, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) {
-            return const Center(child: CircularProgressIndicator());
+            return loadingIndicator;
           }
           final msgs = snapshot.data!.docs
               .map((m) => MsgState.fromJson(m.data() as Map<String, dynamic>))

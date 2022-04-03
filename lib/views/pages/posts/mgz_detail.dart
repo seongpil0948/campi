@@ -125,7 +125,7 @@ class MgzDetailW extends StatelessWidget {
                         bottom: 30,
                         child: CommentPostW(),
                       )
-                    : Container())
+                    : loadingIndicator)
           ],
         ),
       ),
@@ -176,9 +176,8 @@ class MgzStatusRow extends StatelessWidget {
                           onDelete: () => context.read<MgzBloc>().add(
                               MgzDeleted(
                                   mgzId: state.mgzId, owner: snapshot.data!)),
-                          onEdit: () {
-                            navi.push(mgzPostPath, {'magazine': state});
-                          }),
+                          onEdit: () =>
+                              navi.push(mgzPostPath, {'magazine': state})),
                     )
                 ]);
               });

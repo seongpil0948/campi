@@ -185,8 +185,7 @@ class FeedTopStatus extends StatelessWidget {
                       future: post.writer,
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
-                          return const Center(
-                              child: CircularProgressIndicator());
+                          return loadingIndicator;
                         }
                         final writer = snapshot.data;
                         return writer != null
