@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:campi/components/noti/index.dart';
+import 'package:campi/config/index.dart';
 import 'package:campi/modules/app/index.dart';
 import 'package:campi/modules/auth/index.dart';
 import 'package:campi/modules/common/index.dart';
@@ -42,6 +43,7 @@ class MgzPostW extends StatefulWidget {
 class _MgzPostWState extends State<MgzPostW> {
   late TextEditingController _titleContoller;
   late QuillController _controller;
+  bool loading = true;
   @override
   void initState() {
     final bloc = context.read<MgzCubit>();
@@ -60,10 +62,16 @@ class _MgzPostWState extends State<MgzPostW> {
   }
 
   Future<String> _assetPickCallback(File file, bool isVideo, PiUser u) async {
+    setState(() {
+      loading = true;
+    });
     final f = PiFile.file(
         file: file, ftype: isVideo ? PiFileType.video : PiFileType.image);
     final uploaded = await uploadFilePathsToFirebase(
         f: f, path: 'mgzs/${u.userId}/${f.fName}');
+    setState(() {
+      loading = false;
+    });
     return uploaded!.url!;
   }
 
@@ -142,7 +150,12 @@ class _MgzPostWState extends State<MgzPostW> {
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: quillEditor,
+              child: Stack(
+                children: [
+                  quillEditor,
+                  loading == true ? loadingIndicator : const SizedBox()
+                ],
+              ),
             ),
           ),
         ),
