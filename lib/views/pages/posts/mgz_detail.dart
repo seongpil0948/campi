@@ -25,7 +25,7 @@ class MgzDetailPage extends StatelessWidget {
     Widget getBody(MgzState m) {
       return Scaffold(
         appBar: AppBar(
-          title: mat.Text(args.args['magazine']?.title,
+          title: mat.Text(m.title,
               style: const TextStyle(color: Colors.black)),
           leading: IconButton(
               icon: const Icon(Icons.undo),

@@ -26,19 +26,20 @@ class FeedDetailPage extends StatelessWidget {
     Widget child;
     final _cmtController = TextEditingController();
 
-    Widget getDetailW(FeedState f) =>
-        Provider.value(value: f, child: const FeedDetailW());
-    if (args.args['selectedFeed'] != null) {
-      feed = args.args['selectedFeed'] as FeedState;
-      child = BlocProvider(
+    Widget getDetailW(FeedState f) => BlocProvider(
           create: (_) => CommentBloc(
               controller: _cmtController,
-              feedId: feed.feedId,
+              feedId: f.feedId,
               fcm: context.read<AppBloc>().fcm,
               cmtWriter: context.watch<AppBloc>().state.user,
-              postWriterId: feed.writerId,
+              postWriterId: f.writerId,
               contentType: ContentType.feed),
-          child: getDetailW(feed));
+          child: Provider.value(value: f, child: const FeedDetailW()))
+        ;
+
+    if (args.args['selectedFeed'] != null) {
+      feed = args.args['selectedFeed'] as FeedState;
+      child =  getDetailW(feed);
     } else {
       child = FutureBuilder<FeedState>(
           future: PostRepo.getFeedById(args.args['feedId'][0] as String),
