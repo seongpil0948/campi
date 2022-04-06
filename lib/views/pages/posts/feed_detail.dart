@@ -130,7 +130,6 @@ class FeedDetailW extends StatelessWidget {
                     child: const Text("댓글 달기")),
                 Container(
                   padding: const EdgeInsets.only(left: leftPadding),
-                  margin: const EdgeInsets.only(bottom: 40),
                   child: CommentList(
                       feedId: feed.feedId,
                       commentStream: getCollection(
