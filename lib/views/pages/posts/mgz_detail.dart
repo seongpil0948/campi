@@ -106,7 +106,7 @@ class MgzDetailW extends StatelessWidget {
                       child: const MgzStatusRow(),
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(left: 20, bottom: 40),
+                      padding: const EdgeInsets.only(left: 20, bottom: 0),
                       child: CommentList(
                           commentStream: getCollection(
                                   c: Collections.comments,
