@@ -6,14 +6,30 @@ class PiAppBarTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final txtController = TextEditingController();
+    final focusNode = FocusNode();
     final b = UnderlineInputBorder(
         borderSide:
             BorderSide(width: 0.3, color: Theme.of(context).primaryColor));
+
+    void searching() {
+      final terms = txtController.text
+          .trim()
+          .split(" ")
+          .where((e) => e.isNotEmpty)
+          .toList();
+      context.read<SearchValBloc>().add(AppOnSearch(terms: terms));
+      if (focusNode.hasFocus) {
+        focusNode.unfocus();
+      }
+    }
+
     return Row(
       children: [
         Expanded(
           flex: 8,
           child: TextField(
+              focusNode: focusNode,
+              onSubmitted: (txt) => searching(),
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.caption,
               controller: txtController,
@@ -34,12 +50,8 @@ class PiAppBarTextField extends StatelessWidget {
             flex: 1,
             child: IconButton(
                 onPressed: () {
-                  final terms = txtController.text
-                      .trim()
-                      .split(" ")
-                      .where((e) => e.isNotEmpty)
-                      .toList();
-                  context.read<SearchValBloc>().add(AppOnSearch(terms: terms));
+                  focusNode.requestFocus();
+                  searching();
                 },
                 icon: Icon(Icons.search_outlined,
                     size: 35, color: Theme.of(context).primaryColor)))
