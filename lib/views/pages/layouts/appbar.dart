@@ -1,7 +1,9 @@
+import 'package:badges/badges.dart';
 import 'package:campi/components/btn/index.dart';
 import 'package:campi/components/inputs/index.dart';
 import 'package:campi/modules/app/index.dart';
 import 'package:campi/views/router/index.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,8 +24,9 @@ class PiAppBar extends StatelessWidget {
       flexibleSpace: Padding(
         padding: EdgeInsets.fromLTRB(20, mq.padding.top, 25, 0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            const _PushBadge(),
             // IconButton(
             //   icon: const Icon(
             //     Icons.menu,
@@ -34,7 +37,6 @@ class PiAppBar extends StatelessWidget {
             //   },
             //   tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
             // ),
-            const Spacer(),
             BlocBuilder<AppBloc, AppState>(
                 builder: (context, state) => InkWell(
                     onTap: () => context
@@ -55,6 +57,40 @@ class PiAppBar extends StatelessWidget {
               ],
             ),
           )),
+    );
+  }
+}
+
+class _PushBadge extends StatelessWidget {
+  const _PushBadge({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final mq = MediaQuery.of(context);
+    return InkWell(
+      onTap: (() => showDialog(
+          context: context,
+          barrierColor: Colors.black12,
+          builder: (context) => const Padding(
+                padding: EdgeInsets.all(40),
+                child: Card(
+                    elevation: 20,
+                    child: SizedBox(
+                        height: 500,
+                        child: Center(child: Text("Message Dialog")))),
+              ))),
+      child: Badge(
+          badgeContent:
+              Text("10", style: Theme.of(context).textTheme.bodyText1),
+          child: const Icon(
+            CupertinoIcons.bell_fill,
+            size: 35,
+          ),
+          badgeColor: Colors.red.shade700
+          // TODO showBadge: ,
+          ),
     );
   }
 }
