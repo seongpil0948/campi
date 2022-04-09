@@ -10,6 +10,9 @@ class MgzCubit extends Cubit<MgzState> {
   void changeDoc(String title, Document doc) =>
       emit(state.copyWith(title: title, content: doc));
 
+  void changeTags({required List<String> tags}) =>
+      emit(state.copyWith(hashTags: tags));
+
   Future<void> posting(BuildContext context) async {
     await getCollection(c: Collections.magazines)
         .doc(state.mgzId)

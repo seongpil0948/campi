@@ -77,6 +77,7 @@ class _MgzPostWState extends State<MgzPostW> {
 
   @override
   Widget build(BuildContext context) {
+    final ms = MediaQuery.of(context).size;
     Future<String> _onImagePickCallback(File file) async {
       return await _assetPickCallback(file, false, widget.user);
     }
@@ -91,6 +92,7 @@ class _MgzPostWState extends State<MgzPostW> {
         locale: const Locale("ko"),
         scrollController: ScrollController(),
         scrollable: false,
+        minHeight: ms.height * 0.5,
         focusNode: _focusNode,
         autoFocus: true,
         readOnly: loading,
@@ -140,8 +142,7 @@ class _MgzPostWState extends State<MgzPostW> {
       // bottom: false,
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize:
-              Size(double.infinity, MediaQuery.of(context).size.height / 7),
+          preferredSize: Size(double.infinity, ms.height / 7),
           child: Column(
             children: [_TitleField(titleContoller: _titleContoller), toolbar],
           ),
@@ -152,7 +153,13 @@ class _MgzPostWState extends State<MgzPostW> {
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Stack(
                 children: [
-                  quillEditor,
+                  Column(
+                    children: [
+                      quillEditor,
+                      const _TagList(),
+                      const _TagTxtField()
+                    ],
+                  ),
                   loading == true ? loadingIndicator : const SizedBox()
                 ],
               ),
@@ -191,6 +198,41 @@ class _MgzPostWState extends State<MgzPostW> {
               ),
       ),
     );
+  }
+}
+
+class _TagList extends StatelessWidget {
+  const _TagList({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocSelector<MgzCubit, MgzState, List<String>>(
+      selector: (state) => state.hashTags,
+      builder: (context, tags) => Wrap(
+          spacing: 10,
+          runSpacing: 5,
+          children: [for (var tag in tags) Chip(label: mat.Text(tag))]),
+    );
+  }
+}
+
+class _TagTxtField extends StatelessWidget {
+  const _TagTxtField({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+        decoration: const InputDecoration(
+          labelText: '태그는 공백으로 분리됩니다.',
+          hintText: 'Tagging',
+        ),
+        keyboardType: TextInputType.emailAddress,
+        onSubmitted: (txt) =>
+            context.read<MgzCubit>().changeTags(tags: txt.split(" ")));
   }
 }
 
