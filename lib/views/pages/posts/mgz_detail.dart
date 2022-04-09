@@ -9,6 +9,7 @@ import 'package:campi/modules/comment/index.dart';
 import 'package:campi/modules/common/index.dart';
 import 'package:campi/modules/posts/index.dart';
 import 'package:campi/modules/posts/mgz/index.dart';
+import 'package:campi/views/pages/common/user.dart';
 import 'package:campi/views/router/index.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' as mat;
@@ -25,12 +26,14 @@ class MgzDetailPage extends StatelessWidget {
     Widget getBody(MgzState m) {
       return Scaffold(
         appBar: AppBar(
-          title: mat.Text(m.title, style: const TextStyle(color: Colors.black)),
+          title:
+              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+            mat.Text(m.title, style: const TextStyle(color: Colors.black)),
+            UserRow(userId: m.writerId, isCmc: false)
+          ]),
           leading: IconButton(
               icon: const Icon(Icons.undo),
-              onPressed: () {
-                Navigator.of(context).pop();
-              }),
+              onPressed: () => Navigator.of(context).pop()),
         ),
         body: BlocProvider(
             // create: (_) => CommentBloc(
@@ -80,10 +83,8 @@ class MgzDetailW extends StatelessWidget {
           children: [
             SingleChildScrollView(
               child: InkWell(
-                onTap: () {
-                  context.read<CommentBloc>().add(ShowPostCmtW(
-                      targetComment: null, showPostCmtWiget: false));
-                },
+                onTap: () => context.read<CommentBloc>().add(
+                    ShowPostCmtW(targetComment: null, showPostCmtWiget: false)),
                 child: Column(
                   children: [
                     QuillEditor(

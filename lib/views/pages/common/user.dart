@@ -53,10 +53,11 @@ class UserRow extends StatelessWidget {
   const UserRow({
     Key? key,
     required this.userId,
+    this.isCmc = true,
   }) : super(key: key);
 
   final String userId;
-
+  final bool isCmc;
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<PiUser?>(
@@ -72,7 +73,9 @@ class UserRow extends StatelessWidget {
                       GoMyAvatar(radius: 15, user: snapshot.data!),
                       const SizedBox(width: 10),
                       Text(snapshot.data?.name ?? "",
-                          style: Theme.of(context).textTheme.bodyText1)
+                          style: isCmc
+                              ? Theme.of(context).textTheme.bodyText1
+                              : Theme.of(context).textTheme.bodyText2)
                     ],
                   ),
                 )
