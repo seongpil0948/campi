@@ -34,12 +34,14 @@ class MgzCubit extends Cubit<MgzState> {
       likeUserIds.add(user.userId);
       final w = await UserRepo.getUserById(state.writerId);
       fcm.sendPushMessage(
+          destUserIds: [w.userId],
           source: PushSource(
               tokens: w.rawFcmTokens,
               userIds: [],
               data: DataSource(
                   pushType: "favorFeed",
-                  targetPage: "$mgzDetailPath?magazineId=${state.mgzId}"),
+                  targetPage: "$mgzDetailPath?magazineId=${state.mgzId}",
+                  fromUserId: user.userId),
               noti: NotiSource(
                   title: "캠핑 포스팅 좋아요 알림",
                   body: "${user.name}님이 당신의 포스팅에 좋아요를 눌렀어요!")));

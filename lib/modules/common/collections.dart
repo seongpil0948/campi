@@ -8,6 +8,7 @@ enum Collections {
   messages,
   magazines,
   chatRooms,
+  alarms
 }
 
 DocumentReference getCmtTargetDocRef(String? feedId, String? mgzId) {
@@ -58,6 +59,8 @@ CollectionReference getCollection(
           .collection(chatRoomCollection)
           .doc(roomId)
           .collection(messagesCollection);
+    case Collections.alarms:
+      return store.collection(alarmCollection);
   }
 }
 
@@ -68,3 +71,4 @@ const replyCollection = 'replies';
 const chatRoomCollection = 'chatRooms';
 const messagesCollection = 'messages';
 const magazineCollection = 'mgzs';
+const alarmCollection = 'alarms';

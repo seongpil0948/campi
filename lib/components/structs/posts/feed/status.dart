@@ -60,13 +60,15 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                             _updates(currUser);
                             final w = await F.writer;
                             fcm.sendPushMessage(
+                                destUserIds: [w.userId],
                                 source: PushSource(
                                     tokens: w.rawFcmTokens,
                                     userIds: [],
                                     data: DataSource(
                                         pushType: "favorFeed",
                                         targetPage:
-                                            "$feedDetailPath?feedId=${F.feedId}"),
+                                            "$feedDetailPath?feedId=${F.feedId}",
+                                        fromUserId: currUser.userId),
                                     noti: NotiSource(
                                         title: "캠핑 SNS 좋아요 알림",
                                         body:

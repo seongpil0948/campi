@@ -116,26 +116,28 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
           } else if (state.targetCmt == null) {
             postFeedComment(txt, cmtWriter, feedId!);
             fcm.sendPushMessage(
+                destUserIds: [postWriter.userId],
                 source: PushSource(
                     tokens: postWriter.rawFcmTokens,
                     userIds: [],
                     data: DataSource(
-                      pushType: "postComment",
-                      targetPage: "$feedDetailPath?feedId=$feedId",
-                    ),
+                        pushType: "postComment",
+                        targetPage: "$feedDetailPath?feedId=$feedId",
+                        fromUserId: cmtWriter.userId),
                     noti: NotiSource(
                         title: "댓글 알림",
                         body: "${cmtWriter.name}님이 당신의 게시글에 댓글을 남겼어요")));
           } else {
             postFeedReply(txt, cmtWriter, feedId!, state.targetCmt!.id);
             fcm.sendPushMessage(
+                destUserIds: [state.targetCmt!.writerId],
                 source: PushSource(
                     tokens: [],
                     userIds: [state.targetCmt!.writerId],
                     data: DataSource(
-                      pushType: "postReply",
-                      targetPage: "$feedDetailPath?feedId=$feedId",
-                    ),
+                        pushType: "postReply",
+                        targetPage: "$feedDetailPath?feedId=$feedId",
+                        fromUserId: cmtWriter.userId),
                     noti: NotiSource(
                         title: "답글 알림",
                         body: "${cmtWriter.name}님이 당신의 댓글에 답글을 남겼어요")));
@@ -148,26 +150,28 @@ class CommentBloc extends Bloc<CommentEvent, CommentState> {
           } else if (state.targetCmt == null) {
             postMgzComment(txt, cmtWriter, mgzId!);
             fcm.sendPushMessage(
+                destUserIds: [postWriter.userId],
                 source: PushSource(
                     tokens: postWriter.rawFcmTokens,
                     userIds: [],
                     data: DataSource(
-                      pushType: "postComment",
-                      targetPage: "$mgzDetailPath?magazineId=$mgzId",
-                    ),
+                        pushType: "postComment",
+                        targetPage: "$mgzDetailPath?magazineId=$mgzId",
+                        fromUserId: cmtWriter.userId),
                     noti: NotiSource(
                         title: "댓글 알림",
                         body: "${cmtWriter.name}님이 당신의 게시글에 댓글을 남겼어요")));
           } else {
             postMgzReply(txt, cmtWriter, mgzId!, state.targetCmt!.id);
             fcm.sendPushMessage(
+                destUserIds: [state.targetCmt!.writerId],
                 source: PushSource(
                     tokens: [],
                     userIds: [state.targetCmt!.writerId],
                     data: DataSource(
-                      pushType: "postReply",
-                      targetPage: "$mgzDetailPath?magazineId=$mgzId",
-                    ),
+                        pushType: "postReply",
+                        targetPage: "$mgzDetailPath?magazineId=$mgzId",
+                        fromUserId: cmtWriter.userId),
                     noti: NotiSource(
                         title: "답글 알림",
                         body: "${cmtWriter.name}님이 당신의 댓글에 답글을 남겼어요")));

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:campi/config/index.dart';
+import 'package:campi/modules/alarm.dart';
 import 'package:campi/utils/index.dart';
 import 'package:campi/views/router/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

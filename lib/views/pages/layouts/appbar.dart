@@ -68,7 +68,7 @@ class _PushBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mq = MediaQuery.of(context);
+    // final mq = MediaQuery.of(context);
     return InkWell(
       onTap: (() => showDialog(
           context: context,

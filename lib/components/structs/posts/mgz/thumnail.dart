@@ -14,7 +14,7 @@ class MgzThumnail extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final mediaUrl = docCheckMedia(mgz.content, checkImg: true);
-    final comC = Colors.white; // complementary color
+    const comC = Colors.white; // complementary color
     final marginHSide = size.width / 15;
     final marginVSide = size.height / 30;
     return mediaUrl != null
@@ -57,16 +57,16 @@ class MgzThumnail extends StatelessWidget {
                           right: marginHSide,
                           child: Row(
                             children: [
-                              Icon(Icons.favorite, color: comC),
+                              const Icon(Icons.favorite, color: comC),
                               const SizedBox(width: 5),
                               Text(
                                 mgz.likeCnt.toString(),
-                                style: TextStyle(color: comC),
+                                style: const TextStyle(color: comC),
                               ),
                               const SizedBox(width: 10),
-                              Icon(Icons.mode_comment, color: comC),
+                              const Icon(Icons.mode_comment, color: comC),
                               const SizedBox(width: 5),
-                              Text("10", style: TextStyle(color: comC))
+                              const Text("10", style: TextStyle(color: comC))
                             ],
                           ))
                     ],

@@ -182,13 +182,15 @@ class _MgzPostWState extends State<MgzPostW> {
                   widget.user.mgzIds.add(c.state.mgzId);
                   widget.user.update();
                   context.read<AppBloc>().fcm.sendPushMessage(
+                      destUserIds: widget.user.followers,
                       source: PushSource(
                           tokens: [],
                           userIds: widget.user.followers,
                           data: DataSource(
                               pushType: "postMgz",
                               targetPage:
-                                  "$mgzDetailPath?magazineId=${c.state.mgzId}"),
+                                  "$mgzDetailPath?magazineId=${c.state.mgzId}",
+                              fromUserId: widget.user.userId),
                           noti: NotiSource(
                               title: "캠핑 SNS 좋아요 알림",
                               body:

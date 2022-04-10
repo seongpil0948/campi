@@ -12,12 +12,16 @@ class FcmRepo {
   NavigationCubit navi;
   FcmRepo({this.token, required this.navi});
 
-  Future<void> sendPushMessage({required PushSource source}) async {
+  Future<void> sendPushMessage(
+      {required PushSource source,
+      required Iterable<String> destUserIds}) async {
     final res = await Dio().post(
       multiPushUrl,
       data: FormData.fromMap(source.bodyJson),
       options: Options(contentType: Headers.formUrlEncodedContentType),
     );
+    await alarmSetBatch(
+        destUserIds.map((e) => AlarmState(src: source, userId: e)));
     debugPrint("Push Msg Response: $res");
   }
 

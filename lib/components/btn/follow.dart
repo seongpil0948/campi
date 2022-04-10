@@ -30,13 +30,14 @@ class _FollowBtnState extends State<FollowBtn> {
               me: currUser, you: widget.targetUser, unfollow: aleady));
           if (!aleady) {
             fcm.sendPushMessage(
+                destUserIds: [widget.targetUser.userId],
                 source: PushSource(
                     tokens: widget.targetUser.rawFcmTokens,
                     userIds: [],
                     data: DataSource(
-                      pushType: "followUser",
-                      targetPage: "$myPath?selectedUserId=${currUser.userId}",
-                    ),
+                        pushType: "followUser",
+                        targetPage: "$myPath?selectedUserId=${currUser.userId}",
+                        fromUserId: currUser.userId),
                     noti: NotiSource(
                         title: "팔로우 알림",
                         body: "${currUser.name}님이 당신을 팔로우 했어요!")));

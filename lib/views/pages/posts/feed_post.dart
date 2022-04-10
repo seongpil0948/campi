@@ -127,13 +127,15 @@ class _FeedPostWState extends State<FeedPostW> {
                                 writer.feedIds.add(feed.feedId);
                                 await writer.update();
                                 context.read<AppBloc>().fcm.sendPushMessage(
+                                    destUserIds: writer.followers,
                                     source: PushSource(
                                         tokens: [],
                                         userIds: writer.followers,
                                         data: DataSource(
                                             pushType: "postFeed",
                                             targetPage:
-                                                "$feedDetailPath?feedId=${feed.feedId}"),
+                                                "$feedDetailPath?feedId=${feed.feedId}",
+                                            fromUserId: writer.userId),
                                         noti: NotiSource(
                                             title: "캠핑 SNS 포스팅 알림",
                                             body:
