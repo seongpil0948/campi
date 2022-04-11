@@ -21,7 +21,8 @@ class DataSource {
   Map<String, dynamic> toJson() => {
         'pushType': pushType,
         'targetPage': targetPage,
-        'application': application
+        'application': application,
+        'fromUserId': fromUserId
       };
 }
 
@@ -51,10 +52,10 @@ class PushSource {
       this.topic});
 
   PushSource.fromJson(Map<String, dynamic> j)
-      : tokens = j['tokens'],
-        userIds = j['userIds'],
-        data = DataSource.fromJson(j),
-        noti = NotiSource.fromJson(j),
+      : tokens = j['tokens'].cast<String>(),
+        userIds = j['userIds'].cast<String>(),
+        data = DataSource.fromJson(j['data']),
+        noti = NotiSource.fromJson(j['notification']),
         topic = j['topic'];
 
   Map<String, dynamic> get bodyJson => {

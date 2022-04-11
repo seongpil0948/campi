@@ -13,14 +13,10 @@ void showFollow({
           child: Stack(
             children: [
               FollowTabList(user: targetUser),
-              Positioned(
+              const Positioned(
                 top: 0,
                 left: 0,
-                child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: const Icon(Icons.arrow_left_outlined, size: 60)),
+                child: BackBtn(),
               ),
             ],
           )));

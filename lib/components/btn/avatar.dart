@@ -5,6 +5,23 @@ const uuid = Uuid();
 Widget getAvatar(double? radius, String imgUrl) => CircleAvatar(
     radius: radius, backgroundImage: CachedNetworkImageProvider(imgUrl));
 
+class GoMyIdAvatar extends StatelessWidget {
+  final void Function()? onTap;
+  final double? radius;
+  final String userId;
+  const GoMyIdAvatar({Key? key, this.onTap, this.radius, required this.userId})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<PiUser>(
+        future: UserRepo.getUserById(userId),
+        builder: (context, snapshot) => snapshot.hasData
+            ? GoMyAvatar(radius: radius, onTap: onTap, user: snapshot.data!)
+            : loadingIndicator);
+  }
+}
+
 class GoMyAvatar extends StatelessWidget {
   final double? radius;
   final PiUser user;

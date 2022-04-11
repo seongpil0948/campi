@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:campi/config/index.dart';
 import 'package:campi/modules/app/index.dart';
 import 'package:campi/modules/auth/index.dart';
 
@@ -20,3 +21,4 @@ part './follow.dart';
 part './icon_text.dart';
 part './white.dart';
 part './more_flow.dart';
+part './back.dart';
