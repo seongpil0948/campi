@@ -19,8 +19,8 @@ class _PostListTabState extends State<PostListTab>
     with AutomaticKeepAliveClientMixin<PostListTab>, TickerProviderStateMixin {
   late final TabController _controller;
   late final ScrollController scrollController;
-  late final FeedBloc feedBloc;
-  late final MgzBloc mgzBloc;
+  late final FeedRUDBloc feedBloc;
+  late final MgzRUDBloc mgzBloc;
   int selectedIndex = entryPostType == PostType.mgz ? mgzTabIdx : feedTabIdx;
 
   @override
@@ -30,8 +30,8 @@ class _PostListTabState extends State<PostListTab>
   @override
   void initState() {
     super.initState();
-    feedBloc = context.read<FeedBloc>();
-    mgzBloc = context.read<MgzBloc>();
+    feedBloc = context.read<FeedRUDBloc>();
+    mgzBloc = context.read<MgzRUDBloc>();
     _controller = TabController(length: 2, vsync: this);
     scrollController = ScrollController();
     scrollController.addListener(_onScroll);
@@ -63,7 +63,7 @@ class _PostListTabState extends State<PostListTab>
 
   void _onScroll() {
     if (_isBottom) {
-      isMgzIdx ? mgzBloc.add(MgzFetched()) : feedBloc.add(FeedFetched());
+      isMgzIdx ? mgzBloc.add(PostFetched()) : feedBloc.add(PostFetched());
     }
   }
 
@@ -189,8 +189,8 @@ class PostOrderSelector extends StatelessWidget {
 //         builder: (context, blueState, greenState) { ... },
   @override
   Widget build(BuildContext context) {
-    final mgzBloc = context.watch<MgzBloc>();
-    final feedBloc = context.watch<FeedBloc>();
+    final mgzBloc = context.watch<MgzRUDBloc>();
+    final feedBloc = context.watch<FeedRUDBloc>();
     final feedTurn = feedBloc.state.myTurn;
     return PiSingleSelect(
       color: Colors.white,
@@ -199,22 +199,10 @@ class PostOrderSelector extends StatelessWidget {
           : orderToStr(orderBy: mgzBloc.state.orderBy, ko: true),
       items: postOpts,
       onChange: (String? v) {
-        switch (v) {
-          case "최신순":
-            feedTurn
-                ? feedBloc.add(FeedChangeOrder(order: PostOrder.latest))
-                : mgzBloc.add(MgzChangeOrder(order: PostOrder.latest));
-
-            break;
-          case "인기순":
-            feedTurn
-                ? feedBloc.add(FeedChangeOrder(order: PostOrder.popular))
-                : mgzBloc.add(MgzChangeOrder(order: PostOrder.popular));
-            break;
-          default:
-        }
-
-        //
+        final order = v == "최신순" ? PostOrder.latest : PostOrder.popular;
+        feedTurn
+            ? feedBloc.add(PostChangeOrder(order: order))
+            : mgzBloc.add(PostChangeOrder(order: order));
       },
     );
   }

@@ -90,12 +90,12 @@ class _MyPageW extends StatelessWidget {
               child: MultiBlocProvider(
                   providers: [
                     BlocProvider(
-                        create: (context) => FeedBloc(
+                        create: (context) => FeedRUDBloc(
                             sBloc: context.read<SearchValBloc>(),
                             orderBy: defaultPostOrder,
                             navi: context.read<NavigationCubit>())),
                     BlocProvider(
-                        create: (context) => MgzBloc(
+                        create: (context) => MgzRUDBloc(
                             sBloc: context.read<SearchValBloc>(),
                             orderBy: defaultPostOrder,
                             navi: context.read<NavigationCubit>()))

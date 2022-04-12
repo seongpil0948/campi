@@ -15,7 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'modules/bloc_observer.dart';
 
 final appTheme = PiTheme();
-final searchBloc = SearchValBloc();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -50,46 +49,21 @@ class CampingApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: auth,
-      child: FutureBuilder<List>(
-          future: Future.wait([SharedPreferences.getInstance()]),
-          builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data!.isNotEmpty) {
-              final pref = snapshot.data![0] as SharedPreferences;
-              return MultiBlocProvider(
-                  providers: [
-                    BlocProvider(
-                        create: (context) => FeedBloc(
-                            sBloc: searchBloc,
-                            orderBy: orderFromStr(
-                                orderBy: pref.getString(prefFeedOrderKey) ??
-                                    defaultPostOrderStr),
-                            navi: navi)),
-                    BlocProvider(
-                        create: (context) => MgzBloc(
-                            sBloc: searchBloc,
-                            orderBy: orderFromStr(
-                                orderBy: pref.getString(prefFeedOrderKey) ??
-                                    defaultPostOrderStr),
-                            navi: navi)),
-                    BlocProvider.value(value: navi),
-                    BlocProvider(
-                        create: (_) =>
-                            AppBloc(authRepo: auth, fcm: fcm, navi: navi)),
-                    BlocProvider(create: (context) => searchBloc)
-                  ],
-                  child: MaterialApp.router(
-                    title: 'Camping & Picknic',
-                    theme: appTheme.lightTheme,
-                    darkTheme: appTheme.darkTheme,
-                    themeMode: appTheme.currentTheme,
-                    routeInformationParser: PiRouteParser(),
-                    routerDelegate: PiRouteDelegator(navi: navi),
-                  ));
-            } else {
-              return loadingIndicator;
-            }
-          }),
-    );
+        value: auth,
+        child: MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: navi),
+              BlocProvider(
+                  create: (_) => AppBloc(authRepo: auth, fcm: fcm, navi: navi)),
+              BlocProvider(create: (context) => SearchValBloc())
+            ],
+            child: MaterialApp.router(
+              title: 'Camping & Picknic',
+              theme: appTheme.lightTheme,
+              darkTheme: appTheme.darkTheme,
+              themeMode: appTheme.currentTheme,
+              routeInformationParser: PiRouteParser(),
+              routerDelegate: PiRouteDelegator(navi: navi),
+            )));
   }
 }

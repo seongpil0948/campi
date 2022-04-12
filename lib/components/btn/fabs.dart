@@ -7,7 +7,7 @@ class PostingFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<MgzBloc, PostState>(
+    return BlocBuilder<MgzRUDBloc, PostState>(
         builder: (context, state) => FloatingActionButton(
             onPressed: () => state.myTurn
                 ? context.read<NavigationCubit>().push(mgzPostPath)

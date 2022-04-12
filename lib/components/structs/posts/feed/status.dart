@@ -140,8 +140,8 @@ class _FeedStatusRowState extends State<FeedStatusRow> {
                     constraints: BoxConstraints(maxWidth: s.width / 7),
                     child: MoreSelect(
                         onDelete: () => context
-                            .read<FeedBloc>()
-                            .add(FeedDeleted(feedId: F.feedId, owner: writer)),
+                            .read<FeedRUDBloc>()
+                            .add(PostDeleted(postId: F.feedId, owner: writer)),
                         onEdit: () {
                           debugPrint("On Edit $F");
                           navi.push(feedPostPath, {'selectedFeed': F});

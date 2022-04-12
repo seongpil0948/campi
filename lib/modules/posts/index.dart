@@ -9,13 +9,15 @@ import 'package:campi/utils/index.dart';
 import 'package:campi/views/router/index.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:stream_transform/stream_transform.dart';
 
-part './bloc.dart';
 part './common.dart';
-part './events.dart';
-part './repo.dart';
+part 'rud_repo.dart';
 
-part './state.dart';
+part 'rud_state.dart';
+part 'rud_bloc_base.dart';
+part './rud_feed_bloc.dart';
+part './rud_mgz_bloc.dart';

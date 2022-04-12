@@ -48,11 +48,12 @@ class PostRepo {
     }).toList();
   }
 
-  Future<QuerySnapshot> getFeeds(
+  Future<Iterable<FeedState>> getFeeds(
       {required FeedState? lastObj,
       required int pageSize,
       required PostOrder orderBy,
       List<String>? tags}) async {
+    debugPrint("Get Feeds $lastObj $pageSize $orderBy");
     Query collect = getCollection(c: Collections.feeds);
     if (tags != null && tags.isNotEmpty) {
       collect = collect.where('hashTags', arrayContainsAny: tags);
@@ -63,7 +64,9 @@ class PostRepo {
       query =
           query.startAfter([lastObj.toJson()[orderToStr(orderBy: orderBy)]]);
     }
-    return query.limit(pageSize).get();
+    final result = await query.limit(pageSize).get();
+    return result.docs
+        .map((m) => FeedState.fromJson(m.data() as Map<String, dynamic>));
   }
 
   static Future<MgzState> getMgzById(String mgzId) async {
@@ -80,11 +83,12 @@ class PostRepo {
     }).toList();
   }
 
-  Future<QuerySnapshot> getMgzs(
+  Future<Iterable<MgzState>> getMgzs(
       {required MgzState? lastObj,
       required int pageSize,
       required PostOrder orderBy,
       List<String>? tags}) async {
+    debugPrint("Get Magazines $lastObj $pageSize $orderBy");
     Query collect = getCollection(c: Collections.magazines);
     if (tags != null && tags.isNotEmpty) {
       collect = collect.where('hashTags', arrayContainsAny: tags);
@@ -94,6 +98,8 @@ class PostRepo {
       query =
           query.startAfter([lastObj.toJson()[orderToStr(orderBy: orderBy)]]);
     }
-    return query.limit(pageSize).get();
+    final result = await query.limit(pageSize).get();
+    return result.docs
+        .map((m) => MgzState.fromJson(m.data() as Map<String, dynamic>));
   }
 }

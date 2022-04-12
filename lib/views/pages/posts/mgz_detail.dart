@@ -173,9 +173,9 @@ class MgzStatusRow extends StatelessWidget {
                     ConstrainedBox(
                       constraints: BoxConstraints(maxWidth: s.width / 7),
                       child: MoreSelect(
-                          onDelete: () => context.read<MgzBloc>().add(
-                              MgzDeleted(
-                                  mgzId: state.mgzId, owner: snapshot.data!)),
+                          onDelete: () => context.read<MgzRUDBloc>().add(
+                              PostDeleted(
+                                  postId: state.mgzId, owner: snapshot.data!)),
                           onEdit: () =>
                               navi.push(mgzPostPath, {'magazine': state})),
                     )

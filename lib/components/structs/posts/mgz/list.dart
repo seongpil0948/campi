@@ -8,30 +8,17 @@ class MgzListW extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final txtSty = Theme.of(context).textTheme.bodyText2;
-    return BlocBuilder<MgzBloc, PostState>(
+    return BlocBuilder<MgzRUDBloc, PostState>(
       builder: (context, state) {
-        switch (state.status) {
-          case PostStatus.failure:
-            return Center(child: Text('게시글들을 받아오는데에 실패 하였습니다.', style: txtSty));
-          case PostStatus.success:
-            if (state.posts.isEmpty) {
-              return Center(
-                  child: Text(
-                'no posts',
-                style: txtSty,
-              ));
-            }
-
-            return ListView.builder(
-              itemBuilder: (BuildContext context, int index) => MgzThumnail(
-                  mgz: state.posts[index] as MgzState,
-                  tSize: ThumnailSize.medium),
-              itemCount: state.posts.length,
-              controller: scrollController,
-            );
-          default:
-            return Container();
+        if (state.status == PostStatus.failure) {
+          return Center(child: Text('게시글들을 받아오는데에 실패 하였습니다.', style: txtSty));
         }
+        return ListView.builder(
+          itemBuilder: (BuildContext context, int index) => MgzThumnail(
+              mgz: state.posts[index] as MgzState, tSize: ThumnailSize.medium),
+          itemCount: state.posts.length,
+          controller: scrollController,
+        );
       },
     );
   }
